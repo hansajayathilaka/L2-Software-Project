@@ -1,0 +1,13 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/email-verification-agent/email-verification-agent-build.yaml
+#=========================================================
+NAME=email-verification-agent
+APP_NAME=email-verification-service
+GIT_REPO_URL=https://github.com/bcgov/indy-email-verification.git
+GIT_REF=master
+SOURCE_CONTEXT_DIR=
+DOCKER_FILE_PATH=./docker/email-verification-agent/Dockerfile
+SOURCE_IMAGE=docker-remote.artifacts.developer.gov.bc.ca/bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
+OUTPUT_IMAGE_TAG=latest
