@@ -2,24 +2,26 @@ FROM python:3.6 as base
 
 ENV PYTHONUNBUFFERED=1
 
+RUN apt update
+
 WORKDIR /app
 
-RUN apt update
+USER root
+
+RUN useradd -ms /bin/bash user
+# RUN addgroup -S user && adduser -S user -G user
+RUN chown -R user:user /app
+RUN chmod 755 /app
+RUN mkdir -p /app/asset_files
+RUN chown -R user:user /app/asset_files
+RUN chmod 755 /app/asset_files
 
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . /app
-
-USER root
-
-RUN useradd -s /bin/bash user
-# RUN addgroup -S user && adduser -S user -G user
-RUN chown -R user:user /app
-RUN mkdir -p /app/asset_files && chmod -R 777 /app/asset_files
-RUN chown -R user:user /app/asset_files
-
 USER user
+
+COPY --chown=user:user . /app
 
 FROM base as local
 
@@ -32,9 +34,8 @@ WORKDIR /app
 
 USER root
 RUN chmod a+x entrypoint.sh
-USER user
+# USER user
 
-RUN ls -l
 CMD ./entrypoint.sh
 
 FROM base as migrations

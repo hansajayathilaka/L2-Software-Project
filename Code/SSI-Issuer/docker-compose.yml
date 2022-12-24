@@ -40,7 +40,7 @@ services:
     restart: always
     build:
       context: .
-      target: local
+      target: ${TARGET}
     depends_on:
       - issuer-postgres
       - issuer-agent
@@ -57,7 +57,7 @@ services:
       EMAIL_HOST: maildev
       EMAIL_PORT: 25
       EMAIL_USE_SSL: "false"
-#      APP_HOME: "email_verification_service"
+      # APP_HOME: "email_verification_service"
       WEB_CONCURRENCY: 1
     ports:
       - "8080:8080"
