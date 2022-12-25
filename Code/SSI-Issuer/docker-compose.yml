@@ -13,7 +13,7 @@ services:
       ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
       ACAPY_GENESIS_URL: "http://test.bcovrin.vonx.io/genesis"
       ACAPY_WALLET_TYPE: "indy"
-      ACAPY_WALLET_NAME: "bc_email_verifier"
+      ACAPY_WALLET_NAME: "voms_person"
       ACAPY_WALLET_KEY: "walletkey"
       ACAPY_AUTO_ACCEPT_INVITES: "true"
       ACAPY_AUTO_ACCEPT_REQUESTS: "true"
