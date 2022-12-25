@@ -177,17 +177,17 @@ def webhooks(request, topic):
                 "attributes": sorted([
                     {
                         "name": "nic",
-                        "value": verification.nic,
+                        "value": str(verification.nic),
                         "mime-type": "text/plain",
                     },
                     {
                         "name": "fname",
-                        "value": verification.fname,
+                        "value": str(verification.fname),
                         "mime-type": "text/plain",
                     },
                     {
                         "name": "lname",
-                        "value": verification.lname,
+                        "value": str(verification.lname),
                         "mime-type": "text/plain",
                     },
                     {
@@ -197,12 +197,12 @@ def webhooks(request, topic):
                     },
                     {
                         "name": "address",
-                        "value": verification.address,
+                        "value": str(verification.address),
                         "mime-type": "text/plain",
                     },
                     {
                         "name": "wallet_address",
-                        "value": verification.wallet_address,
+                        "value": str(verification.wallet_address),
                         "mime-type": "text/plain",
                     },
                     {
@@ -212,7 +212,7 @@ def webhooks(request, topic):
                     },
                     {
                         "name": "email",
-                        "value": verification.email,
+                        "value": str(verification.email),
                         "mime-type": "text/plain",
                     },
                     {

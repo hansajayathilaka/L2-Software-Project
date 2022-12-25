@@ -1,17 +1,16 @@
 import os
 import logging
+import requests
 
 from django.apps import AppConfig
 from django.core.cache import cache
 from django.db.utils import ProgrammingError
 
-import requests
 
 logger = logging.getLogger(__name__)
-
 AGENT_URL = os.environ.get("AGENT_URL")
-
 API_KEY = os.environ.get("AGENT_ADMIN_API_KEY", "")
+
 
 class EmailVerificationConfig(AppConfig):
     name = "email_verification"
@@ -27,7 +26,7 @@ class EmailVerificationConfig(AppConfig):
         if cache.get("credential_definition_id") is None:
             schema_body = {
                 "schema_name": "verified-person",
-                "schema_version": "0.0.2",
+                "schema_version": "0.0.3",
                 "attributes": ["nic", "fname", "lname", "dob", "address", "wallet_address", "img", "email", "time"],
             }
             schema_response = requests.post(f"{AGENT_URL}/schemas", headers={"x-api-key": API_KEY}, json=schema_body)
