@@ -206,6 +206,11 @@ def webhooks(request, topic):
                         "mime-type": "text/plain",
                     },
                     {
+                        "name": "sex",
+                        "value": str(verification.sex),
+                        "mime-type": "text/plain",
+                    },
+                    {
                         "name": "img",
                         "value": "test image url",
                         "mime-type": "text/plain",

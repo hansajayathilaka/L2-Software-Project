@@ -1,5 +1,10 @@
 from django.db import models
 
+SEX_CHOICES = (
+    ("male", "Male"),
+    ("female", "Female"),
+)
+
 
 class Verification(models.Model):
     email = models.EmailField(max_length=100)
@@ -11,6 +16,7 @@ class Verification(models.Model):
     address = models.TextField("Address", null=True, blank=True)
     wallet_address = models.CharField("Wallet Address", max_length=1024, help_text="Address of Etherium wallet", null=True, blank=True)
     img = models.ImageField("Image", help_text="Portrait Image of the user", null=True, blank=True)
+    sex = models.CharField("Sex", choices=SEX_CHOICES, max_length=10, default="male", null=True, blank=True)
 
     connection_id = models.UUIDField()
     invite_url = models.URLField(max_length=2000)

@@ -19,4 +19,4 @@ class EmailForm(BaseForm):
 class PersonForm(BaseForm):
     class Meta:
         model = Verification
-        fields = ["email", "nic", "fname", "lname", "dob", "address", "wallet_address", "img"]
+        fields = ["email", "nic", "fname", "lname", "dob", "address", "wallet_address", "sex", "img"]
