@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+    <title>ConfBook Attendance Issuer</title>
+    <meta
+      name="description"
+      content="A verification service used to issue a verifiable credential asserting a requester is a conference attendee based on their verified email address."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="{% static 'css/app.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bcgov_theme.min.css' %}" />
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <!-- Navbar content -->
+        <div class="container">
+          <a class="navbar-brand" href="/" style="font-size:2em">
+            ConfBook
+          </a>
+        </div>
+      </nav>
+    </header>
+    <main role="main">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-9 col-sm-8">
+            <h1>Welcome to ConfBook!</h1>
+            <p>
+              ConfBook is a demonstration that issues verifiable credentials to
+              conference members
+            </p>
+            <p>
+              Want to know more before proceeding? Learn about this demonstration at 
+              <a href="http://iiw.vonx.io" target="_blank"
+                >http://iiw.vonx.io</a
+              >.
+            </p>
+            <p>
+              ConfBook will verify you email using a separate service and credential. To get that, go to  
+              <a href="https://email-verification.vonx.io" target="_blank"
+                >https://email-verification.vonx.io</a
+              >
+            </p>
+          </div>
+        </div>
+        <a href="/get-invite" class="btn btn-primary btn-lg">Connect to ConfBook</a>
+      </div>
+    </main>
+
+    <script src="{% static 'js/bcgov_theme.min.js' %}" async defer></script>
+  </body>
+</html>
