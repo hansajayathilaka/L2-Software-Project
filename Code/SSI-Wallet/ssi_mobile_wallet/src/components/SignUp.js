@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, StyleSheet, View, TextInput, Button} from 'react-native';
 
 const SignUp = () => {
-  const placeHoderTextColor = '#2196f3';
+  const placeHoderTextColor = '#2196f3'; // color of text
 
   const submitPassword = () => {
     
@@ -23,7 +23,7 @@ const SignUp = () => {
         placeholder="Confirm Password"
         placeholderTextColor={placeHoderTextColor}
         secureTextEntry={true}
-        style={style.passwordField}
+        style={[style.singleInputTag, style.passwordField]}
       />
       <View style={style.buttonContailer}>
         <Button title="Sign Up" onPress={submitPassword} />
@@ -59,6 +59,8 @@ const style = StyleSheet.create({
     paddingTop: 40,
     maxWidth: '100%',
   },
+  singleInputTag: {
+    paddingTop: 40,
+  },
 });
-
 export default SignUp;
