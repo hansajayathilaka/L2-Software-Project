@@ -1,0 +1,10 @@
+# Environment files
+*/*/.env.*
+
+# Jetbrains config file
+*/*/.idea
+*/*/.idea/*
+.idea
+
+# Assets file
+Code/SSI-Issuer/assets_files
