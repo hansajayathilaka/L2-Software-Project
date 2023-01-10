@@ -1,0 +1,86 @@
+version: "3"
+services:
+  issuer-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
+    environment:
+      ADMIN_PORT: 5000
+      AGENT_PORT: 10000
+      INDY_SEED: ${AGENT_WALLET_SEED}
+      SITE_URL: ${AGENT_EXTERNAL_URL}
+      WEBHOOK_URL: "http://issuer-service:8080/webhooks"
+      ACAPY_LABEL: "VOMS Person SSI Issuer"
+      ACAPY_ENDPOINT: ${AGENT_EXTERNAL_URL}
+      ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
+      ACAPY_GENESIS_URL: "http://test.bcovrin.vonx.io/genesis"
+      ACAPY_WALLET_TYPE: "indy"
+      ACAPY_WALLET_NAME: "voms"
+      ACAPY_WALLET_KEY: "walletkey"
+      ACAPY_AUTO_ACCEPT_INVITES: "true"
+      ACAPY_AUTO_ACCEPT_REQUESTS: "true"
+      ACAPY_ADMIN_INSECURE_MODE: "true"
+      ACAPY_AUTO_PROVISION: "true"
+      ACAPY_LOG_LEVEL: "info"
+    ports:
+      - "5000:5000"
+      - "10000:10000"
+    volumes:
+      - issuer-aca-py:/home/indy/.indy_client/wallet
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"VOMS Person SSI Issuer (Docker)\"}' -X POST http://test.bcovrin.vonx.io/register; \
+        sleep 5; \
+        aca-py start \
+        -it http '0.0.0.0' 10000 \
+        -ot http \
+        --admin '0.0.0.0' 5000",
+      ]
+
+  issuer-service:
+    restart: always
+    build:
+      context: .
+      target: ${TARGET}
+    depends_on:
+      - issuer-postgres
+      - issuer-agent
+    environment:
+      PORT: 8080
+      SITE_URL: ${SERVICE_EXTERNAL_URL}
+      AGENT_URL: "http://issuer-agent:5000"
+      DEBUG: "true"
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_PORT: 5432
+      DB_HOST: issuer-postgres
+      EMAIL_HOST: maildev
+      EMAIL_PORT: 25
+      EMAIL_USE_SSL: "false"
+      # APP_HOME: "email_verification_service"
+      WEB_CONCURRENCY: 1
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+
+  issuer-postgres:
+    restart: always
+    image: postgres:10
+    volumes:
+      - issuer-db:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5430:5432"
+
+  maildev:
+    image: djfarrelly/maildev
+    ports:
+      - "8050:80"
+
+volumes:
+  issuer-aca-py:
+  issuer-db:
