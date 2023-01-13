@@ -1,11 +1,36 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, StyleSheet, View, TextInput, Button} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUp = () => {
-  const placeHoderTextColor = '#2196f3'; // color of text
+  const placeHoderTextColor = '#2196f3'; // colour of text
+  const [password, setPassword] = useState(''); // password field data
+  const [confPassword, setConfPassword] = useState(''); // confpassword field data
 
-  const submitPassword = () => {
-    
+  // store the password in the asynch storage
+  const _storeData = async value => {
+    try {
+      AsyncStorage.setItem('@password', value);
+      resetForm();
+      alert('SignUp successfull');
+    } catch (e) {
+      alert('Error occured while signup');
+    }
+  };
+
+  // check the equality of the password and confPassword
+  const isBothPasswordsEqual = () => {
+    if (password === confPassword) {
+      _storeData(password);
+    } else {
+      alert('Passwords are not matching. Please check passwords wheter they are matching');
+    }
+  };
+
+  // reset the signup form
+  const resetForm = () => {
+    setPassword('');
+    setConfPassword('');
   };
 
   return (
@@ -18,15 +43,19 @@ const SignUp = () => {
         placeholderTextColor={placeHoderTextColor}
         secureTextEntry={true}
         style={style.passwordField}
+        onChangeText={newPassword => setPassword(newPassword)}
+        maxLength={6}
       />
       <TextInput
         placeholder="Confirm Password"
         placeholderTextColor={placeHoderTextColor}
         secureTextEntry={true}
         style={[style.singleInputTag, style.passwordField]}
+        onChangeText={newConfPassword => setConfPassword(newConfPassword)}
+        maxLength={6}
       />
       <View style={style.buttonContailer}>
-        <Button title="Sign Up" onPress={submitPassword} />
+        <Button title="Sign Up" onPress={isBothPasswordsEqual} />
       </View>
     </View>
   );
@@ -39,6 +68,7 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+    padding: 20,
   },
   title: {
     color: '#2196f3',
