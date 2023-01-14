@@ -8,7 +8,6 @@ const SignIn = () => {
 
     const signIn = () => {
         AsyncStorage.getItem('@password').then((value) => {
-            console.log(value);
             if (value === userEnteredPassword) {
                 alert('password is correct');
             } else {

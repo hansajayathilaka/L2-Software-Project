@@ -8,7 +8,7 @@ const SignUp = () => {
   const [confPassword, setConfPassword] = useState(''); // confpassword field data
 
   // store the password in the asynch storage
-  const _storeData = async value => {
+  const storeData = async value => {
     try {
       AsyncStorage.setItem('@password', value);
       resetForm();
@@ -21,7 +21,7 @@ const SignUp = () => {
   // check the equality of the password and confPassword
   const isBothPasswordsEqual = () => {
     if (password === confPassword) {
-      _storeData(password);
+      storeData(password);
     } else {
       alert('Passwords are not matching. Please check passwords wheter they are matching');
     }

@@ -1,12 +1,12 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 
-const Credential = () => {
+const Credentials = () => {
     return (
         <View>
             <Text>Credentials page</Text>
-            <Button title="go back to signUp" onPress={() => props.navigate('Home')} />
         </View>
     )
 }
 
-export default Credential;
+export default Credentials;
