@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Header from './Header';
 
-const Conections = () => {
+const Connections = () => {
     return (
         <View>
             <Header title="Connections"/>
@@ -11,4 +11,4 @@ const Conections = () => {
     );
 }
 
-export default Conections;
+export default Connections;
