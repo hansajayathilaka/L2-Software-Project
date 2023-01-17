@@ -7,11 +7,14 @@ import Credentials from './src/components/Credentials';
 import Header from './src/components/Header';
 import Conections from './src/components/Connections';
 import FetchingData from './src/components/FetchingData';
-import ItemCard from './src/components/ItemCard';
+import ItemCard from './src/components/Card';
 
 const App = () => {
   return (
-    <ItemCard />
+    <ItemCard 
+      title="this is the card"
+      description="Api thamai hodatama kale"
+    />
   );
 }
 
