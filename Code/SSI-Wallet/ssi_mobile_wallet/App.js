@@ -8,13 +8,12 @@ import Header from './src/components/Header';
 import Conections from './src/components/Connections';
 import FetchingData from './src/components/FetchingData';
 import ItemCard from './src/components/Card';
+import Home from './src/components/Home';
+import ScannerButton from './src/components/ScannerButton';
 
 const App = () => {
   return (
-    <ItemCard 
-      title="this is the card"
-      description="Api thamai hodatama kale"
-    />
+    <ScannerButton />
   );
 }
 
