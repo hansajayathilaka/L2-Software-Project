@@ -2,15 +2,19 @@ import React, {useState} from 'react';
 import {Text, StyleSheet, View, TextInput, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SignIn = () => {
+const SignIn = ({navigation}) => {
     const[userEnteredPassword, setUserEnteredPassword] = useState('');
     const placeHoderTextColor = '#2196f3'; // colour of text
 
     const signIn = () => {
         AsyncStorage.getItem('@password').then((value) => {
             if (value === userEnteredPassword) {
-                alert('password is correct');
+                console.log(value);
+                setUserEnteredPassword('');
+                console.log(value);
+                navigation.navigate('Home', {name: 'Upeksha'});
             } else {
+                console.log(value);
                 alert('password is incorrect. Check the password correctly!');
             }
         })

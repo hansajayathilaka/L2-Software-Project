@@ -1,31 +1,15 @@
 import React from 'react';
-import { Button, Icon } from 'react-native-elements';
+import { View, Text } from 'react-native';
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+// import { faMugSaucer } from '@fortawesome/free-solid-svg-icons/faMugSaucer'
+// import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 
-const RoundScannerButton = () => {
 
-    return (
-        <Button
-        icon={
-            <Icon
-            name='scanner'
-            size={25}
-            color='black'
-            />
-        }
-        buttonStyle={{
-            backgroundColor: 'white',
-            borderRadius: 50,
-            width: 50,
-            height: 50,
-            borderColor: 'black',
-            borderWidth: 1,
-            elevation: 5, // for android
-            shadowOpacity: 0.5, // for ios
-            shadowRadius: 5, // for ios
-            shadowOffset: { width: 0, height: 2 }, // for ios
-        }}
-        />
-    );
-};
+const ScannerButton = () => (
+    <View style={{borderColor: '#4567', padding: 20, color: '#5679', backgroundColor: '#8976'}}>
+        {/* <FontAwesomeIcon icon={ faMugSaucer } size={40} />
+        <FontAwesomeIcon icon={ faSquareCheck } size={50} /> */}
+    </View>
+);
 
-export default RoundScannerButton;
+export default ScannerButton;

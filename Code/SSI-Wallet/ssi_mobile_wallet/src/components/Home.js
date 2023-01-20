@@ -3,14 +3,10 @@ import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {View, Text } from 'react-native';
 
-const Home = () => {
+const Home = ({navigation}) => {
   return (
     <View>
-      <Text>Home page</Text>
-      <Button
-        icon={<Icon name="arrow-right" size={15} color="white" />}
-        title="Button with icon component"
-      />
+      <Text>This is the Home</Text>
     </View>
   );
 };

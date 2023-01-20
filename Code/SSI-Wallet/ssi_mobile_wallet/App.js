@@ -11,9 +11,28 @@ import ItemCard from './src/components/Card';
 import Home from './src/components/Home';
 import ScannerButton from './src/components/ScannerButton';
 
+const Stack = createNativeStackNavigator();
+
 const App = () => {
   return (
-    <ScannerButton />
+    <NavigationContainer>
+      <Stack.Navigator>
+        
+          <Stack.Screen 
+          name="SignUp"
+          component={SignUp}
+        />
+        <Stack.Screen 
+            name="SignIn"
+            component={SignIn}
+            options={{title: "wellcome"}}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+          />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

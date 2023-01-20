@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Text, StyleSheet, View, TextInput, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   const placeHoderTextColor = '#2196f3'; // colour of text
   const [password, setPassword] = useState(''); // password field data
   const [confPassword, setConfPassword] = useState(''); // confpassword field data
@@ -12,7 +12,8 @@ const SignUp = () => {
     try {
       AsyncStorage.setItem('@password', value);
       resetForm();
-      alert('SignUp successfull');
+      navigation.navigate('SignIn', {name: 'Upeksha'});
+
     } catch (e) {
       alert('Error occured while signup');
     }
@@ -22,6 +23,7 @@ const SignUp = () => {
   const isBothPasswordsEqual = () => {
     if (password === confPassword) {
       storeData(password);
+      navigation.navigate('SignIn', {name: 'upeksha'});
     } else {
       alert('Passwords are not matching. Please check passwords wheter they are matching');
     }
