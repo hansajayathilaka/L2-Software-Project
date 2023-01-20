@@ -28,7 +28,6 @@ const FetchingData = () => {
         .finally(() => setLoading(false));
     }, []);
 
-
     return (
         <SafeAreaView>
             {

@@ -12,7 +12,12 @@ const SignIn = ({navigation}) => {
                 console.log(value);
                 setUserEnteredPassword('');
                 console.log(value);
-                navigation.navigate('Home', {name: 'Upeksha'});
+
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: "Home"}]
+                });
+                
             } else {
                 console.log(value);
                 alert('password is incorrect. Check the password correctly!');
