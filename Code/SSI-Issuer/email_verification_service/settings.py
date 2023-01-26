@@ -175,7 +175,7 @@ USE_TZ = True
 STATIC_URL = "/assets/"
 STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "assets"),)
 print('STATICFILES_DIRS', STATICFILES_DIRS)
-STATIC_ROOT = '/' + posixpath.join(*(BASE_DIR.split(os.path.sep) + ['asset_files']))
+STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['asset_files']))
 print('STATIC_ROOT', STATIC_ROOT)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

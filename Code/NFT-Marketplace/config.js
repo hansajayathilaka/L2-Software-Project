@@ -1,5 +1,5 @@
-export const nftaddress = '0xc45fdB3c1054fD7027fdc5298A54696A0e347De1';
-export const nftmarketaddress = '0xf9C839b7Ce984232E9ea8d3AeF23c4a323b1732C';
+export const nftmarketaddress = '0xa3CdAbE75b2B3106B2AAD7d39bD6e72f44e2415d';
+export const nftaddress = '0xF84d26418a0f14Cb059Fc72Aa64b70878567773F';
 
 // This should be null if you are using localhost
 export const rpc = 'https://matic-mumbai.chainstacklabs.com'
