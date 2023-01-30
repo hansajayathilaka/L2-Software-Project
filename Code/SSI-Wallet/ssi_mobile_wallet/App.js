@@ -17,23 +17,28 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen 
-          name="SignUp"
-          component={SignUp}
-        />
-        <Stack.Screen 
-            name="SignIn"
-            component={SignIn}
-            options={{title: "wellcome"}}
-          />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{title: "Home"}}
+          name="SignIn"
+          component={SignIn}
+          options={{title: 'wellcome'}}
         />
+        <Stack.Screen 
+        name="Home" 
+        component={Home} 
+        options={{
+          title: 'Home',
+          headerStyle: {
+            backgroundColor: '#2196f3',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default App;
