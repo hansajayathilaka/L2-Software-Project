@@ -16,7 +16,13 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}>
         <Stack.Screen
           name="SignUp"
           component={SignUp}
@@ -37,9 +43,6 @@ const App = () => {
               backgroundColor: '#2196f3',
             },
             headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
           }}
         />
       </Stack.Navigator>
