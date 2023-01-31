@@ -17,25 +17,31 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="SignIn"
           component={SignIn}
-          options={{title: 'wellcome'}}
+          options={{headerShown: false}}
         />
-        <Stack.Screen 
-        name="Home" 
-        component={Home} 
-        options={{
-          title: 'Home',
-          headerStyle: {
-            backgroundColor: '#2196f3',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }} />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'Home',
+            headerBackVisible: false,
+            headerStyle: {
+              backgroundColor: '#2196f3',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
