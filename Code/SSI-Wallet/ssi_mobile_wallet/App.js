@@ -38,6 +38,7 @@ const App = () => {
           component={Home}
           options={{
             title: 'Home',
+            headerLeft: null,
             headerBackVisible: false,
             headerStyle: {
               backgroundColor: '#2196f3',
