@@ -1,16 +1,26 @@
-import React, {useState} from 'react';
-import {Text, StyleSheet, View, TextInput, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, StyleSheet, View, TextInput, Button, BackHandler} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SignIn = () => {
+const SignIn = ({navigation}) => {
     const[userEnteredPassword, setUserEnteredPassword] = useState('');
     const placeHoderTextColor = '#2196f3'; // colour of text
+
+    // make unable to use mobile back button and go back
+    useEffect(() => {
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
+      return () => backHandler.remove();
+    }, [])
 
     const signIn = () => {
         AsyncStorage.getItem('@password').then((value) => {
             if (value === userEnteredPassword) {
-                alert('password is correct');
+                console.log(value);
+                setUserEnteredPassword('');
+                console.log(value);
+                navigation.push('Home', {name: 'Upeksha'});
             } else {
+                console.log(value);
                 alert('password is incorrect. Check the password correctly!');
             }
         })

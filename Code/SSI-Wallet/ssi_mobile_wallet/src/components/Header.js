@@ -1,11 +1,26 @@
 import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 
-const Home = () => {
+const Header = ({title}) => {
   return (
-    <View>
-      <Text>Header</Text>
+    <View style={styles.container}>
+      <Text style={styles.Text}>{title}</Text>
     </View>
   );
 };
 
-export default Home;
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#2196f3',
+        padding: 20,
+        justifyContent: 'center',
+        alignContent: 'center',
+    },
+    Text: {
+        color: 'white',
+        fontSize: 30,
+        textAlign: 'center',
+    },
+});
+
+export default Header;

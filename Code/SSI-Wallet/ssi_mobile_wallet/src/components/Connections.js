@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Header from './Header';
 
-const Credentials = () => {
+const Connections = () => {
     return (
         <View>
-            <Header title="Credentials"/>
-            <Text>Credentials page</Text>
+            <Header title="Connections"/>
+            <Text>connections</Text>
         </View>
-    )
+    );
 }
 
-export default Credentials;
+export default Connections;
