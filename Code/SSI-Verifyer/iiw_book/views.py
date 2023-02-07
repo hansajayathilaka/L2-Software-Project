@@ -396,8 +396,10 @@ def webhooks(request, topic):
 
         # HACK: we need a better way to pull values out of presentations
         revealed_attrs = message["presentation"]["requested_proof"]["revealed_attrs"]
-        for revealed_attr in revealed_attrs.values():
-            email = revealed_attr["raw"]
+        # for revealed_attr in revealed_attrs.values():
+        #     email = revealed_attr["raw"]
+
+        email = revealed_attrs['email']['raw']
 
         try:
             session_state = SessionState.objects.get(connection_id=connection_id)

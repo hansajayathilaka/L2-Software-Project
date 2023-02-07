@@ -1,9 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
-const fs = require('fs');
 
-const privateKey = fs.readFileSync('.secret').toString().trim();
-const projectId = 'b5634cb5d4774309ab5593716f0362b9';
-console.log(privateKey.length);
+const privateKey = process.env.PRIVATE_KEY
+const projectId = process.env.INFURA_PROJECT_ID;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {

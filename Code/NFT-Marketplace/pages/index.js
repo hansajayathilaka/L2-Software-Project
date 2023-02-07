@@ -16,7 +16,6 @@ export default function Home() {
     const [loadingState, setLoadingState] = useState('not-loaded');
 
     useEffect(() => {
-        console.log('useEffect...');
         loadNFTs().then(() => {
             console.log('NFT loaded...');
         }).catch(err => {
@@ -31,20 +30,21 @@ export default function Home() {
         const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider);
 
         const data = await marketContract.fetchMarketItems();
-        debugger;
         const items = await Promise.all(data.map(async  i => {
-            debugger;
             // const tokenUri = `https://infura-ipfs.io/ipfs/${i.tokenId}`
-            const tokenUri = await tokenContract.tokenURI(i.tokenId);
-            debugger;
+            let tokenUri;
+            try {
+                tokenUri = await tokenContract.tokenURI(i.tokenId);
+            } catch (e) {
+                debugger;
+                console.error(e);
+            }
             let meta;
             try {
                 meta = await axios.get(tokenUri, {maxRedirects: 5});
-                debugger;
             } catch (e) {
+                debugger;
                 console.error(e);
-                console.log(error);
-                debugger
             }
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
 
@@ -63,8 +63,15 @@ export default function Home() {
             console.error(err)
         });
 
-        setNfts(items);
-        setLoadingState('loaded');
+        if (!items) {
+            debugger;
+            cosole.error("Error geting items.");
+            setNfts([]);
+            setLoadingState('loaded');
+        } else {
+            setNfts(items);
+            setLoadingState('loaded');
+        }
     }
 
     async function buyNft(nft) {
