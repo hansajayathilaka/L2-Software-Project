@@ -40,7 +40,7 @@ export default function CreateItem() {
                     progress: (prog) => console.log(`Received: ${prog}`)
                 }
             )
-            const url = `https://infura-ipfs.io/ipfs/${added.path}`;
+            const url = `https://ipfs.io/ipfs/${added.path}`;
             console.log(`IPFS image url: ${url}`);
             setFileUrl(url);
         } catch (err) {
@@ -58,7 +58,7 @@ export default function CreateItem() {
 
         try {
             const added = await client.add(data);
-            const url = `https://infura-ipfs.io/ipfs/${added.path}`;
+            const url = `https://ipfs.io/ipfs/${added.path}`;
             await createSale(url);
         } catch (err) {
             console.log('Error while uploading file', err);

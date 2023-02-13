@@ -31,8 +31,9 @@ export default function Home() {
         const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider);
 
         const data = await marketContract.fetchMarketItems();
-
+        debugger;
         const items = await Promise.all(data.map(async  i => {
+            debugger;
             const tokenUri = await tokenContract.tokenURI(i.tokenId);
             const meta = await axios.get(tokenUri);
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether');

@@ -26,7 +26,8 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env*.local
+.env
+.env.*
 
 # vercel
 .vercel
@@ -46,18 +47,5 @@ typechain-types
 
 #Hardhat files
 cache
-artifacts
-
-
-node_modules
-.env
-coverage
-coverage.json
-typechain
-typechain-types
-
-#Hardhat files
-cache
-artifacts
 
 .secret
