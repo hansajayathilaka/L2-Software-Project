@@ -3,13 +3,14 @@ import logging
 import requests
 
 from django.apps import AppConfig
+from django.conf import settings
 from django.core.cache import cache
 from django.db.utils import ProgrammingError
 
 
 logger = logging.getLogger(__name__)
-AGENT_URL = os.environ.get("AGENT_URL")
-API_KEY = os.environ.get("AGENT_ADMIN_API_KEY", "")
+AGENT_URL = getattr(settings, "AGENT_URL", 'localhost')
+API_KEY = getattr(settings, "AGENT_ADMIN_API_KEY", '')
 
 
 class EmailVerificationConfig(AppConfig):
