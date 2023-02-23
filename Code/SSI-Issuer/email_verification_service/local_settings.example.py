@@ -3,6 +3,7 @@ DEBUG = True
 SITE_URL = 'http://localhost:8080'
 AGENT_URL = 'http://localhost:5000'
 AGENT_ADMIN_API_KEY = ''
+SCHEMA_VERSION = "0.0.2"
 
 DATABASES = {
     "default": {

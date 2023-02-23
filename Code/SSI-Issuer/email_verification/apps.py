@@ -27,7 +27,7 @@ class EmailVerificationConfig(AppConfig):
         if cache.get("credential_definition_id") is None:
             schema_body = {
                 "schema_name": "ssi-person",
-                "schema_version": "0.0.2",
+                "schema_version": settings.SCHEMA_VERSION,
                 "attributes": ["nic", "fname", "lname", "dob", "address", "wallet_address", "img", "sex", "email", "time"],
             }
             schema_response = requests.post(f"{AGENT_URL}/schemas", headers={"x-api-key": API_KEY}, json=schema_body)
