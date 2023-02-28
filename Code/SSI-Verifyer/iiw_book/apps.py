@@ -2,6 +2,7 @@ import os
 import logging
 
 from django.apps import AppConfig
+from django.conf import settings
 from django.core.cache import cache
 from django.db.utils import ProgrammingError
 
@@ -9,10 +10,10 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-AGENT_URL = os.environ.get("AGENT_URL")
-API_KEY = os.environ.get("AGENT_ADMIN_API_KEY", "")
-AGENT_WALLET_SEED = os.environ.get("AGENT_WALLET_SEED")
-INDY_DID_REGISTER_URL = os.environ.get("INDY_DID_REGISTER_URL")
+AGENT_URL = settings.AGENT_URL
+API_KEY = settings.AGENT_ADMIN_API_KEY
+AGENT_WALLET_SEED = settings.AGENT_WALLET_SEED
+INDY_DID_REGISTER_URL = settings.INDY_DID_REGISTER_URL
 
 
 class IIWBookConfig(AppConfig):
