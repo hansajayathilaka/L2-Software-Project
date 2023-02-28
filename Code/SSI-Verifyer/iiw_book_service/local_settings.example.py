@@ -8,6 +8,7 @@ STAFF_EMAILS = "hansajayathilaka@yahoo.com"
 CONFERENCE_OPTIONS = "VOMS,NFT Marketplace"
 INDY_DID_REGISTER_URL = "http://test.bcovrin.vonx.io/register"
 AGENT_ADMIN_API_KEY = ""
+SCHEMA_VERSION = "0.0.3"
 
 DATABASES = {
     "default": {

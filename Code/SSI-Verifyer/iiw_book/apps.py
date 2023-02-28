@@ -39,7 +39,7 @@ class IIWBookConfig(AppConfig):
         if cache.get("credential_definition_id") is None:
             schema_body = {
                 "schema_name": "ssi-general-person",
-                "schema_version": "0.0.3",
+                "schema_version": settings.SCHEMA_VERSION,
                 "attributes": ["email", "fname", "lname", "nic", "wallet_address", "sex", "img", "time"],
             }
             schema_response = requests.post(f"{AGENT_URL}/schemas", headers={"x-api-key": API_KEY}, json=schema_body)
