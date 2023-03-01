@@ -1,14 +1,13 @@
 import React from "react";
-import { View } from "react-native";
-import { Drawer, Appbar } from "react-native-paper";
+import { View, Text } from "react-native";
+// import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Home = () => {
   const [active, setActive] = React.useState("");
 
   return (
     <View>
-      
-      
+      <Text>Working this application</Text>
     </View>
   );
 };
