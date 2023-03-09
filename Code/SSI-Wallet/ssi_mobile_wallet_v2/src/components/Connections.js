@@ -1,12 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Settings = () => {
+export default function Connections() {
   return (
     <View>
-      <Text>Settings</Text>
+      <Text>Connections</Text>
     </View>
   )
 }
-
-export default Settings;

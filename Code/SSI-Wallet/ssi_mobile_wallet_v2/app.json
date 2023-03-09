@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
+        }
+      ]
+    ],
     "name": "ssi_mobile_wallet_v2",
     "appName": "Mobile Wollet",
     "slug": "ssi_mobile_wallet_v2",

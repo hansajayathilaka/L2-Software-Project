@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Form } from "react-native";
 import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
 
@@ -8,7 +8,11 @@ const SignIn = ({ theme, navigation }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
 
   const signIn = () => {
-    navigation.navigate("Home");
+    if (userName == "Upeksha" && password == "abc") {
+      navigation.navigate('Root');
+    } else {
+      alert("Check the password and user name");
+    }
   };
 
   return (
@@ -16,7 +20,6 @@ const SignIn = ({ theme, navigation }) => {
       style={{
         flex: 1,
         justifyContent: "center",
-        backgroundColor: theme.colors.secondary,
       }}
     >
       <View

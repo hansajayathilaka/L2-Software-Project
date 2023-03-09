@@ -18,7 +18,6 @@ const SignUp = ({ theme, navigation }) => {
       style={{
         flex: 1,
         justifyContent: "center",
-        backgroundColor: theme.colors.secondary,
       }}
     >
       <View
