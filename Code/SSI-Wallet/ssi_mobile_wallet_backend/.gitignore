@@ -1,0 +1,31 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-workspace
+*.iml
+
+# Built output
+dist/
+build/
+This will ignore log files, runtime data, dependency directories, environment variables, editor directories and files, and built output. You can customize this file to fit your specific project needs.
+
+
+
+
+
