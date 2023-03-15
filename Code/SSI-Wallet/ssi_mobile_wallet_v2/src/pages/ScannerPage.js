@@ -7,7 +7,6 @@ const ScannerPage = ({ navigation }) => {
     <View>
       <Text>Scanner Page</Text>
       <Scanner />
-      {/* <Button title="pressMe" onPress={() => {navigation.navigate('Root')}} /> */}
     </View>
   )
 };
