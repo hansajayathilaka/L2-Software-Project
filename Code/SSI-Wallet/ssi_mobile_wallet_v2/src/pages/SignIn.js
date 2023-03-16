@@ -3,17 +3,33 @@ import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
 
 const SignIn = ({ theme, navigation }) => {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [userEnteredUserName, setUserEnteredName] = useState("");
+  const [userEnteredPassword, setUserEnteredPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true);
 
+  // const SignIn = () => {
+  //   // if (userName == "Upeksha" && password == "abc") {
+  //   //   navigation.navigate('Root');
+  //   // } else {
+  //   //   alert("Check the password and user name");
+  //   // }
+  //   navigation.navigate('Root');
+  // };
+
   const signIn = () => {
-    if (userName == "Upeksha" && password == "abc") {
-      navigation.navigate('Root');
-    } else {
-      alert("Check the password and user name");
-    }
-  };
+    AsyncStorage.getItem('@password').then((value) => {
+        if (value === userEnteredPassword) {
+            console.log(value);
+            setUserEnteredPassword('');
+            console.log(value);
+            navigation.navigate('Root');
+            // navigation.push('Home', {name: 'Upeksha'});
+        } else {
+            console.log(value);
+            alert('password is incorrect. Check the password correctly!');
+        }
+    })
+}
 
   return (
     <View
@@ -36,7 +52,7 @@ const SignIn = ({ theme, navigation }) => {
           placeholder="Enter User Name"
           maxLength={20}
           right={<TextInput.Affix text="/20" />}
-          onChangeText={(userName) => setUserName(userName)}
+          onChangeText={(userName) => setUserEnteredName(userName)}
         />
         <TextInput
           mode="outlined"
@@ -51,7 +67,7 @@ const SignIn = ({ theme, navigation }) => {
             />
           }
           onChangeText={(pass) => {
-            setPassword(pass);
+            setUserEnteredPassword(pass);
           }}
         />
         <Button icon="login" onPress={signIn}>
@@ -62,4 +78,4 @@ const SignIn = ({ theme, navigation }) => {
   );
 };
 
-export default withTheme(SignIn);
+export default SignIn;

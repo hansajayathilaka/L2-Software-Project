@@ -8,37 +8,45 @@ import SignIn from "./src/pages/SignIn";
 import ScannerPage from "./src/pages/ScannerPage";
 import Home from "./src/pages/Home";
 import Connections from "./src/pages/Connections";
+import Credentials from "./src/pages/Credentials";
 import Settings from "./src/pages/Settings";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { DrawerContent } from "@react-navigation/drawer";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const theme = {
+const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "blue",
-    secondary: "white",
+    primary: 'rgb(102, 234, 255)',
+    secondary: 'black',
+    background: 'white',
   },
 };
 
 function Root() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Connections" component={Connections} />
+      <Drawer.Screen name="Credentials" component={Credentials} />
       <Drawer.Screen name="QR Scanner" component={ScannerPage} />
       <Drawer.Screen name="Settings" component={Settings} />
+      {/* <DrawerItem
+        label="Help"
+        onPress={() => Linking.openURL("https://mywebsite.com/help")}
+      /> */}
     </Drawer.Navigator>
   );
 }
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Stack.Navigator>
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignIn" component={SignIn} />

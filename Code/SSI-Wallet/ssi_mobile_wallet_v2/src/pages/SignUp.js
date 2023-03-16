@@ -1,15 +1,48 @@
 import { View } from "react-native";
 import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SignUp = ({ theme, navigation }) => {
+const SignUp = ({ navigation }) => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [confPasswordVisibility, setconfPasswordVisibility] = useState(true);
 
+  // store the password in the asynch storage
+  const storeData = async value => {
+    try {
+      AsyncStorage.setItem('@password', value);
+      resetForm();
+      navigation.navigate('SignIn', {name: 'Upeksha'});
+
+    } catch (e) {
+      alert('Error occured while signup');
+    }
+  };
+
+  // check the equality of the password and confPassword and store the password in the storage
+  const isBothPasswordsEqual = () => {
+    if (password === confPassword) {
+      storeData(userName);
+      storeData(password);
+      navigation.navigate('SignIn', {name: 'upeksha'});
+    } else {
+      alert('Passwords are not matching. Please check passwords wheter they are matching');
+    }
+  };
+
+  // reset the signup form
+  const resetForm = () => {
+    setPassword('');
+    setConfPassword('');
+  };
+
+
   const signUp = () => {
+    isBothPasswordsEqual();
+    console.log(`${userName} ${password} ${confPassword}`);
     navigation.navigate("SignIn");
   };
 
@@ -74,4 +107,4 @@ const SignUp = ({ theme, navigation }) => {
   );
 };
 
-export default withTheme(SignUp);
+export default SignUp;
