@@ -13,6 +13,9 @@ const nextConfig = {
     //
     //     return config;
     // },
+    images: {
+        domains: ["https://ipfs.io/ipfs/"]
+    }
 }
 
 module.exports = nextConfig
