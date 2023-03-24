@@ -1,31 +1,15 @@
-# Logs
-logs
-*.log
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Dependency directories
+# Node.js
 node_modules/
+npm-debug.log
+yarn-error.log
 
-# Environment variables
-.env
+# TypeScript
+*.tsbuildinfo
 
-# Editor directories and files
-.idea/
+# IDE and editor files
 .vscode/
-*.sublime-workspace
-*.iml
+.idea/
+*.code-workspace
 
-# Built output
+# Build output
 dist/
-build/
-This will ignore log files, runtime data, dependency directories, environment variables, editor directories and files, and built output. You can customize this file to fit your specific project needs.
-
-
-
-
-
