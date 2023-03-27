@@ -184,3 +184,8 @@ LOGOUT_REDIRECT_URL = 'index'
 
 # Gunicorn options
 timeout = 300
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

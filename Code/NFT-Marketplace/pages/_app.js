@@ -1,14 +1,47 @@
 /* pages/_app.js */
 import '../styles/globals.css'
+import "../styles/custom.css";
 import Link from 'next/link'
-import {useReducer, useState} from "react";
-import Login from "./login";
+import {useEffect, useReducer} from "react";
+import { initialState, reducer } from "../reducer/ìndex";
+import {SET_LOADING, SET_LOGIN, SET_NFT} from "../reducer/actions";
+import loadNFTs from "../utils/loadNFT";
+
 
 function MyApp({ Component, pageProps }) {
-  // const [loggedIn, setLoggedIn] = useState(null);
-  const [loggedIn, setLoggedIn] = useReducer((state, action) => {
-    return action;
-  }, null);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    const val = Math.random();
+    console.log("Start UseEffect on _app.js", val);
+    dispatch({
+      type: SET_LOADING,
+      data: true,
+    });
+    loadNFTs().then((items) => {
+      window.items = items;
+      console.log(items);
+      dispatch({
+        type: SET_NFT,
+        data: items
+      });
+      dispatch({
+        type: SET_LOADING,
+        data: false,
+      });
+    }).catch(err => {
+      console.log('Error while loading NFT.');
+      console.error(err);
+      dispatch({
+        type: SET_LOADING,
+        data: false,
+      });
+    });
+    console.log("Finish UseEffect on _app.js", val);
+    return () => {
+      console.log("Remove UseEffect on _app.js", val);
+    }
+  }, [])
   
   const onLoginClick = () => {
     const windowFeatures = "left=100,top=100,width=500,height=700";
@@ -19,7 +52,10 @@ function MyApp({ Component, pageProps }) {
   }
 
   const onLogoutClick = () => {
-    setLoggedIn(false);
+    dispatch({
+      type: SET_LOGIN,
+      data: false
+    });
   }
 
   return (
@@ -33,13 +69,13 @@ function MyApp({ Component, pageProps }) {
                   Home
                 </a>
               </Link>
-              {/*<Link href="/create-item">*/}
-              {/*  <a className="mr-6 text-blue-600">*/}
-              {/*    Sell Digital Asset*/}
-              {/*  </a>*/}
-              {/*</Link>*/}
+              <Link href="/create-item">
+                <a className="mr-6 text-blue-600">
+                  Sell Digital Asset
+                </a>
+              </Link>
               {
-                loggedIn ?
+                state.loggedIn ?
                     <Link href="/my-assets">
                       <a className="mr-6 text-blue-600">
                         My Digital Assets
@@ -52,7 +88,7 @@ function MyApp({ Component, pageProps }) {
               {/*    Creator Dashboard*/}
               {/*  </a>*/}
               {/*</Link>*/}
-              {loggedIn ?
+              {state.loggedIn ?
                   <button className="mr-6 text-blue-900 inset-y-0 right-0" onClick={onLogoutClick}>
                     Logout
                   </button>
@@ -65,7 +101,24 @@ function MyApp({ Component, pageProps }) {
             </div>
           </div>
         </nav>
-        <Component {...pageProps} setLogin={setLoggedIn} login={loggedIn} />
+
+        {
+          state.loading ?
+              <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
+                <div
+                    className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+                <h2 className="text-center text-white text-xl font-semibold">Loading...</h2>
+                <p className="w-1/3 text-center text-white">This may take a few seconds, please don't close this
+                  page.</p>
+              </div>
+              :
+              <></>
+        }
+
+        <Component className="flex min-h-full"
+                   {...pageProps}
+                   state={state} dispatch={dispatch}
+        />
       </div>
   )
 

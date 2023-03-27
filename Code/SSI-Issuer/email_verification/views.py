@@ -1,6 +1,5 @@
 import base64
 import io
-import os
 import re
 import json
 import time
@@ -8,7 +7,7 @@ from datetime import datetime
 
 import qrcode
 import requests
-
+from django.conf import settings
 
 from django.http import (
     JsonResponse,
@@ -29,8 +28,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-AGENT_URL = os.environ.get("AGENT_URL")
-API_KEY = os.environ.get("AGENT_ADMIN_API_KEY", "")
+AGENT_URL = getattr(settings, "AGENT_URL", "localhost")
+API_KEY = getattr(settings, "AGENT_ADMIN_API_KEY", '')
+
 
 def index(request):
     template = loader.get_template("index.html")
@@ -54,7 +54,7 @@ def submit(request):
 
             email = form.instance.email
 
-            redirect_url = f"{os.environ.get('SITE_URL')}/verify/{connection_id}"
+            redirect_url = f"{getattr(settings, 'SITE_URL')}/verify/{connection_id}"
 
             template = loader.get_template("email.html")
             email_html = template.render({"redirect_url": redirect_url}, request)

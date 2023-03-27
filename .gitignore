@@ -8,3 +8,6 @@
 
 # Assets file
 Code/SSI-Issuer/assets_files
+
+# local_settings
+*/*/local_settings.py
