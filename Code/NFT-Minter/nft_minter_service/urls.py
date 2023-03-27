@@ -19,5 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authenticator.urls')),
-    path('nft/', include('nft_minter.urls')).
+    path('nft/', include('nft_minter.urls')),
 ]
