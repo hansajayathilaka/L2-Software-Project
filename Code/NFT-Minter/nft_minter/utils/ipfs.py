@@ -1,43 +1,43 @@
 import base64
+import json
+
 import ipfsapi
 import ipfshttpclient
+import requests
 
 from django.conf import settings
 
 
-def get_ipfs_client():
-    string = f'{settings.INFURA_IPFS_PROJECT_ID}:{settings.INFURA_IPFS_PROJECT_SECRET}'
-    string_bytes = string.encode('utf-8')
-    encoded_bytes = base64.b64encode(string_bytes)
-    encoded_string = encoded_bytes.decode('utf-8')
+def upload_files_to_ipfs(files):
+    files = {f'file{i}': files[i].file for i in range(len(files)) if files[i] is not None}
+    try:
+        response = requests.post(
+            settings.INFURA_IPFS_URL,
+            files=files,
+            auth=(settings.INFURA_IPFS_PROJECT_ID, settings.INFURA_IPFS_PROJECT_SECRET)
+        )
+        res = response.text.strip().split('\n')
+        hash_list = []
+        for i in res:
+            _res = json.loads(i)
+            hash_list.append(_res['Hash'])
 
-    # Create an IPFS client instance with configuration
-    # client = ipfshttpclient.connect(
-    #     addr='https://ipfs.infura.io:5001/api/v0',
-    #     headers={
-    #         'authorization': f'Basic {encoded_string}',
-    #     },
-    # )
-    client = ipfsapi.connect(
-        host='ipfs.infura.io',
-        port=5001,
-        base='api/v0',
-        headers={
-            'authorization': f'Basic {encoded_string}',
-        },
-    )
-    print(client)
-    return client
+        return hash_list
+    except Exception as e:
+        print(e)
+        return False
 
 
-def upload_to_ipfs(files):
-    client = get_ipfs_client()
+def upload_json_to_ipfs(_json):
+    try:
+        response = requests.post(
+            settings.INFURA_IPFS_URL,
+            data=_json,
+            auth=(settings.INFURA_IPFS_PROJECT_ID, settings.INFURA_IPFS_PROJECT_SECRET)
+        )
+        res = response.json
+        return res['Hash']
+    except Exception as e:
+        print(e)
+        return False
 
-    res = []
-    for file in files:
-        # Upload the file to IPFS
-        _res = client.add(file)
-        res.append(_res['Hash'])
-
-    # Return the IPFS hash of the uploaded file
-    return res

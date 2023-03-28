@@ -173,7 +173,7 @@ export default function Assert({state, dispatch}) {
                                         <p className="font-bold mb-1">Attachments</p>
                                         {
                                             currentNFT.attachments.map((item, index) => {
-                                                return <p className="text-gray-500 ml-6" key={index}><a href={item.fileUrl} target="_blank">{item.description}</a></p>
+                                                return <p className="text-gray-500 ml-6" key={index}><a href={item.fileUrl} target="_blank" rel="noreferrer">{item.description}</a></p>
                                             })
                                         }
                                     </div>

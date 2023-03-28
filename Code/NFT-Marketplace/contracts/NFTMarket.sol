@@ -62,6 +62,7 @@ contract NFTMarket is ReentrancyGuard {
         return listingPrice;
     }
 
+    // Mint NFT
     function createMarketItem (
         address nftContract,
         uint256 tokenId,

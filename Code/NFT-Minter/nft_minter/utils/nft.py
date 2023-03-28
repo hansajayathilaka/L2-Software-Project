@@ -1,13 +1,42 @@
 import json
+from enum import Enum
 
 from django.conf import settings
+from web3 import Web3
 from web3.types import TxReceipt
 
+from nft_minter.utils import upload_json_to_ipfs
 
-def get_abi():
-    with open(settings.API_PATH, 'r') as f:
+
+class Contract(Enum):
+    NFT_Marketplace = "nft_marketplace"
+    NFT = 'nft'
+
+
+def get_abi(contract_type):
+    if contract_type == Contract.NFT_Marketplace:
+        abi_path = settings.NFT_MARKETPLACE_ABI_PATH
+    elif contract_type == Contract.NFT:
+        abi_path = settings.NFT_ABI_PATH
+    else:
+        raise Exception("Invalid Contract Type")
+
+    with open(abi_path, 'r') as f:
         abi = json.load(f)
     return abi
+
+
+def get_contract(contract_type):
+    if contract_type == Contract.NFT_Marketplace:
+        address = settings.NFT_MARKETPLACE_CONTRACT_ADDRESS
+    elif contract_type == Contract.NFT:
+        address = settings.NFT_CONTRACT_ADDRESS
+    else:
+        raise Exception("Invalid Contract Type")
+
+    w3 = Web3(Web3.HTTPProvider(settings.INFURA_POLYGON_NETWORK_URL))
+    contract = w3.eth.contract(address=address, abi=get_abi(contract_type))
+    return w3, contract
 
 
 def create_transaction(w3, contract, function_name, params=None, gas_price=None) -> TxReceipt:
@@ -29,6 +58,29 @@ def create_transaction(w3, contract, function_name, params=None, gas_price=None)
     return tx_receipt
 
 
-def mint_nft(details):
-    ...
+def mint_nft(details, price, owner_name, owner_nic):
+    # Save primary details in IPFS
+    _hash = upload_json_to_ipfs(details)
 
+    if _hash:
+
+        # Mint NFT
+        w3, contract = get_contract(Contract.NFT)
+        try:
+            receipt = create_transaction(w3, contract, 'createToken', [_hash])
+            print(receipt.logs)
+        except Exception as e:
+            print(e)
+            raise e
+
+        # Add NFT to marketplace
+        w3, contract = get_contract(Contract.NFT_Marketplace)
+        try:
+            receipt = create_transaction(w3, contract, 'createMarketItem', [settings.NFT_CONTRACT_ADDRESS, _hash, price, owner_name, owner_nic])
+            return receipt.logs
+        except Exception as e:
+            print(e)
+            raise e
+
+    else:
+        raise Exception("Error while uploading details to IPFS")
