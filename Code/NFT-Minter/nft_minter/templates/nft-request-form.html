@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+    NFT Requesting Form | NFT Minter
+{% endblock %}
+
+{% block content %}
+    {% if errors %}
+        <div class="alert alert-danger">
+            <ul>
+            {% for field, errors in errors.items %}
+                {% for error in errors %}
+                    <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form action="/nft/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

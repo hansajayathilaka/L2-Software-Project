@@ -5,7 +5,8 @@ idna==2.8
 pillow
 # Pillow>=8.3.2
 # psycopg2==2.8.2
-psycopg2-binary
+# psycopg2-binary
+psycopg2-binary==2.9.5
 pytz==2019.1
 qrcode==6.1
 requests==2.21.0

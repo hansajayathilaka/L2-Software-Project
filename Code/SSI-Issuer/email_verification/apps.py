@@ -3,13 +3,14 @@ import logging
 import requests
 
 from django.apps import AppConfig
+from django.conf import settings
 from django.core.cache import cache
 from django.db.utils import ProgrammingError
 
 #setting a logger
 logger = logging.getLogger(__name__)
-AGENT_URL = os.environ.get("AGENT_URL")
-API_KEY = os.environ.get("AGENT_ADMIN_API_KEY", "")
+AGENT_URL = getattr(settings, "AGENT_URL", 'localhost')
+API_KEY = getattr(settings, "AGENT_ADMIN_API_KEY", '')
 
 
 class EmailVerificationConfig(AppConfig):
@@ -29,7 +30,7 @@ class EmailVerificationConfig(AppConfig):
         if cache.get("credential_definition_id") is None:
             schema_body = {
                 "schema_name": "ssi-person",
-                "schema_version": "0.0.2",
+                "schema_version": settings.SCHEMA_VERSION,
                 "attributes": ["nic", "fname", "lname", "dob", "address", "wallet_address", "img", "sex", "email", "time"],
             }
             schema_response = requests.post(f"{AGENT_URL}/schemas", headers={"x-api-key": API_KEY}, json=schema_body)

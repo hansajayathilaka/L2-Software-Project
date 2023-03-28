@@ -8,6 +8,7 @@ from datetime import datetime
 
 import qrcode
 import requests
+from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
 from django.http import (
@@ -28,11 +29,11 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
-AGENT_URL = os.environ.get("AGENT_URL")
-API_KEY = os.environ.get("AGENT_ADMIN_API_KEY", "")
-INDY_SSI_ISSUER_DID = os.environ.get("INDY_SSI_ISSUER_DID", "TduHMBiPVkFvrLhwZteMUn")
-STAFF_EMAILS = os.environ.get("STAFF_EMAILS")
-CONFERENCE_OPTIONS = os.environ.get("CONFERENCE_OPTIONS")
+AGENT_URL = settings.AGENT_URL
+API_KEY = settings.AGENT_ADMIN_API_KEY
+INDY_SSI_ISSUER_DID = settings.INDY_SSI_ISSUER_DID
+STAFF_EMAILS = settings.STAFF_EMAILS
+CONFERENCE_OPTIONS = settings.CONFERENCE_OPTIONS
 
 
 if not AGENT_URL:
@@ -396,8 +397,10 @@ def webhooks(request, topic):
 
         # HACK: we need a better way to pull values out of presentations
         revealed_attrs = message["presentation"]["requested_proof"]["revealed_attrs"]
-        for revealed_attr in revealed_attrs.values():
-            email = revealed_attr["raw"]
+        # for revealed_attr in revealed_attrs.values():
+        #     email = revealed_attr["raw"]
+
+        email = revealed_attrs['email']['raw']
 
         try:
             session_state = SessionState.objects.get(connection_id=connection_id)

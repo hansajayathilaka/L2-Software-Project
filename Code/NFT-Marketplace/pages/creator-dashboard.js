@@ -19,7 +19,7 @@ export default function CreatorDashboard() {
     useEffect(() => {
         loadNFTs();
     }, []);
-    //
+
     async function loadNFTs() {
         const web3Modal = new Web3Modal();
         const connection = await web3Modal.connect();
@@ -38,7 +38,7 @@ export default function CreatorDashboard() {
                 price,
                 tokenId: i.tokenId.toNumber().tokenId,
                 seller: i.seller,
-                owner: i.owner,
+                owners: i.owners,
                 image: meta.data.image,
                 name: meta.data.name,
                 description: meta.data.description,

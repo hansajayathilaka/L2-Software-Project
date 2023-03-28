@@ -10,11 +10,11 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
-    <title>VOMS Email Verification Service</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.svg' %}" />
+    <title>VOMS | SSI Issuer Service</title>
     <meta
       name="description"
-      content="An email verification service used to issue a verifiable credential asserting that you are the owner of an email address."
+      content="An SSI issuing system for VOMS system"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -50,7 +50,7 @@
             />
           </a>
           <div class="navbar-brand">
-            Email Verification Service
+            SSI Issuing Service
           </div>
         </div>
       </nav>
@@ -59,9 +59,9 @@
       <div class="container">
         <div class="row">
           <div class="col-md-9 col-sm-8">
-            <h1>Email Verification Service</h1>
+            <h1>SSI Issuing  Service</h1>
             <p>
-              Use the form below to request a verifiable credential about your email address.
+                Fill the fallowing form to request SSI. Verification mail will be sent to the given email.
             </p>
           </div>
         </div>
@@ -74,7 +74,7 @@
                 <div class="form-group">
                   {{ form }}
                   <small id="emailHelp" class="form-text text-muted"
-                    >We'll never share your email with anyone else.</small
+                    >We'll never share your details with anyone else.</small
                   >
                 </div>
                 <strong>{{ errors }}</strong>
