@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'authenticator',
     'nft_minter',
+    
 ]
 
 MIDDLEWARE = [
