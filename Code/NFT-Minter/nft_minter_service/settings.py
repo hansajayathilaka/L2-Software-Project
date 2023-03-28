@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # Custom Apps
     'authenticator',
     'nft_minter',
+    
 ]
 
 MIDDLEWARE = [
