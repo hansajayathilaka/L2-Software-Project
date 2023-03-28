@@ -22,15 +22,15 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'rgb(102, 234, 255)',
-    secondary: 'black',
-    background: 'white',
+    primary: "rgb(102, 234, 255)",
+    secondary: "black",
+    background: "white",
   },
 };
 
 function Root() {
   return (
-    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Connections" component={Connections} />
       <Drawer.Screen name="Credentials" component={Credentials} />
@@ -46,8 +46,8 @@ function Root() {
 
 export default function App() {
   return (
-    <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator theme={styles.container}>
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="ScannerPage" component={ScannerPage} />

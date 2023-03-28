@@ -1,6 +1,7 @@
 import { View } from "react-native";
 import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = ({ theme, navigation }) => {
   const [userEnteredUserName, setUserEnteredName] = useState("");
@@ -70,7 +71,7 @@ const SignIn = ({ theme, navigation }) => {
             setUserEnteredPassword(pass);
           }}
         />
-        <Button icon="login" onPress={signIn}>
+        <Button icon="login" onPress={signIn} buttonColor="rgb(37, 139, 214)" textColor="white" >
           Sign In
         </Button>
       </View>

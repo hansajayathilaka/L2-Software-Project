@@ -42,6 +42,11 @@ const Scanner = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 400,
+    backgroundColor: 'black',
     padding: 100,
     margin: 20,
   },

@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignUp = ({ navigation }) => {
   const [userName, setUserName] = useState("");
@@ -10,40 +10,46 @@ const SignUp = ({ navigation }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [confPasswordVisibility, setconfPasswordVisibility] = useState(true);
 
-  // store the password in the asynch storage
-  const storeData = async value => {
-    try {
-      AsyncStorage.setItem('@password', value);
-      resetForm();
-      navigation.navigate('SignIn', {name: 'Upeksha'});
+  const outlineColor = "rgb(37, 139, 214)";
 
+  // store the password in the asynch storage
+  const storeData = async (value) => {
+    try {
+      AsyncStorage.setItem("@password", value);
+      console.log("saved the data");
+      resetForm();
+      navigation.navigate("SignIn", { name: "Upeksha" });
     } catch (e) {
-      alert('Error occured while signup');
+      alert("Error occured while signup");
     }
   };
 
   // check the equality of the password and confPassword and store the password in the storage
   const isBothPasswordsEqual = () => {
-    if (password === confPassword) {
-      storeData(userName);
-      storeData(password);
-      navigation.navigate('SignIn', {name: 'upeksha'});
+    if (password != "") {
+      if (password === confPassword) {
+        storeData(userName);
+        storeData(password);
+        navigation.navigate("SignIn", { name: "upeksha" });
+      } else {
+        alert(
+          "Passwords are not matching. Please check passwords wheter they are matching"
+        );
+      }
     } else {
-      alert('Passwords are not matching. Please check passwords wheter they are matching');
+      alert("Password can't be empty");
     }
   };
 
   // reset the signup form
   const resetForm = () => {
-    setPassword('');
-    setConfPassword('');
+    setPassword("");
+    setConfPassword("");
   };
-
 
   const signUp = () => {
     isBothPasswordsEqual();
     console.log(`${userName} ${password} ${confPassword}`);
-    navigation.navigate("SignIn");
   };
 
   return (
@@ -63,6 +69,8 @@ const SignUp = ({ navigation }) => {
         </View>
         <TextInput
           mode="outlined"
+          // outlineColor={outlineColor}
+          // textColor={outlineColor}
           label="User Name"
           placeholder="Enter User Name"
           maxLength={20}
@@ -71,11 +79,13 @@ const SignUp = ({ navigation }) => {
         />
         <TextInput
           mode="outlined"
+          // outlineColor={outlineColor}
+          // textColor={outlineColor}
           label="Password"
           secureTextEntry={passwordVisibility}
           right={
             <TextInput.Icon
-              icon="eye"
+              icon={passwordVisibility ? "eye" : "eye-off"}
               onPress={() => {
                 setPasswordVisibility(!passwordVisibility);
               }}
@@ -87,11 +97,16 @@ const SignUp = ({ navigation }) => {
         />
         <TextInput
           mode="outlined"
+          // outlineColor={outlineColor}
+          // textColor={outlineColor}
+          // selectionColor={outlineColor}
+          // underlineColor={outlineColor}
+          // activeUnderlineColor={outlineColor}
           label="Confirm Password"
           secureTextEntry={confPasswordVisibility}
           right={
             <TextInput.Icon
-              icon="eye"
+              icon={confPasswordVisibility ? "eye" : "eye-off"}
               onPress={() => setconfPasswordVisibility(!confPasswordVisibility)}
             />
           }
@@ -99,7 +114,12 @@ const SignUp = ({ navigation }) => {
             setConfPassword(confPass);
           }}
         />
-        <Button icon="account-arrow-right" onPress={signUp}>
+        <Button
+          icon="account-arrow-right"
+          onPress={signUp}
+          buttonColor="rgb(37, 139, 214)"
+          textColor="white"
+        >
           Sign Up
         </Button>
       </View>
