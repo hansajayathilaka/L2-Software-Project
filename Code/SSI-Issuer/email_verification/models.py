@@ -8,7 +8,6 @@ SEX_CHOICES = (
 
 class Verification(models.Model):
     email = models.EmailField(max_length=100)
-
     nic = models.CharField("NIC", max_length=12)
     fname = models.CharField("First Name", max_length=30)
     lname = models.CharField("Last Name", max_length=30)

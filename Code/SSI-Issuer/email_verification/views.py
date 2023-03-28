@@ -60,7 +60,7 @@ def submit(request):
             email_html = template.render({"redirect_url": redirect_url}, request)
 
             send_mail(
-                "BC Email Verification Invite",
+                "VOMS Email Verification Invite",
                 (
                     "Follow this link to connect with our "
                     f"verification service: {redirect_url}"
