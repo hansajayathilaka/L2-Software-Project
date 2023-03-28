@@ -1,7 +1,8 @@
 from enum import Enum
 from django.conf import settings
 
-from colorfield.fields import ColorField
+#from colorfield.fields import ColorField
+from django.db import models
 from django import forms
 
 
@@ -45,7 +46,7 @@ class NFTRequestForm(forms.Form):
     registered_data = forms.DateField(label='Date of Registered', required=False if settings.DEBUG else True)
     body_type = forms.CharField(label='Body Type', required=False)
     wheel_base = forms.CharField(label='Wheel Base (cm)', required=False)
-    color = ColorField(default='#000000')
+   # color = ColorField(default='#000000')
     seating_capacity = forms.IntegerField(label='Seating Capacity', required=False if settings.DEBUG else True)
     internal_height = forms.DecimalField(label='Internal Height (cm)', required=False)
     cylinder_capacity = forms.IntegerField(label='Cylinder Capacity (cc)', required=False if settings.DEBUG else True)
