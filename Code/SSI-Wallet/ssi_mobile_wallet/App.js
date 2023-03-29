@@ -10,44 +10,59 @@ import FetchingData from './src/components/FetchingData';
 import ItemCard from './src/components/Card';
 import Home from './src/components/Home';
 import ScannerButton from './src/components/ScannerButton';
+import {View, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {Button} from 'react-native-paper';
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}>
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SignIn"
-          component={SignIn}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            title: 'Home',
-            headerLeft: null,
-            headerBackVisible: false,
-            headerStyle: {
-              backgroundColor: '#2196f3',
-            },
-            headerTintColor: '#fff',
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View>
+      <Text>This is working</Text>
+      <Text>
+        <Icon name="comments" size={30} color="#900" light />
+      </Text>
+      <Button
+        icon="camera"
+        mode="contained"
+        onPress={() => console.log('Pressed')}>
+        Press me
+      </Button>
+    </View>
+    // <NavigationContainer>
+    //   <Stack.Navigator
+    //     screenOptions={{
+    //       headerTitleAlign: 'center',
+    //       headerTitleStyle: {
+    //         fontWeight: 'bold',
+    //       },
+    //     }}>
+    //     <Stack.Screen
+    //       name="SignUp"
+    //       component={SignUp}
+    //       options={{headerShown: false}}
+    //     />
+    //     <Stack.Screen
+    //       name="SignIn"
+    //       component={SignIn}
+    //       options={{headerShown: false}}
+    //     />
+    //     <Stack.Screen
+    //       name="Home"
+    //       component={Home}
+    //       options={{
+    //         title: 'Home',
+    //         headerLeft: null,
+    //         headerBackVisible: false,
+    //         headerStyle: {
+    //           backgroundColor: '#2196f3',
+    //         },
+    //         headerTintColor: '#fff',
+    //       }}
+    //     />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
   );
 };
 
