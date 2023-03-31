@@ -19,7 +19,145 @@
 
     <form action="/nft/" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
+        <section class="vh-100 gradient-custom">
+            <div class="container py-5 h-100">
+              <div class="row justify-content-center align-items-center h-100">
+                <div class="col-12 col-lg-9 col-xl-7">
+                  <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                    <div class="card-body p-4 p-md-5">
+                      <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 text-primary">Vehicle Details</h3>
+                      <form>
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="Cowner">Owner Name</label>
+                            {{form.owner_name}}
+                          </div>
+                          <div class="col">
+                            <label for="Cowner">Manufacture Date</label>
+                            {{form.manufactured_date}}
+                          </div>
+                        </div>
+        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Owner Address</label>
+                            {{form.owner_address}}
+                          </div>
+                          <div class="col">
+                            <label for="examplePassword">Colour</label>
+                            <div class="input-group">
+                              <input type="text" class="form-control" placeholder="Black">
+                              <span class="input">
+                                <input type="color" class="form-control form-control-color" id="exampleColorInput"
+                                  value="#563d7c" title="Choose your color">
+                              </span>
+                            </div>
+        
+                          </div>
+                        </div>
+        
+        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Owner NIC Number</label>
+                             {{form.owner_nic}}
+                          </div>
+                          <div class="col">
+                            <label for="seatingCapacity">Seating Capacity</label>
+                            <input type="text" class="form-control" placeholder="Eg: four">
+                          </div>
+                        </div>
+        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Description</label>
+                            {{form.description}}
+                          </div>
+                          <div class="col">
+                            <label for="Height">Internal Height</label>
+                            <input type="text" class="form-control" placeholder="Enter Internal Height">
+                          </div>
+                        </div>
+        
+        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Engine Number</label>
+                            {{form.engine_no}}
+                          </div>
+                          <div class="col">
+                            <label for="capacity">Cylinder Capacity</label>
+                            <input type="text" class="form-control" placeholder="Enter cylinder capacity">
+                          </div>
+                        </div>
+        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Chassis Number</label>
+                            {{form.chassis_no}}
+                          </div>
+                          <div class="col">
+                            <label for="powner">Previous Owner</label>
+                            <input type="text" class="form-control" placeholder="Eg: ABC Perera, No 15, Colombo 14">
+                          </div>
+                        </div>
+        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Vehicle Type</label>
+                              {{form.vehicle_type}}
+                          </div>
+                          <div class="col">
+                            <label for="fuel">Fuel Type</label>
+                            <select class="form-select" aria-label="Default select example">
+                              <option selected>Diesel</option>
+                              <option value="1">Petrol</option>
+                              <option value="2">Two</option>
+                              <option value="3">Three</option>
+                            </select>
+                          </div>
+                        </div>
+        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Company</label>
+                            {{form.company}}
+                          </div>                          
+                          <div class="col mt-4">
+                            
+                          </div>
+                        </div>
+
+                        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Fuel Type</label>
+                            {{form.fuel_type}}
+                          </div>                          
+                          <div class="col mt-4">
+                           
+                          </div>
+                        </div>
+
+                        
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Model Number</label>
+                            {{form.vehicle_model}}
+                          </div>                          
+                          <div class="col mt-4">
+                            <button type="submit" class="btn btn-primary" style="background-color: #036;">Create NFT</button>
+                          </div>
+                        </div>
+        
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        
     </form>
 {% endblock %}
+
