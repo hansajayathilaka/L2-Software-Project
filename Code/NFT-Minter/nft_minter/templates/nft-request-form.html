@@ -44,18 +44,11 @@
                             {{form.owner_address}}
                           </div>
                           <div class="col">
-                            <label for="examplePassword">Colour</label>
-                            <div class="input-group">
-                              <input type="text" class="form-control" placeholder="Black">
-                              <span class="input">
-                                <input type="color" class="form-control form-control-color" id="exampleColorInput"
-                                  value="#563d7c" title="Choose your color">
-                              </span>
+                            <label for="Cowner">Date of Registered</label>
+                            {{form.registered_date}}
                             </div>
-        
                           </div>
-                        </div>
-        
+            
         
                         <div class="row mt-3">
                           <div class="col">
@@ -63,8 +56,8 @@
                              {{form.owner_nic}}
                           </div>
                           <div class="col">
-                            <label for="seatingCapacity">Seating Capacity</label>
-                            <input type="text" class="form-control" placeholder="Eg: four">
+                            <label for="Cowner">Body Type</label>
+                            {{form.body_type}}
                           </div>
                         </div>
         
@@ -74,8 +67,8 @@
                             {{form.description}}
                           </div>
                           <div class="col">
-                            <label for="Height">Internal Height</label>
-                            <input type="text" class="form-control" placeholder="Enter Internal Height">
+                            <label for="Cowner">Wheel Base (cm)</label>
+                            {{form.wheel_base}}
                           </div>
                         </div>
         
@@ -86,8 +79,8 @@
                             {{form.engine_no}}
                           </div>
                           <div class="col">
-                            <label for="capacity">Cylinder Capacity</label>
-                            <input type="text" class="form-control" placeholder="Enter cylinder capacity">
+                            <label for="Cowner">Color</label>
+                            {{form.color}}
                           </div>
                         </div>
         
@@ -97,8 +90,8 @@
                             {{form.chassis_no}}
                           </div>
                           <div class="col">
-                            <label for="powner">Previous Owner</label>
-                            <input type="text" class="form-control" placeholder="Eg: ABC Perera, No 15, Colombo 14">
+                            <label for="Cowner">Seating Capacity</label>
+                            {{form.seating_capacity}}
                           </div>
                         </div>
         
@@ -108,13 +101,8 @@
                               {{form.vehicle_type}}
                           </div>
                           <div class="col">
-                            <label for="fuel">Fuel Type</label>
-                            <select class="form-select" aria-label="Default select example">
-                              <option selected>Diesel</option>
-                              <option value="1">Petrol</option>
-                              <option value="2">Two</option>
-                              <option value="3">Three</option>
-                            </select>
+                            <label for="Cowner">Internal Height (cm)</label>
+                            {{form.internal_height}}
                           </div>
                         </div>
         
@@ -124,7 +112,8 @@
                             {{form.company}}
                           </div>                          
                           <div class="col mt-4">
-                            
+                            <label for="body">Cylinder Capacity (cc)</label>
+                            {{form.cylinder_capacity}}
                           </div>
                         </div>
 
@@ -135,10 +124,21 @@
                             {{form.fuel_type}}
                           </div>                          
                           <div class="col mt-4">
-                           
+                            <label for="body">Estimation Price (MATIC)</label>
+                            {{form.price}}
                           </div>
                         </div>
 
+                        <div class="row mt-3">
+                          <div class="col">
+                            <label for="body">Thumbnail</label>
+                            {{form.thumbnail}}
+                          </div>                          
+                          <div class="col mt-4">
+                            <label for="body">Attachments</label>
+                            {{form.attachments}}
+                          </div>
+                        </div>
                         
                         <div class="row mt-3">
                           <div class="col">
