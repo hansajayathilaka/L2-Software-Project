@@ -1,7 +1,8 @@
 from enum import Enum
 from django.conf import settings
 
-from colorfield.fields import ColorField
+#from colorfield.fields import ColorField
+from django.db import models
 from django import forms
 
 

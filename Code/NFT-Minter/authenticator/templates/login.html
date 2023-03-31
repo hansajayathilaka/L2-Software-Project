@@ -1,14 +1,48 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Login Form | NFT Minter
+Login Form | NFT Minter
 {% endblock %}
 
-{% block content %} 
-    <h2>Login</h2> 
-    <form method="post"> 
-        {% csrf_token %} 
-        {{ form.as_p }} 
-        <button type="submit" class="btn btn-primary">Login</button> 
-    </form> 
+{% block content %}
+<div class="row">
+    <div class="col-lg-5 m-auto">
+        <div class="card mt-5 border-2 shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-title text-center mt-3">
+                <h2 class="text-primary">Minting Officer Login</h2>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+               
+                <div class="card-body mt-3">
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="bi bi-person fa-1x"></i></div>
+                        {{ form.username.errors }}
+                        {{ form.username }}
+                      </div>
+                        <div class="input-group mt-3">
+                            <div class="input-group-text">
+                                <i class="bi bi-lock fa-1x"></i>
+                            </div>
+                            {{ form.password.errors }}
+                            {{ form.password }}
+                        </div> 
+                    <div class="row">
+                        <div class="col d-flex justify-content-start mt-3 mx-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked />
+                                <label class="form-check-label"> Remember me </label>
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-end mt-3 mx-3">
+                            <a href="#!">Forgot password?</a>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-6 mx-auto mt-3"> <button type="submit"
+                            class="btn btn-primary btn-block mb-5">Login</button></div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
+
