@@ -1,9 +1,0 @@
-NFT only contain a single url.
-It is a IPFS link.
-That url points to  a JSON containing images, documents and other details about the vehicle.
-So in first there are multiple request to store images, documents and another request to save the JSON that contain all details.
-Finally single IPFS URL for the NFT that contains all information
-
-**** Price is not stored in NFT. It is saved in NFT Marketplace ****
-
-Marketplace contain address of

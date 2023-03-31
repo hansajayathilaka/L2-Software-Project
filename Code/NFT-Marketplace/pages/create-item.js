@@ -49,11 +49,9 @@ export default function CreateItem() {
     }
 
     async function createItem() {
-        debugger;
         if (!formInput.name || !formInput.price || !formInput.description) {
             return;
         }
-        debugger;
         const data = JSON.stringify({
             name: formInput.name, description: formInput.description,
             thumbnail: fileUrl,

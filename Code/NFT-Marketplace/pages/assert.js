@@ -1,17 +1,14 @@
 import {useRouter} from "next/router";
 import Link from "next/link";
-import {CustomImage} from "../components/Image";
 import {useEffect, useState} from "react";
-import ConfirmPopup from "../components/ConfirmPopup";
-import Web3Modal from "web3modal";
-import {ethers} from "ethers";
-import {nftaddress, nftmarketaddress} from "../config";
-import Market from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
-import buyNft from "../utils/buyNFT";
-import {SET_LOADING} from "../reducer/actions";
+import { toast } from 'react-toastify';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
-import historyNFT from "../utils/historyNFT";
+
+import {CustomImage} from "../components/Image";
+import buyNft from "../utils/buyNFT";
+import {SET_LOADING} from "../reducer/actions";
+
 
 export default function Assert({state, dispatch}) {
     const router = useRouter();
@@ -40,7 +37,7 @@ export default function Assert({state, dispatch}) {
 
     const clickCopyLink = () => {
         navigator.clipboard.writeText(window.location.href).then(r => {
-
+            toast("Link copied to clipboard", {type: toast.TYPE.INFO});
         })
     }
 
@@ -63,6 +60,9 @@ export default function Assert({state, dispatch}) {
 
 
     function handleDeleteClick() {
+        if (state.loggedIn === false) {
+            toast("Please login before buy...", {type: toast.TYPE.ERROR})
+        }
         setIsConfirmOpen(true);
     }
 
@@ -171,7 +171,6 @@ export default function Assert({state, dispatch}) {
                                     </div>
                                     {
                                         Object.entries(currentNFT.more_data).map(([key,value],i) => {
-                                            debugger;
                                             const split_key = key.split("_");
                                             const formatted_key = split_key.map(val => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase());
                                             const formatted_string = formatted_key.join(" ")
@@ -229,6 +228,7 @@ export default function Assert({state, dispatch}) {
                                             duration-150
                                             ease-in-out"
                                             onClick={handleDeleteClick}
+                                            title={!state.loggedIn ? "Please login before buy" : ""}
                                         >
                                             Buy for {currentNFT.price} MATIC
                                         </button>

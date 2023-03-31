@@ -1,13 +1,16 @@
 /* pages/_app.js */
 import '../styles/globals.css'
 import "../styles/custom.css";
+import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link'
 import React, {useEffect, useReducer} from "react";
+import Image from "next/image";
+import { ToastContainer, toast } from 'react-toastify';
+
 import { initialState, reducer } from "../reducer/ìndex";
 import {SET_LOADING, SET_LOGIN, SET_NFT} from "../reducer/actions";
 import loadNFTs from "../utils/loadNFT";
 import logo from "../public/logo.svg";
-import Image from "next/image";
 
 
 function MyApp({Component, pageProps}) {
@@ -43,7 +46,7 @@ function MyApp({Component, pageProps}) {
         return () => {
             console.log("Remove UseEffect on _app.js", val);
         }
-    }, [])
+    }, []);
 
     const onLoginClick = () => {
         const windowFeatures = "left=100,top=100,width=500,height=700";
@@ -54,6 +57,7 @@ function MyApp({Component, pageProps}) {
     }
 
     const onLogoutClick = () => {
+        toast("Logged out successfully", {type: toast.TYPE.INFO})
         dispatch({
             type: SET_LOGIN,
             data: false
@@ -62,6 +66,7 @@ function MyApp({Component, pageProps}) {
 
     return (
         <div>
+            <ToastContainer draggable={false} />
             <nav className="border-b p-2 flex" style={{
                 backgroundColor: "#036",
                 borderBottomWidth: 2,
