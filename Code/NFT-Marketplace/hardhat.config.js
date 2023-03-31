@@ -1,24 +1,32 @@
+require('dotenv').config({path:__dirname+'/.env'})
 require("@nomicfoundation/hardhat-toolbox");
-const fs = require('fs');
 
-const privateKey = fs.readFileSync('.secret').toString().trim();
-const projectId = 'b5634cb5d4774309ab5593716f0362b9';
-console.log(privateKey.length);
+const privateKey = process.env.PRIVATE_KEY
+const projectId = process.env.INFURA_PROJECT_ID;
+const polygonScanApiKey = process.env.POLYGON_ETHER_SCAN_APIKEY;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   networks: {
     hardhat: {
-      chainId: 1337,
+      chainId: 1337
     },
-    mumbai: {
+    localhost: {
+      url: "http://127.0.0.1:8545"
+    },
+    polygonMumbai: {
       url: `https://polygon-mumbai.infura.io/v3/${projectId}`,
-      accounts: [privateKey],
+      accounts: [privateKey]
     },
     mainnet: {
       url: `https://polygon-mainnet.infura.io/v3/${projectId}`,
-      accounts: [privateKey],
-    },
+      accounts: [privateKey]
+    }
   },
-  solidity: "0.8.9",
+  etherscan: {
+    apiKey: {
+      polygonMumbai: polygonScanApiKey
+    }
+  },
+  solidity: "0.8.19"
 };

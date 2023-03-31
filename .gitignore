@@ -2,9 +2,19 @@
 */*/.env.*
 
 # Jetbrains config file
-*/*/.idea
-*/*/.idea/*
+**/.idea
+**/.idea/*
 .idea
 
 # Assets file
 Code/SSI-Issuer/assets_files
+
+# local_settings
+**/local_settings.py
+
+# Static files
+Code/NFT-Minter/static_files/*
+
+**/*.pyc
+
+Code/NFT-Minter/db.sqlite3

@@ -16,3 +16,8 @@ As well as we issue digital IDs to car owners to break the barrier between the d
 
 ## Is data storage secure?
 Yes. The images are going to save in IPFS (InterPlanetary File System). Other details will be saved in the Polygon blockchain. It use etherium as its sidechain. So we can have Ethereum's security on a low budget. SSI details will be saved in the Indy blockchain. It is a Hyperledger-based blockchain specifically created to save sensitive user data.
+
+### Resourcces
+ - Add mumbai test network to metamask `https://chainlist.org/?search=polygon&testnets=true`
+ - Faucet for Polygon `https://faucet.polygon.technology/`
+ 

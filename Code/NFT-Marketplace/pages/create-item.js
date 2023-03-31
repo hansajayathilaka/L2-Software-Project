@@ -11,8 +11,8 @@ import {
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json';
 import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json';
 
-const ipfs_projectId = '2EmjXF7GSMqwUg8CQb1q7F4ImWd'
-const ipfs_projectSecret = 'a07868d7486d89a1ee3dd2a1649c5571';
+const ipfs_projectId = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID;
+const ipfs_projectSecret = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECREY;
 
 const auth = 'Basic ' + Buffer.from(ipfs_projectId + ':' + ipfs_projectSecret).toString('base64');
 const client = ipfsHttpClient({
@@ -27,7 +27,7 @@ const client = ipfsHttpClient({
 
 export default function CreateItem() {
     const [fileUrl, setFileUrl] = useState(null);
-    const [formInput, updateFormInput] = useState({price: '', name: '', description: ''});
+    const [formInput, updateFormInput] = useState({price: 0, name: '', description: ''});
     const router = useRouter();
 
     async function onChange(e) {
@@ -40,7 +40,7 @@ export default function CreateItem() {
                     progress: (prog) => console.log(`Received: ${prog}`)
                 }
             )
-            const url = `https://infura-ipfs.io/ipfs/${added.path}`;
+            const url = `https://ipfs.io/ipfs/${added.path}`;
             console.log(`IPFS image url: ${url}`);
             setFileUrl(url);
         } catch (err) {
@@ -49,16 +49,23 @@ export default function CreateItem() {
     }
 
     async function createItem() {
-        const {name, price, description} = formInput;
-        if (!name || !price || !description) return;
+        if (!formInput.name || !formInput.price || !formInput.description) {
+            return;
+        }
         const data = JSON.stringify({
-            name, description,
-            image: fileUrl,
+            name: formInput.name, description: formInput.description,
+            thumbnail: fileUrl,
+            attachments: [
+                {
+                    description: "Thumbnail",
+                    fileUrl: fileUrl
+                }
+            ]
         });
 
         try {
             const added = await client.add(data);
-            const url = `https://infura-ipfs.io/ipfs/${added.path}`;
+            const url = `https://ipfs.io/ipfs/${added.path}`;
             await createSale(url);
         } catch (err) {
             console.log('Error while uploading file', err);
@@ -66,31 +73,29 @@ export default function CreateItem() {
     }
 
     async function createSale(url) {
-        debugger;
         const web3Modal = new Web3Modal();
         const connection = await web3Modal.connect();
         const provider = new ethers.providers.Web3Provider(connection);
         const signer = provider.getSigner();
 
-        let contract = new ethers.Contract(nftaddress, NFT.abi, signer);
-        let transaction = await contract.createToken(url);
-        let tx = await transaction.wait();
+        const nftContract = new ethers.Contract(nftaddress, NFT.abi, signer);
+        const nftTransaction = await nftContract.createToken(url);
+        let tx = await nftTransaction.wait();
 
-        debugger;
         let event = tx.events[0];
         let value = event.args[2];
         let tokenId = value.toNumber();
 
         const price = ethers.utils.parseUnits(formInput.price, 'ether');
 
-        contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-        let listingPrice = await contract.getListingPrice();
+        const MarketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+        let listingPrice = await MarketContract.getListingPrice();
         listingPrice = listingPrice.toString();
 
-        transaction = await contract.createMarketItem(
+        const marketTransaction = await MarketContract.createMarketItem(
             nftaddress, tokenId, price, {value: listingPrice}
         )
-        await transaction.wait();
+        await marketTransaction.wait();
         await router.push('/');
     }
 

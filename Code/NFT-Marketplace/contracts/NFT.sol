@@ -11,7 +11,7 @@ contract NFT is ERC721URIStorage {
     Counters.Counter private _tokenIds;
     address contractAddress;
 
-    constructor(address marketplaceAddress) ERC721("Metaverse Tokens", "METT") {
+    constructor(address marketplaceAddress) ERC721("VOMS NFTs", "VOMSNFT") {
         contractAddress = marketplaceAddress;
     }
 
@@ -19,7 +19,7 @@ contract NFT is ERC721URIStorage {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
 
-        _mint(msg.sender, newItemId);
+        _safeMint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
         setApprovalForAll(contractAddress, true);
 
