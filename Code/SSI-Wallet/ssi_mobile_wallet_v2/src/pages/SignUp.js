@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Alert, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -35,15 +35,39 @@ const SignUp = ({ navigation }) => {
           resetForm();
           navigation.navigate("SignIn", { name: "upeksha" });
         } else {
-          alert(
-            "Passwords are not matching. Please check passwords wheter they are matching"
+          // Alert.alert(
+          //   "Passwords do not match"
+          // );
+          Alert.alert(
+            "Bad Inputs",
+            "Passwords do not match",
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => console.log("OK pressed"),
+                style: "default",
+              },
+            ]
+            // {
+            //   cancelable: false,
+            //   onDismiss: () => console.log("Alert dismissed"),
+            //   style: styles.alertContainer,
+            //   titleStyle: styles.titleText,
+            //   messageStyle: styles.messageText,
+            //   buttonStyle: styles.button,
+            //   buttonContainerStyle: styles.buttonContainer,
+            // }
           );
         }
       } else {
-        alert("Password can't be empty");
+        Alert.alert("Password can't be empty");
       }
     } else {
-      alert("User Name can't be empty");
+      Alert.alert("User Name can't be empty");
     }
   };
 
@@ -153,5 +177,34 @@ const SignUp = ({ navigation }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  alertContainer: {
+    backgroundColor: "black",
+    borderRadius: 8,
+    padding: 16,
+    borderWidth: 4,
+    borderColor: "blue",
+  },
+  titleText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+    color: "blue",
+  },
+  messageText: {
+    fontSize: 16,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 16,
+  },
+  button: {
+    flex: 1,
+    marginLeft: 8,
+    marginRight: 8,
+  },
+});
 
 export default SignUp;

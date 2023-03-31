@@ -61,7 +61,7 @@ const SignIn = ({ theme, navigation }) => {
           </Text>
         </View>
         <TextInput
-        style={{ marginBottom: 10 }}
+          style={{ marginBottom: 10 }}
           outlineColor={outlineColor}
           activeOutlineColor={outlineColor}
           textColor={outlineColor}
@@ -69,8 +69,6 @@ const SignIn = ({ theme, navigation }) => {
           placeholderTextColor={outlineColor}
           label="User Name"
           placeholder="Enter User Name"
-          maxLength={20}
-          right={<TextInput.Affix text="/20" />}
           onChangeText={(userName) => setUserEnteredName(userName)}
         />
         <TextInput
@@ -85,10 +83,8 @@ const SignIn = ({ theme, navigation }) => {
           secureTextEntry={passwordVisibility}
           right={
             <TextInput.Icon
-              icon="eye"
-              onPress={() => {
-                setPasswordVisibility(!passwordVisibility);
-              }}
+              icon={passwordVisibility ? "eye" : "eye-off"}
+              onPress={() => setPasswordVisibility(!passwordVisibility)}
             />
           }
           onChangeText={(pass) => {

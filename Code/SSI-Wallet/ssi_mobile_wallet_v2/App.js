@@ -91,7 +91,7 @@ function Root() {
         name="Settings"
         component={Settings}
         options={{
-          title: "Scan Credentials",
+          title: "Settings",
           headerStyle: {
             backgroundColor: "rgb(37, 139, 214)",
           },
