@@ -19,21 +19,24 @@ app.get("/createWalletWithOutEmail", async (req: Request, res: Response) => {
     const trinsic = new TrinsicService();
     // assign that service in account
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
-    console.log(process.env.AUTHTOKEN);
 
     // take the information related to the account
     const accountInfo = await trinsic.account().info();
     console.log(accountInfo);
 
     // create a wallet in the VOMSMobileWallet ecosystem
-    const value = await trinsic.account().loginAnonymous();
-    res.send("is working");
+    const value = await trinsic.account().loginAnonymous("vomsmobilewallet");
+    res.send(value);
   } catch (e) {
     console.error(e);
     console.log("Not working this part");
     return "ERROR" + e;
   }
 });
+
+app.get('/default', (req: Request, res: Response) => {
+  res.send('Hello World !!');
+})
 
 // start the server
 app.listen(port, () => {

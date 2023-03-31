@@ -31,11 +31,76 @@ const MyTheme = {
 function Root() {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Connections" component={Connections} />
-      <Drawer.Screen name="Credentials" component={Credentials} />
-      <Drawer.Screen name="QR Scanner" component={ScannerPage} />
-      <Drawer.Screen name="Settings" component={Settings} />
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={{
+          title: "Home",
+          headerStyle: {
+            backgroundColor: "rgb(37, 139, 214)",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+      {/* <Drawer.Screen
+        name="Connections"
+        component={Connections}
+        options={{
+          title: "My home",
+          headerStyle: {
+            backgroundColor: "rgb(37, 139, 214)",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      /> */}
+      <Drawer.Screen
+        name="Credentials"
+        component={Credentials}
+        options={{
+          title: "Credentials",
+          headerStyle: {
+            backgroundColor: "rgb(37, 139, 214)",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="Scan Credentials"
+        component={ScannerPage}
+        options={{
+          title: "Scan Credentials",
+          headerStyle: {
+            backgroundColor: "rgb(37, 139, 214)",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          title: "Scan Credentials",
+          headerStyle: {
+            backgroundColor: "rgb(37, 139, 214)",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
       {/* <DrawerItem
         label="Help"
         onPress={() => Linking.openURL("https://mywebsite.com/help")}
@@ -48,8 +113,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator theme={styles.container}>
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignIn"
+          component={SignIn}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="ScannerPage" component={ScannerPage} />
         <Stack.Screen
           name="Root"

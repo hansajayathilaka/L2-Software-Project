@@ -8,6 +8,9 @@ const SignIn = ({ theme, navigation }) => {
   const [userEnteredPassword, setUserEnteredPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true);
 
+  // style colour
+  const outlineColor = "rgb(37, 139, 214)";
+
   // const SignIn = () => {
   //   // if (userName == "Upeksha" && password == "abc") {
   //   //   navigation.navigate('Root');
@@ -18,19 +21,19 @@ const SignIn = ({ theme, navigation }) => {
   // };
 
   const signIn = () => {
-    AsyncStorage.getItem('@password').then((value) => {
-        if (value === userEnteredPassword) {
-            console.log(value);
-            setUserEnteredPassword('');
-            console.log(value);
-            navigation.navigate('Root');
-            // navigation.push('Home', {name: 'Upeksha'});
-        } else {
-            console.log(value);
-            alert('password is incorrect. Check the password correctly!');
-        }
-    })
-}
+    AsyncStorage.getItem("@password").then((value) => {
+      if (value === userEnteredPassword) {
+        console.log(value);
+        setUserEnteredPassword("");
+        console.log(value);
+        navigation.navigate("Root");
+        // navigation.push('Home', {name: 'Upeksha'});
+      } else {
+        console.log(value);
+        alert("password is incorrect. Check the password correctly!");
+      }
+    });
+  };
 
   return (
     <View
@@ -45,10 +48,25 @@ const SignIn = ({ theme, navigation }) => {
         }}
       >
         <View style={{ alignItems: "center" }}>
-          <Text variant="headlineMedium">Sign In</Text>
+          <Text
+            variant="headlineMedium"
+            style={{
+              color: "rgb(37, 139, 214)",
+              marginTop: 50,
+              marginBottom: 15,
+              fontWeight: "bold",
+            }}
+          >
+            Sign In
+          </Text>
         </View>
         <TextInput
+        style={{ marginBottom: 10 }}
+          outlineColor={outlineColor}
+          activeOutlineColor={outlineColor}
+          textColor={outlineColor}
           mode="outlined"
+          placeholderTextColor={outlineColor}
           label="User Name"
           placeholder="Enter User Name"
           maxLength={20}
@@ -56,7 +74,13 @@ const SignIn = ({ theme, navigation }) => {
           onChangeText={(userName) => setUserEnteredName(userName)}
         />
         <TextInput
+          style={{ marginBottom: 10 }}
+          outlineColor={outlineColor}
+          activeOutlineColor={outlineColor}
+          textColor={outlineColor}
           mode="outlined"
+          placeholder="Enter Password"
+          placeholderTextColor={outlineColor}
           label="Password"
           secureTextEntry={passwordVisibility}
           right={
@@ -71,7 +95,13 @@ const SignIn = ({ theme, navigation }) => {
             setUserEnteredPassword(pass);
           }}
         />
-        <Button icon="login" onPress={signIn} buttonColor="rgb(37, 139, 214)" textColor="white" >
+        <Button
+          icon="login"
+          onPress={signIn}
+          style={{ marginTop: 10, fontWeight: "bold" }}
+          buttonColor="rgb(37, 139, 214)"
+          textColor="white"
+        >
           Sign In
         </Button>
       </View>

@@ -8,14 +8,17 @@ const Home = ({ navigation }) => {
   const [active, setActive] = React.useState("");
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button
-          icon="qrcode-scan"
-          mode="contained"
-          onPress={() => navigation.navigate("ScannerPage")}
-        >
-          QR Scanner
-        </Button>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Button
+        icon="qrcode-scan"
+        mode="contained"
+        onPress={() => navigation.navigate("ScannerPage")}
+        style={{ marginTop: 10, fontWeight: "bold" }}
+        buttonColor="rgb(37, 139, 214)"
+        textColor="white"
+      >
+        QR Scanner
+      </Button>
     </View>
   );
 

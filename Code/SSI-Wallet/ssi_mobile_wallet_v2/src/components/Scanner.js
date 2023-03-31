@@ -45,10 +45,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 400,
     backgroundColor: 'black',
-    padding: 100,
-    margin: 20,
+    margin: 10,
   },
 });
 

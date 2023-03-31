@@ -4,8 +4,7 @@ import Scanner from "../components/Scanner";
 
 const ScannerPage = ({ navigation }) => {
   return (
-    <View>
-      <Text>Scanner Page</Text>
+    <View style={{flex: 1, backgroundColor: 'black'}}>
       <Scanner />
     </View>
   )

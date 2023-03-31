@@ -10,6 +10,7 @@ const SignUp = ({ navigation }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [confPasswordVisibility, setconfPasswordVisibility] = useState(true);
 
+  // style colour
   const outlineColor = "rgb(37, 139, 214)";
 
   // store the password in the asynch storage
@@ -26,18 +27,23 @@ const SignUp = ({ navigation }) => {
 
   // check the equality of the password and confPassword and store the password in the storage
   const isBothPasswordsEqual = () => {
-    if (password != "") {
-      if (password === confPassword) {
-        storeData(userName);
-        storeData(password);
-        navigation.navigate("SignIn", { name: "upeksha" });
+    if (userName != "") {
+      if (password != "") {
+        if (password === confPassword) {
+          storeData(userName);
+          storeData(password);
+          resetForm();
+          navigation.navigate("SignIn", { name: "upeksha" });
+        } else {
+          alert(
+            "Passwords are not matching. Please check passwords wheter they are matching"
+          );
+        }
       } else {
-        alert(
-          "Passwords are not matching. Please check passwords wheter they are matching"
-        );
+        alert("Password can't be empty");
       }
     } else {
-      alert("Password can't be empty");
+      alert("User Name can't be empty");
     }
   };
 
@@ -65,22 +71,39 @@ const SignUp = ({ navigation }) => {
         }}
       >
         <View style={{ alignItems: "center" }}>
-          <Text variant="headlineMedium">Sign Up</Text>
+          <Text
+            variant="headlineMedium"
+            style={{
+              color: "rgb(37, 139, 214)",
+              marginTop: 30,
+              marginBottom: 15,
+              fontWeight: "bold",
+            }}
+          >
+            Sign Up
+          </Text>
         </View>
+
         <TextInput
+          style={{ marginBottom: 10 }}
+          outlineColor={outlineColor}
+          activeOutlineColor={outlineColor}
+          textColor={outlineColor}
           mode="outlined"
-          // outlineColor={outlineColor}
-          // textColor={outlineColor}
-          label="User Name"
           placeholder="Enter User Name"
-          maxLength={20}
-          right={<TextInput.Affix text="/20" />}
+          placeholderTextColor={outlineColor}
+          label="User Name"
           onChangeText={(userName) => setUserName(userName)}
         />
+
         <TextInput
+          style={{ marginBottom: 10 }}
+          outlineColor={outlineColor}
+          activeOutlineColor={outlineColor}
+          textColor={outlineColor}
           mode="outlined"
-          // outlineColor={outlineColor}
-          // textColor={outlineColor}
+          placeholder="Enter Password"
+          placeholderTextColor={outlineColor}
           label="Password"
           secureTextEntry={passwordVisibility}
           right={
@@ -95,13 +118,15 @@ const SignUp = ({ navigation }) => {
             setPassword(pass);
           }}
         />
+
         <TextInput
+          style={{ marginBottom: 10 }}
+          outlineColor={outlineColor}
+          activeOutlineColor={outlineColor}
+          textColor={outlineColor}
           mode="outlined"
-          // outlineColor={outlineColor}
-          // textColor={outlineColor}
-          // selectionColor={outlineColor}
-          // underlineColor={outlineColor}
-          // activeUnderlineColor={outlineColor}
+          placeholder="Enter Confirm Password"
+          placeholderTextColor={outlineColor}
           label="Confirm Password"
           secureTextEntry={confPasswordVisibility}
           right={
@@ -114,9 +139,11 @@ const SignUp = ({ navigation }) => {
             setConfPassword(confPass);
           }}
         />
+
         <Button
           icon="account-arrow-right"
           onPress={signUp}
+          style={{ marginTop: 10, fontWeight: "bold" }}
           buttonColor="rgb(37, 139, 214)"
           textColor="white"
         >
