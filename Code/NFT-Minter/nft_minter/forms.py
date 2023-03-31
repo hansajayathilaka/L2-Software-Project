@@ -1,8 +1,6 @@
 from enum import Enum
 from django.conf import settings
 
-#from colorfield.fields import ColorField
-from django.db import models
 from django import forms
 
 
@@ -24,6 +22,7 @@ class FuelType(Enum):
     DIESEL = 'Diesel'
     ELECTRIC = 'Electric'
     KEROSENE_OIL = 'Kerosene Oil'
+    HYBRID = 'Hybrid'
     OTHER = 'Other'
 
     @classmethod
@@ -33,23 +32,23 @@ class FuelType(Enum):
 
 class NFTRequestForm(forms.Form):
     owner_address = forms.CharField(label='Owner\'s Address', required=False if settings.DEBUG else True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    owner_name = forms.CharField(label='Full Name', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    owner_name = forms.CharField(label='Full Name', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     owner_nic = forms.CharField(label='NIC', required=False if settings.DEBUG else True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    description = forms.CharField(label='Description', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    description = forms.CharField(label='Description', required=False, widget=forms.Textarea(attrs={'class': 'form-control'}))
     engine_no = forms.CharField(label='Engine Number', required=False if settings.DEBUG else True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     chassis_no = forms.CharField(label='Chassis Number', required=False if settings.DEBUG else True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    vehicle_type = forms.ChoiceField(label='Vehicle Type', choices=VehicleTypes.choices(), required=False if settings.DEBUG else True)
-    company = forms.CharField(label='Company', required=False if settings.DEBUG else True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    fuel_type = forms.ChoiceField(label='Fuel Type', choices=FuelType.choices(), required=False if settings.DEBUG else True)
-    vehicle_model = forms.CharField(label='Model Number', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    manufactured_date = forms.DateField(label='Date of Manufacture', required=False)
-    registered_data = forms.DateField(label='Date of Registered', required=False if settings.DEBUG else True)
+    vehicle_type = forms.ChoiceField(label='Vehicle Type', choices=VehicleTypes.choices(), required=False if settings.DEBUG else True, widget=forms.Select(attrs={'class': 'form-select'}))
+    company = forms.CharField(label='Company', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    fuel_type = forms.ChoiceField(label='Fuel Type', choices=FuelType.choices(), required=False if settings.DEBUG else True, widget=forms.Select(attrs={'class': 'form-select'}))
+    vehicle_model = forms.CharField(label='Model Number', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    manufactured_date = forms.DateField(label='Date of Manufacture', required=False, widget=forms.DateInput(attrs={'class': 'form-control'}))
+    registered_date = forms.DateField(label='Date of Registered', required=False if settings.DEBUG else True, widget=forms.DateInput(attrs={'class': 'form-control'}))
     body_type = forms.CharField(label='Body Type', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     wheel_base = forms.CharField(label='Wheel Base (cm)', required=False,  widget=forms.TextInput(attrs={'class': 'form-control'}))
     color = forms.CharField(label='Color', required=False,  widget=forms.TextInput(attrs={'class': 'form-control'}))
     seating_capacity = forms.IntegerField(label='Seating Capacity', required=False if settings.DEBUG else True)
     internal_height = forms.DecimalField(label='Internal Height (cm)', required=False)
     cylinder_capacity = forms.IntegerField(label='Cylinder Capacity (cc)', required=False if settings.DEBUG else True)
-    price = forms.DecimalField(label="Estimation Price (MATIC)", required=True)
+    price = forms.DecimalField(label="Estimation Price (MATIC)", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     thumbnail = forms.ImageField(label='Thumbnail', required=True)
     attachments = forms.FileField(label='Attachments', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=True)

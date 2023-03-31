@@ -16,7 +16,7 @@
 function login() {
     const windowFeatures = "left=100,top=100,width=500,height=700";
     const handle = window.open("http://localhost:7070/get-invite?oauth=1&redirect=http://localhost:3000/?data=", "VOMS-Verifyer", windowFeatures);
-    // debugger;
+
     if (!handle) {
     // The window wasn't allowed to open
     // This is likely caused by built-in popup blockers.
