@@ -10,7 +10,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { initialState, reducer } from "../reducer/ìndex";
 import {SET_LOADING, SET_LOGIN, SET_NFT} from "../reducer/actions";
 import loadNFTs from "../utils/loadNFT";
-import {useRouter} from "next/router";
 import logo from "../public/logo.svg";
 
 
@@ -87,11 +86,11 @@ function MyApp({Component, pageProps}) {
                                 Home
                             </a>
                         </Link>
-                        <Link href="/create-item">
-                            <a className="mr-8 text-white">
-                                Sell Digital Asset
-                            </a>
-                        </Link>
+                        {/*<Link href="/create-item">*/}
+                        {/*    <a className="mr-8 text-white">*/}
+                        {/*        Sell Digital Asset*/}
+                        {/*    </a>*/}
+                        {/*</Link>*/}
                         {
                             state.loggedIn ?
                                 <Link href="/my-assets">

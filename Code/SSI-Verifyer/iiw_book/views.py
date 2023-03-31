@@ -124,7 +124,7 @@ def verify(request, connection_id):
             template.render(
                 {
                     "img": data['img'],
-                    "name": f"{data['fname']} {data['fname']}",
+                    "name": f"{data['fname']} {data['lname']}",
                     "data": base64_data,
                 }, request
             )
