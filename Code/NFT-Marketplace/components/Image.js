@@ -9,6 +9,8 @@ export const CustomImage = ({src, size}) => {
         width: 100,
         src: "",
     })
+    const ipfsUrlSuffix = process.env.NEXT_PUBLIC_IPFS_URL_PREFIX;
+
     useEffect(() => {
         switch (size) {
             case undefined:
@@ -33,7 +35,7 @@ export const CustomImage = ({src, size}) => {
     return(
         <div className="w-full">
             <Image
-                loader={() => src} src={src}
+                loader={() => src} src={ipfsUrlSuffix + src}
                 alt="NFT Thumbnail"
                 layout="responsive"
                 width={1000}

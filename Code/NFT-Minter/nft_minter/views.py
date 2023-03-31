@@ -17,7 +17,11 @@ class NFTCreateView(View):
             # Save thumbnail and attachments to IPFS
             thumbnail = form.cleaned_data.get('thumbnail')
             attachments = form.files.getlist('attachments')
-            hash_list = upload_files_to_ipfs([thumbnail, *attachments])
+            try:
+                hash_list = upload_files_to_ipfs([thumbnail, *attachments])
+            except Exception as e:
+                form.add_error(None, str(e))
+                hash_list = []
 
             if hash_list:
                 nft_data = {
@@ -64,21 +68,9 @@ class NFTCreateView(View):
                     )
                 except Exception as e:
                     print(e)
-                    return render(request, 'nft-request-form.html', {
-                        'form': form,
-                        'errors': {
-                            'NFT Minting': 'Error while minting nft',
-                        }})
+                    form.add_error(None, str(e))
             else:
-                return render(request, 'nft-request-form.html',{
-                    'form': form,
-                    'errors': {
-                        'File upload': 'Error while uploading files to IPFS',
-                    }})
-            ...
+                form.add_error(None, "Error while uploading files to IPFS")
+            return render(request, 'nft-request-form.html', {'form': form, 'errors': form.errors})
         else:
-            if form.errors:
-                return render(request, 'nft-request-form.html', {'form': form, 'errors': form.errors})
-            else:
-                return render(request, 'nft-request-form.html', {'form': form})
-        return redirect('home')
+            return render(request, 'nft-request-form.html', {'form': form, 'errors': form.errors})
