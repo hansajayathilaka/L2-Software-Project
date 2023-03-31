@@ -16,3 +16,5 @@ Code/SSI-Issuer/assets_files
 Code/NFT-Minter/static_files/*
 
 **/*.pyc
+
+Code/NFT-Minter/db.sqlite3
