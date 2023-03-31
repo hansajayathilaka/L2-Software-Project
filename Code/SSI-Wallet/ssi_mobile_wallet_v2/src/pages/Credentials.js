@@ -1,27 +1,26 @@
 import { View, Text } from "react-native";
-import {React, useState} from "react";
+import { React, useState, useEffect } from "react";
 import axios from "axios";
-const baseUrl = "http://localhost:8000/";
+import CredentialsCard from "../components/CredentialsCard";
+// const baseUrl = "http://10.0.2.2:8000/";
 
 export default function Credentials() {
-  const data = useState('');
-
-  axios.get(`${baseUrl}default`)
-  .then(response => {
-    var data = response.data;
-    console.log(data);
-  })
-  .catch(error => {
-    console.log('Error: ', error.message);
-  })
-  .finally(() => {
-    console.log('Request is completed');
-  });
+  // axios
+  //   .get("http://10.0.2.2:8000/default")
+  //   .then((response) => {
+  //     var data = response.data;
+  //     console.log(data);
+  //   })
+  //   .catch((error) => {
+  //     console.log("Error: ", error.message);
+  //   })
+  //   .finally(() => {
+  //     console.log("Request is completed");
+  //   });
 
   return (
     <View>
-      <Text>Credentials</Text>
+      <CredentialsCard />
     </View>
   );
 }
-

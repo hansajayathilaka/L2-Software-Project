@@ -13,6 +13,7 @@ const app: Express = express();
 app.use(bodyParser.json());
 const port = 8000;
 
+// crating the wallet
 app.get("/createWalletWithOutEmail", async (req: Request, res: Response) => {
   try {
     // create a Trinsic service

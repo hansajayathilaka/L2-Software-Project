@@ -1,24 +1,15 @@
 import { View } from "react-native";
 import React, { useState } from "react";
-import { withTheme, Button, TextInput, Text } from "react-native-paper";
+import { Button, TextInput, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = ({ theme, navigation }) => {
-  const [userEnteredUserName, setUserEnteredName] = useState("");
+  // const [userEnteredUserName, setUserEnteredName] = useState("");
   const [userEnteredPassword, setUserEnteredPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true);
 
   // style colour
   const outlineColor = "rgb(37, 139, 214)";
-
-  // const SignIn = () => {
-  //   // if (userName == "Upeksha" && password == "abc") {
-  //   //   navigation.navigate('Root');
-  //   // } else {
-  //   //   alert("Check the password and user name");
-  //   // }
-  //   navigation.navigate('Root');
-  // };
 
   const signIn = () => {
     AsyncStorage.getItem("@password").then((value) => {

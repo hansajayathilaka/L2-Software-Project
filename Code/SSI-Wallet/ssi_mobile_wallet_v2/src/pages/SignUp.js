@@ -35,9 +35,6 @@ const SignUp = ({ navigation }) => {
           resetForm();
           navigation.navigate("SignIn", { name: "upeksha" });
         } else {
-          // Alert.alert(
-          //   "Passwords do not match"
-          // );
           Alert.alert(
             "Bad Inputs",
             "Passwords do not match",
@@ -52,15 +49,6 @@ const SignUp = ({ navigation }) => {
                 style: "default",
               },
             ]
-            // {
-            //   cancelable: false,
-            //   onDismiss: () => console.log("Alert dismissed"),
-            //   style: styles.alertContainer,
-            //   titleStyle: styles.titleText,
-            //   messageStyle: styles.messageText,
-            //   buttonStyle: styles.button,
-            //   buttonContainerStyle: styles.buttonContainer,
-            // }
           );
         }
       } else {
