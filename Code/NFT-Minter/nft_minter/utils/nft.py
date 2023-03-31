@@ -23,7 +23,7 @@ def get_abi(contract_type):
 
     with open(abi_path, 'r') as f:
         abi = json.load(f)
-    return abi
+    return abi["abi"]
 
 
 def get_contract(contract_type):
@@ -39,14 +39,16 @@ def get_contract(contract_type):
     return w3, contract
 
 
-def create_transaction(w3, contract, function_name, params=None, gas_price=None) -> TxReceipt:
+def create_transaction(w3, contract, function_name, params=None, value=0, gas_price=None) -> TxReceipt:
     if params is None:
         params = []
-    nonce = w3.eth.getTransactionCount(settings.PUBLIC_KEY)
-    tx = getattr(contract.functions, function_name)(*params).buildTransaction(
+    account = w3.eth.account.from_key(settings.PRIVATE_KEY)
+    nonce = w3.eth.get_transaction_count(account.address)
+    tx = getattr(contract.functions, function_name)(*params).build_transaction(
         {
             "gasPrice": gas_price if gas_price else w3.eth.gas_price,
             "chainId": settings.CHAIN_ID,
+            "value": value,
             "from": settings.PUBLIC_KEY,
             "nonce": nonce,
         }
@@ -55,7 +57,13 @@ def create_transaction(w3, contract, function_name, params=None, gas_price=None)
     tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
     print(*tx_receipt['logs'], sep='\n')
-    return tx_receipt
+    return tx_hash, tx_receipt
+
+
+def get_event(contract, tx_hash, event_name):
+    event_filter = contract.events[event_name].createFilter(fromBlock='latest', argument_filters={'txnHash': tx_hash})
+    event_list = event_filter.get_all_entries()
+    return event_list
 
 
 def mint_nft(details, price, owner_name, owner_nic):
@@ -67,7 +75,9 @@ def mint_nft(details, price, owner_name, owner_nic):
         # Mint NFT
         w3, contract = get_contract(Contract.NFT)
         try:
-            receipt = create_transaction(w3, contract, 'createToken', [_hash])
+            tx_hash, receipt = create_transaction(w3, contract, 'createToken', params=[_hash])
+            event_logs = contract.events.Transfer().process_receipt(receipt)
+            item_id = event_logs[0]["args"]["tokenId"]
             print(receipt.logs)
         except Exception as e:
             print(e)
@@ -76,7 +86,15 @@ def mint_nft(details, price, owner_name, owner_nic):
         # Add NFT to marketplace
         w3, contract = get_contract(Contract.NFT_Marketplace)
         try:
-            receipt = create_transaction(w3, contract, 'createMarketItem', [settings.NFT_CONTRACT_ADDRESS, _hash, price, owner_name, owner_nic])
+            listing_price = contract.functions.getListingPrice().call()
+            _price = w3.to_wei(price, "ether")
+            tx_hash, receipt = create_transaction(
+                w3, contract,
+                'createMarketItem',
+                params=[settings.NFT_CONTRACT_ADDRESS, item_id, _price, owner_name, owner_nic],
+                value=listing_price
+            )
+            # events = get_event(contract, tx_hash, "MarketItemCreated")
             return receipt.logs
         except Exception as e:
             print(e)

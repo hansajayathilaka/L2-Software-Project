@@ -1,33 +1,41 @@
-import requests
-
+from web3 import Web3
 import json
 
-files = {
+# Connect to the Polygon Mumbai testnet
+w3 = Web3(Web3.HTTPProvider('https://rpc-mumbai.maticvigil.com'))
 
-'file': (open('C:/Users/hansa/Downloads/download.jpeg', 'rb'), open('C:/Users/hansa/Downloads/pexels-pixabay-45201.jpg', 'rb')),
+# Set the contract address and ABI
+contract_address = "0x0000000000000000000000000000000000000000"  # Replace with your contract address
+with open('contract_abi.json', 'r') as f:
+    contract_abi = json.load(f)
 
+# Instantiate the contract
+contract = w3.eth.contract(address=contract_address, abi=contract_abi)
+
+# Prepare the transaction
+account = w3.eth.account.privateKeyToAccount("0xYOURPRIVATEKEY")
+value = w3.toWei(1, 'ether')  # Replace with the amount you want to send
+gas = 200000
+gas_price = w3.toWei('50', 'gwei')
+
+# Create the transaction object
+tx = {
+    'from': account.address,
+    'to': contract_address,
+    'value': value,
+    'gas': gas,
+    'gasPrice': gas_price,
+    'nonce': w3.eth.get_transaction_count(account.address),
 }
 
-project_id = '2EmjXF7GSMqwUg8CQb1q7F4ImWd'
+# Sign the transaction with your private key
+signed_tx = account.signTransaction(tx)
 
-project_secret = 'a07868d7486d89a1ee3dd2a1649c5571'
+# Send the transaction to the network
+tx_hash = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
 
-files = {
-    'file1': open('C:/Users/hansa/Downloads/download.jpeg', 'rb'),
-    'file2': open('C:/Users/hansa/Downloads/pexels-pixabay-45201.jpg', 'rb'),
-}
+# Wait for the transaction to be confirmed
+tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
-response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=files, auth=(project_id, project_secret))
-
-try:
-    res = response.text.split('\n')
-    hash_list = []
-    for i in res:
-        i = json.loads(i)
-        hash_list.append(i['Hash'])
-except Exception as e:
-    print(e)
-
-hash = p['Hash']
-
-print(hash)
+# Print the transaction receipt
+print("Transaction receipt:", tx_receipt)

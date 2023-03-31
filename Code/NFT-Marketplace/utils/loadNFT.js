@@ -7,6 +7,7 @@ import axios from "axios";
 export const URINFTDataMapper = async (i) => {
     const provider = new ethers.providers.JsonRpcProvider(rpc);
     const nftContract = new ethers.Contract(nftaddress, NFT.abi, provider);
+    const ipfsUrlSuffix = process.env.NEXT_PUBLIC_IPFS_URL_PREFIX;
 
     let tokenUri;
     try {
@@ -17,7 +18,7 @@ export const URINFTDataMapper = async (i) => {
 
     let meta;
     try {
-        meta = await axios.get(tokenUri, {maxRedirects: 5});
+        meta = await axios.get(ipfsUrlSuffix + tokenUri, {maxRedirects: 5});
     } catch (e) {
         console.error(e);
     }
@@ -34,7 +35,7 @@ export const URINFTDataMapper = async (i) => {
         attachments: meta.data.attachments,
         name: meta.data.name,
         description: meta.data.description,
-        data: meta.data.data,
+        more_data: meta.data.more_data,
     };
 }
 

@@ -3,7 +3,7 @@ import {SET_LOADING, SET_LOGIN, SET_NFT} from "./actions";
 
 export const initialState = {
     nft: [],
-    loggedIn: true,
+    loggedIn: false,
     loading: false,
 }
 

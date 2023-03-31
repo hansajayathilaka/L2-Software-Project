@@ -169,11 +169,25 @@ export default function Assert({state, dispatch}) {
                                         <p className="font-bold mb-1">Description</p>
                                         <p className="text-gray-500 ml-6">{currentNFT.description}</p>
                                     </div>
+                                    {
+                                        Object.entries(currentNFT.more_data).map(([key,value],i) => {
+                                            debugger;
+                                            const split_key = key.split("_");
+                                            const formatted_key = split_key.map(val => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase());
+                                            const formatted_string = formatted_key.join(" ")
+                                            return (
+                                                <div className="grow ml-6" key={i}>
+                                                    <p className="font-bold mb-1">{formatted_string}</p>
+                                                    <p className="text-gray-500 ml-6">{value}</p>
+                                                </div>
+                                            );
+                                        })
+                                    }
                                     <div className="grow ml-6">
                                         <p className="font-bold mb-1">Attachments</p>
                                         {
                                             currentNFT.attachments.map((item, index) => {
-                                                return <p className="text-gray-500 ml-6" key={index}><a href={item.fileUrl} target="_blank" rel="noreferrer">{item.description}</a></p>
+                                                return <p className="text-gray-500 ml-6" key={index}><a href={"image/" + item.fileUrl} target="_blank" rel="noreferrer">{item.description}</a></p>
                                             })
                                         }
                                     </div>

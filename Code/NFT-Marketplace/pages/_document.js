@@ -6,6 +6,7 @@ export default class MyDocument extends Document {
             <Html>
                 <Head >
                     <title>VOMS Marketplace</title>
+                    <link rel="icon" href="/favicon.svg" />
                 </Head>
                 <body>
                 <Main />
