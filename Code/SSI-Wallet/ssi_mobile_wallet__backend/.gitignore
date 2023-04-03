@@ -1,0 +1,27 @@
+# Logs
+logs
+*.log
+
+# Compiled output
+dist
+build
+lib
+
+# Dependencies
+node_modules
+
+# Environment variables
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode
+.idea
+
+# Miscellaneous
+*.DS_Store
+Thumbs.db
