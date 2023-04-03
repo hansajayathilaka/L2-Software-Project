@@ -11,13 +11,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@trinsic/trinsic": "1.10.0",
+    "@trinsic/trinsic": "^1.10.0",
     "@types/express": "^4.17.17",
     "@types/node": "^18.15.11",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.3"
+  },
+  "dependencies": {
+    "@trinsic/trinsic": "^1.10.0",
+    "dotenv": "^16.0.3"
   }
 }
