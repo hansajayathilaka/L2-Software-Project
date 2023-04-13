@@ -43,7 +43,7 @@ class NFTRequestForm(forms.Form):
     fuel_type = forms.ChoiceField(label='Fuel Type', choices=FuelType.choices(), required=False if settings.DEBUG else True)
     vehicle_model = forms.CharField(label='Model Number', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     manufactured_date = forms.DateField(label='Date of Manufacture', required=False)
-    registered_date = forms.DateField(label='Date of Registered', required=False if settings.DEBUG else True)
+    registered_data = forms.DateField(label='Date of Registered', required=False if settings.DEBUG else True)
     body_type = forms.CharField(label='Body Type', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     wheel_base = forms.CharField(label='Wheel Base (cm)', required=False,  widget=forms.TextInput(attrs={'class': 'form-control'}))
     color = forms.CharField(label='Color', required=False,  widget=forms.TextInput(attrs={'class': 'form-control'}))

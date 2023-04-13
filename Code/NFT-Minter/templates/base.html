@@ -3,10 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/mystyle.css">
-    <link rel="stylesheet" href="css/fonts.css">
-
     <title>
         {% block title %}
             NFT Minter
@@ -19,6 +15,14 @@
     {% block style %}
     {% endblock %}
 <body>
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+              <span class="navbar-brand mb-0 h1">Navbar</span>
+            </div>
+          </nav>
+    </header>
+
     {% block content %}
     {% endblock %}
 </body>

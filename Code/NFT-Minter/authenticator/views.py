@@ -2,9 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
-
 from authenticator.forms import LoginForm
-
 
 class LoginView(View):
     def get(self, request):
