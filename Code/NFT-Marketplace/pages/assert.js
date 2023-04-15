@@ -1,6 +1,6 @@
 import {useRouter} from "next/router";
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { toast } from 'react-toastify';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
@@ -8,10 +8,18 @@ import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import {CustomImage} from "../components/Image";
 import buyNft from "../utils/buyNFT";
 import {SET_LOADING} from "../reducer/actions";
+import changePriceNFT from "../utils/changePriceNFT";
 
-
+/**
+ * This is for view vehicle assert
+ * @param state
+ * @param dispatch
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function Assert({state, dispatch}) {
     const router = useRouter();
+    const editPriceBoxRef = useRef(null);
     const [currentNFT, setCurrentNFT] = useState(null)
     const [isConfirmOpen, setIsConfirmOpen] = useState(true);
     const [edit, setEdit] = useState(false);
@@ -59,21 +67,79 @@ export default function Assert({state, dispatch}) {
     }
 
 
-    function handleDeleteClick() {
+
+    function handleChangePriceClick() {
+        debugger;
+        if (price === "") {
+            toast("Invalid Price", {type: toast.TYPE.ERROR});
+        } else {
+            changePriceNFT(currentNFT, price);
+        }
+    }
+
+    function handlePriceChangeCancelClick() {
+        setEdit(false);
+    }
+
+    function handleBuyClick() {
         if (state.loggedIn === false) {
             toast("Please login before buy...", {type: toast.TYPE.ERROR})
         }
         setIsConfirmOpen(true);
     }
 
-    function handleConfirmClick() {
-        // do something
-        setIsConfirmOpen(false);
-    }
+    const PriceComp = () => {
+        if (router.query.edit) {
+            if (edit === true) {
+                return (
+                    <>
+                        <p className="font-bold mb-1">Price</p>
+                        <div className="flex m-2">
+                            <input
+                                className="appearance-none block p-2 px-4 text-3xl w-3/4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="grid-last-name" type="text" placeholder={currentNFT.price}
+                                ref={editPriceBoxRef}
+                                value={price}
+                                onChange={val => setPrice(val.target.value)}
+                                autoFocus
+                            />
+                            <div className="flex mx-6 items-center">
+                                <div className="flex items-center mr-2 px-2 border-2 rounded-lg h-full hover:bg-gray-200" onClick={handleChangePriceClick}>
+                                    <FontAwesomeIcon icon={solid("check")} size={"3x"} color={'green'} />
+                                </div>
+                                <div className="flex items-center px-4 border-2 rounded-lg h-full hover:bg-gray-200" onClick={handlePriceChangeCancelClick}>
+                                    <FontAwesomeIcon icon={solid('xmark')} size={"3x"} color={'red'} />
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <p className="font-bold mb-1">Price</p>
+                        <div className="flex">
+                            <p className="text-3xl text-gray-500 p-2 px-4 rounded-lg bg-gray-50 hover:bg-gray-200 hover:text-gray-800"
+                               onClick={() => setEdit(true)}
+                            >
+                                {currentNFT.price} MATIC
+                            </p>
+                        </div>
+                    </>
+                )
+            }
+        } else {
+            return (
+                <>
+                    <p className="font-bold mb-1">Price</p>
+                    <div className="flex">
+                        <p className="px-4 text-3xl text-gray-500">{currentNFT.price} MATIC</p>
+                    </div>
+                </>
+            )
+        }
+    };
 
-    function handleCancelClick() {
-        setIsConfirmOpen(false);
-    }
 
     if (state.loading) {
         return (
@@ -111,60 +177,9 @@ export default function Assert({state, dispatch}) {
                                     <div className="text-center lg:max-w-3xl md:max-w-xl">
                                         <h2 className="text-3xl font-bold mb-12 px-6">{currentNFT.name}</h2>
                                     </div>
-                                    {
-                                        edit ?
-                                            <>
-                                                <div className="flex flex-col grow ml-6 mb-5">
-                                                    <p className="font-bold mb-1">Price</p>
-                                                    <div className="flex px-4">
-                                                        <div className="relative mb-3 xl:w-96">
-                                                            <input
-                                                                type="text"
-                                                                className="min-h-full min-w- shadow-sm border-gray-300 rounded-lg m-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
-                                                                id="priceInput"
-                                                                placeholder={`Price ${currentNFT.price}`}/>
-                                                        </div>
-                                                        <div>
-                                                            <button
-                                                                className="mx-2 inline-block min-h-fit rounded bg-blue-500 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                                                                onClick=""
-                                                            >
-                                                                <FontAwesomeIcon icon={solid('user-secret')} />
-                                                            </button>
-                                                            <button
-                                                                className="mx-2 inline-block rounded bg-red-500 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                                                                onClick={() => setEdit(false)}
-                                                            >
-                                                                <FontAwesomeIcon icon={solid('user-secret')} />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </>
-                                            :
-                                            <>
-                                                <div className="flex flex-col grow ml-6 mb-5">
-                                                    <p className="font-bold mb-1">Price</p>
-                                                    <div className="flex">
-                                                        <p className="px-4 text-3xl text-gray-500">{currentNFT.price} MATIC</p>
-                                                        {
-                                                            router.query.edit && !edit ?
-                                                                <button
-                                                                    onClick={() => setEdit(true)}
-                                                                    className="inline-block rounded border-2 border-primary px-6 pt-2 pb-[6px] text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-primary-700 active:text-primary-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
-                                                                >
-                                                                    Edit
-                                                                </button>
-                                                                :
-                                                                <></>
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                            </>
-                                    }
-
+                                    <div className="flex flex-col grow ml-6 mb-3">
+                                        <PriceComp />
+                                    </div>
                                     <div className="grow ml-6">
                                         <p className="font-bold mb-1">Description</p>
                                         <p className="text-gray-500 ml-6">{currentNFT.description}</p>
@@ -227,7 +242,7 @@ export default function Assert({state, dispatch}) {
                                             transition
                                             duration-150
                                             ease-in-out"
-                                            onClick={handleDeleteClick}
+                                            onClick={handleBuyClick}
                                             title={!state.loggedIn ? "Please login before buy" : ""}
                                         >
                                             Buy for {currentNFT.price} MATIC
