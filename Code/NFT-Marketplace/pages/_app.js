@@ -8,7 +8,7 @@ import Image from "next/image";
 import { ToastContainer, toast } from 'react-toastify';
 
 import { initialState, reducer } from "../reducer/ìndex";
-import {SET_LOADING, SET_LOGIN, SET_NFT} from "../reducer/actions";
+import {SET_LOADING, SET_LOGIN, SET_METAMASK, SET_NFT} from "../reducer/actions";
 import loadNFTs from "../utils/loadNFT";
 import logo from "../public/logo.svg";
 
@@ -16,37 +16,43 @@ import logo from "../public/logo.svg";
 function MyApp({Component, pageProps}) {
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    // Login
     useEffect(() => {
-        const val = Math.random();
-        console.log("Start UseEffect on _app.js", val);
-        dispatch({
-            type: SET_LOADING,
-            data: true,
-        });
-        loadNFTs().then((items) => {
-            window.items = items;
-            console.log(items);
-            dispatch({
-                type: SET_NFT,
-                data: items
-            });
-            dispatch({
-                type: SET_LOADING,
-                data: false,
-            });
-        }).catch(err => {
-            console.log('Error while loading NFT.');
-            console.error(err);
-            dispatch({
-                type: SET_LOADING,
-                data: false,
-            });
-        });
-        console.log("Finish UseEffect on _app.js", val);
-        return () => {
-            console.log("Remove UseEffect on _app.js", val);
+        if ('caches' in window){
+
         }
     }, []);
+
+    // Load initial data from Polygon blockchain
+    useEffect(() => {
+        handleConnectMetamask();
+    }, []);
+
+    // Configure with the metamask
+    const handleConnectMetamask =  () => {
+        if (typeof window.ethereum === 'undefined') {
+            toast("Metamask is not installed in this browser", toast.TYPE.ERROR);
+        } else {
+            if (!ethereum.isMetaMask) {
+                toast("You should install metamask for transactions", toast.TYPE.WARNING);
+            } else {
+                ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+                    if (accounts.length > 0) {
+                        // TODO: Check the address with logged in address and verify it is same
+                        dispatch({
+                            type: SET_METAMASK,
+                            data: accounts[0],
+                        });
+                    } else {
+                        toast("No account selected", toast.TYPE.ERROR);
+                    }
+                }).catch(err => {
+                    toast(`Metamask: ${err.message}`, toast.TYPE.WARNING);
+                })
+
+            }
+        }
+    };
 
     const onLoginClick = () => {
         const windowFeatures = "left=100,top=100,width=500,height=700";
@@ -110,7 +116,7 @@ function MyApp({Component, pageProps}) {
                                 <button className="mr-8 text-white inset-y-0 right-0" onClick={onLogoutClick}>
                                     Logout
                                 </button>
-                                <strong className="mr-8">Hi, {state.loggedIn.fname}</strong>
+                                <strong className="mr-8 text-white">Hi, {state.loggedIn.fname}</strong>
                             </>
                             :
                             <button className="mr-8 text-white inset-y-0 right-0 flex flex-row items-center"
@@ -123,6 +129,20 @@ function MyApp({Component, pageProps}) {
                     </div>
                 </div>
             </nav>
+            <div className={"flex items-center w-full h-16 " + (state.metamask ? "bg-emerald-100" : "bg-red-200")}>
+                {
+                    state.metamask ?
+                        <div className="flex justify-center container">
+                            Account {state.metamask}
+                        </div>
+                        :
+                        <div className="flex justify-center container">
+                            <button onClick={handleConnectMetamask} className="mb-3 bg-blue-400 text-white font-bold py-2 px-12 rounded">
+                                Connect with Metamask
+                            </button>
+                        </div>
+                }
+            </div>
 
             {
                 state.loading ?

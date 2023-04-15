@@ -64,7 +64,8 @@ class NFTCreateView(View):
                         nft_data,
                         form.cleaned_data['price'],
                         form.cleaned_data['owner_name'],
-                        form.cleaned_data['owner_nic']
+                        form.cleaned_data['owner_nic'],
+                        form.cleaned_data['owner_address'],
                     )
                 except Exception as e:
                     print(e)

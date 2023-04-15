@@ -68,7 +68,8 @@ contract NFTMarket is ReentrancyGuard {
         uint256 tokenId,
         uint256 price,
         string memory name,
-        string memory nic
+        string memory nic,
+        address owner_address
     ) public payable nonReentrant {
         require(price > 0, "Price must be at least 1 wei");
         require(msg.value == listingPrice, "Payment must be equal to listing price");
@@ -80,7 +81,7 @@ contract NFTMarket is ReentrancyGuard {
         Owner memory _owner = Owner({
             name: name,
             nic: nic,
-            _address: payable(msg.sender)
+            _address: payable(owner_address)
         });
         idToOwners[itemId].push(_owner);
 
@@ -91,6 +92,8 @@ contract NFTMarket is ReentrancyGuard {
             price: price,
             sold:false
         });
+
+        ERC721(nftContract).transferFrom(msg.sender, address(_owner._address), tokenId);
 
         emit MarketItemCreated({
             itemId: itemId,
@@ -106,8 +109,8 @@ contract NFTMarket is ReentrancyGuard {
     function createMarketSale (
         address nftContract,
         uint256 itemId,
-        string memory name,
-        string memory nic
+        string memory new_owner_name,
+        string memory new_owner_nic
     ) public payable nonReentrant {
         uint price = idToMarketItem[itemId].price;
         uint tokenId = idToMarketItem[itemId].tokenId;
@@ -123,8 +126,8 @@ contract NFTMarket is ReentrancyGuard {
 
         // Add new owner to owners list
         idToOwners[itemId].push(Owner({
-            name: name,
-            nic: nic,
+            name: new_owner_name,
+            nic: new_owner_nic,
             _address: payable(msg.sender)
         }));
         idToMarketItem[itemId].sold = true;
@@ -179,6 +182,17 @@ contract NFTMarket is ReentrancyGuard {
         assembly { mstore(items, counter) }
 
         return items;
+    }
+
+    function changeMarketItemPrice(
+        address nftContract,
+        uint256 itemId,
+        uint256 new_price
+    ) public {
+        require(Address.isContract(nftContract), "Invalid NFT contract address");
+        require(msg.sender == idToOwners[itemId][idToOwners[itemId].length - 1]._address, "You are not the owner of this NFT");
+
+        idToMarketItem[itemId].price = new_price;
     }
 
 }
