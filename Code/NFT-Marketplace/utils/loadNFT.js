@@ -9,6 +9,8 @@ export const URINFTDataMapper = async (i) => {
     const nftContract = new ethers.Contract(nftaddress, NFT.abi, provider);
     const ipfsUrlSuffix = process.env.NEXT_PUBLIC_IPFS_URL_PREFIX;
 
+    debugger
+
     let tokenUri;
     try {
         tokenUri = await nftContract.tokenURI(i.tokenId.toNumber());

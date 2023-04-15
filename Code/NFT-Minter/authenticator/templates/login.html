@@ -5,11 +5,9 @@ Login Form | NFT Minter
 {% endblock %}
 
 {% block content %}
-
-
-<div class="row m-auto d-flex aligns-items-center justify-content-center">
-    <div class="col-lg-5 d-flex aligns-items-center justify-content-center">
-        <div class="card mt-5 border-2 shadow-lg p-3 mb-5 bg-white rounded">
+<div class="row h-100">
+    <div class="d-flex col justify-content-center align-items-center">
+        <div class="d-flex card mt-5 border-2 shadow-lg p-3 mb-3 bg-white rounded justify-content-around" style="width: 500px; height: 400px">
             <div class="card-title text-center mt-3">
                 <h2 class="text-primary">Minting Officer Login</h2>
             </div>
@@ -40,12 +38,14 @@ Login Form | NFT Minter
                             <a href="#!">Forgot password?</a>
                         </div>
                     </div>
-                    <div class="d-grid gap-2 col-6 mx-auto mt-3"> <button type="submit"
-                            class="btn btn-primary btn-block mb-5">Login</button></div>
+                    <div class="d-grid gap-2 col-6 mx-auto mt-3">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Login
+                        </button>
+                    </div>
             </form>
         </div>
     </div>
 </div>
 {% endblock %}
-
 

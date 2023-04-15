@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import {useRouter} from "next/router";
 import {SET_LOGIN} from "../reducer/actions";
+import {toast} from "react-toastify";
 
 
 function utf8_to_b64(str) {
@@ -24,6 +25,7 @@ export default function Login({state, dispatch}) {
                 type: SET_LOGIN,
                 data: _data
             });
+            toast("Logged in successfully", {type: toast.TYPE.INFO})
             router.push('/').then(r => console.log("Logged in...")).catch(e => console.error("Error while routing..."));
         } catch (e) {
             debugger

@@ -18,7 +18,6 @@ export default async function historyNFT(nft) {
     const tokenId = nft.tokenId;
 
     async function getPastOwners() {
-        debugger;
         const tokenURI = await contract.tokenURI(4).call();
 
         const response = await fetch(tokenURI);

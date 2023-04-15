@@ -34,8 +34,8 @@ class NFTCreateView(View):
                         'company': form.cleaned_data['company'],
                         'fuel_type': form.cleaned_data['fuel_type'],
                         'vehicle_model': form.cleaned_data['vehicle_model'],
-                        'manufactured_date': form.cleaned_data['manufactured_date'],
-                        'registered_data': form.cleaned_data['registered_data'],
+                        'manufactured_date': str(form.cleaned_data['manufactured_date']),
+                        'registered_data': str(form.cleaned_data['registered_date']),
                         'body_type': form.cleaned_data['body_type'],
                         'wheel_base': form.cleaned_data['wheel_base'],
                         'color': form.cleaned_data['color'],
@@ -64,7 +64,8 @@ class NFTCreateView(View):
                         nft_data,
                         form.cleaned_data['price'],
                         form.cleaned_data['owner_name'],
-                        form.cleaned_data['owner_nic']
+                        form.cleaned_data['owner_nic'],
+                        form.cleaned_data['owner_address'],
                     )
                 except Exception as e:
                     print(e)
