@@ -195,4 +195,15 @@ contract NFTMarket is ReentrancyGuard {
         idToMarketItem[itemId].price = new_price;
     }
 
+    function updateMarketItemSoldStatus(
+        address nftContract,
+        uint256 itemId,
+        bool soldStatus
+    ) public {
+        require(Address.isContract(nftContract), "Invalid NFT contract address");
+        require(msg.sender == idToOwners[itemId][idToOwners[itemId].length - 1]._address, "You are not the owner of this NFT");
+
+        idToMarketItem[itemId].sold = soldStatus;
+    }
+
 }

@@ -1,24 +1,66 @@
 import React, {useState, useEffect} from "react";
-import {ethers} from "ethers";
-import Web3Modal from "web3modal";
 import Link from "next/link";
 
-import {nftaddress, nftmarketaddress} from "../config";
-import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json';
 import {CustomImage} from "../components/Image";
-import {URINFTDataMapper} from "../utils/loadNFT";
-import {SET_LOADING} from "../reducer/actions";
+import {updateSoldStatus} from "../utils/nftSoldStatus";
+import {SET_LOADING, SET_NFT} from "../reducer/actions";
+import {toast} from "react-toastify";
 
 
-export default function MyAssets(props) {
-    const {state, dispatch} = props;
-    // const [myNFTs, setMyNFTs] = useState([]);
-    const [myNFTs, setMyNFTs] = useState(props.state.nft);
+export default function MyAssets({state, dispatch, updateNFTs}) {
+    const [myNFTs, setMyNFTs] = useState([]);
+
+    useEffect(() => {
+        const _nft = [];
+        for(const nft of state.nft) {
+            if (
+                (
+                    state.loggedIn &&
+                    state.loggedIn.wallet_address &&
+                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()
+                ) || (
+                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.metamask.toLowerCase())
+            ) {
+                _nft.push(nft);
+            }
+        }
+        setMyNFTs(_nft);
+    }, []);
+
+    if (!state.metamask || !state.loggedIn) return (
+        <h1 className="py-10 px-20 text-3xl">Please connect to metamask and login using your SSI</h1>
+    );
 
     if (state.loading === false && (myNFTs && !myNFTs.length)) return (
         <h1 className="py-10 px-20 text-3xl">No assets owned</h1>
     );
 
+    const _updateSoldStatus = (nft, status) => {
+        dispatch({
+            type: SET_LOADING,
+            data: true,
+        });
+        updateSoldStatus(nft, status).then(doc => {
+            toast("Selling status updated successfully", toast.TYPE.INFO);
+            updateNFTs();
+        }).catch(err => {
+            toast("Selling status update failed", toast.TYPE.ERROR);
+            toast(err.message, toast.TYPE.ERROR);
+
+            dispatch({
+                type: SET_LOADING,
+                data: false,
+            });
+        });
+    }
+
+    const onClickToBeSale = (nft) => {
+        _updateSoldStatus(nft, false);
+    }
+
+    const onClickToSold = (nft) => {
+        _updateSoldStatus(nft, true);
+    }
 
     return (
         <div className="flex justify-center">
@@ -36,11 +78,19 @@ export default function MyAssets(props) {
                                 </div>
                                 <div className="p-4 bg-gray-100">
                                     <p className="text-2xl mb-4 font-bold text-gray-800">{nft.price} Matic</p>
-                                    <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" onClick={() => console.log(nft)}>
-                                        Mark to be Sale
-                                    </button>
+                                    {
+                                        nft.sold ?
+                                            <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" onClick={() => onClickToBeSale(nft)}>
+                                                Mark to be Sale
+                                            </button>
+                                            :
+                                            <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" onClick={() => onClickToSold(nft)}>
+                                                Mark as Sold
+                                            </button>
+                                    }
+
                                     <Link href={{pathname: '/assert', query: {tokenId: nft.tokenId, edit: true}}}>
-                                        <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" title={`Token Id ${nft.tokenId}`}>
+                                        <button className="mb-3 w-full bg-blue-500 text-white font-bold py-2 px-12 rounded" title={`Token Id ${nft.tokenId}`}>
                                             More details
                                         </button>
                                     </Link>

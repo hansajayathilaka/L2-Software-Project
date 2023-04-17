@@ -5,12 +5,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link'
 import React, {useEffect, useReducer} from "react";
 import Image from "next/image";
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 
-import { initialState, reducer } from "../reducer/ìndex";
+import {initialState, reducer} from "../reducer/ìndex";
 import {SET_LOADING, SET_LOGIN, SET_METAMASK, SET_NFT} from "../reducer/actions";
-import loadNFTs from "../utils/loadNFT";
 import logo from "../public/logo.svg";
+import {checkMetamaskAvailability, getMetamaskAccount} from "../utils/metamask";
+import loadNFTs from "../utils/loadNFT";
 
 
 function MyApp({Component, pageProps}) {
@@ -18,41 +19,61 @@ function MyApp({Component, pageProps}) {
 
     // Login
     useEffect(() => {
-        if ('caches' in window){
+        if ('caches' in window) {
 
         }
     }, []);
 
-    // Load initial data from Polygon blockchain
     useEffect(() => {
-        handleConnectMetamask();
+        const val = Math.random();
+        console.log("Start UseEffect on _app.js", val);
+
+        // Check availability of metamask in browser.
+        checkMetamaskAvailability();
+
+        updateNFTs();
+        console.log("Finish UseEffect on _app.js", val);
+        return () => {
+            console.log("Remove UseEffect on _app.js", val);
+        }
     }, []);
 
-    // Configure with the metamask
-    const handleConnectMetamask =  () => {
-        if (typeof window.ethereum === 'undefined') {
-            toast("Metamask is not installed in this browser", toast.TYPE.ERROR);
-        } else {
-            if (!ethereum.isMetaMask) {
-                toast("You should install metamask for transactions", toast.TYPE.WARNING);
-            } else {
-                ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
-                    if (accounts.length > 0) {
-                        // TODO: Check the address with logged in address and verify it is same
-                        dispatch({
-                            type: SET_METAMASK,
-                            data: accounts[0],
-                        });
-                    } else {
-                        toast("No account selected", toast.TYPE.ERROR);
-                    }
-                }).catch(err => {
-                    toast(`Metamask: ${err.message}`, toast.TYPE.WARNING);
-                })
+    const updateNFTs = () => {
+        dispatch({
+            type: SET_LOADING,
+            data: true,
+        });
+        loadNFTs().then((items) => {
+            window.items = items;
+            console.log(items);
+            dispatch({
+                type: SET_NFT,
+                data: items
+            });
+            dispatch({
+                type: SET_LOADING,
+                data: false,
+            });
+        }).catch(err => {
+            toast("Loading NFT failed", toast.TYPE.ERROR);
+            console.log('Error while loading NFT.');
+            console.error(err);
+            dispatch({
+                type: SET_LOADING,
+                data: false,
+            });
+        });
+    }
 
-            }
-        }
-    };
+    const onClickConnectMetamask = () => {
+        getMetamaskAccount().then(account => {
+            // TODO: Check the address with logged in address and verify it is same
+            dispatch({
+                type: SET_METAMASK,
+                data: account,
+            });
+        });
+    }
 
     const onLoginClick = () => {
         const windowFeatures = "left=100,top=100,width=500,height=700";
@@ -72,7 +93,7 @@ function MyApp({Component, pageProps}) {
 
     return (
         <div>
-            <ToastContainer draggable={false} />
+            <ToastContainer draggable={false}/>
             <nav className="border-b p-2 flex" style={{
                 backgroundColor: "#036",
                 borderBottomWidth: 2,
@@ -92,11 +113,6 @@ function MyApp({Component, pageProps}) {
                                 Home
                             </a>
                         </Link>
-                        {/*<Link href="/create-item">*/}
-                        {/*    <a className="mr-8 text-white">*/}
-                        {/*        Sell Digital Asset*/}
-                        {/*    </a>*/}
-                        {/*</Link>*/}
                         {
                             state.loggedIn ?
                                 <Link href="/my-assets">
@@ -106,30 +122,26 @@ function MyApp({Component, pageProps}) {
                                 </Link>
                                 : <></>
                         }
-                        {/*<Link href="/creator-dashboard">*/}
-                        {/*  <a className="mr-6 text-blue-600">*/}
-                        {/*    Creator Dashboard*/}
-                        {/*  </a>*/}
-                        {/*</Link>*/}
-                        {state.loggedIn ?
-                            <>
-                                <button className="mr-8 text-white inset-y-0 right-0" onClick={onLogoutClick}>
-                                    Logout
+                        {
+                            state.loggedIn ?
+                                <>
+                                    <button className="mr-8 text-white inset-y-0 right-0" onClick={onLogoutClick}>
+                                        Logout
+                                    </button>
+                                    <strong className="mr-8 text-white">Hi, {state.loggedIn.fname}</strong>
+                                </>
+                                :
+                                <button className="mr-8 text-white inset-y-0 right-0 flex flex-row items-center"
+                                        onClick={onLoginClick}>
+                                    <Image className="" src={logo} alt="Logo" height={20} width={20}/>
+                                    <strong className="ml-1">Login with VOMS Verifier</strong>
                                 </button>
-                                <strong className="mr-8 text-white">Hi, {state.loggedIn.fname}</strong>
-                            </>
-                            :
-                            <button className="mr-8 text-white inset-y-0 right-0 flex flex-row items-center"
-                                    onClick={onLoginClick}>
-                                <Image className="" src={logo} alt="Logo" height={20} width={20}/>
-                                <strong className="ml-1">Login with VOMS Verifier</strong>
-                            </button>
                         }
 
                     </div>
                 </div>
             </nav>
-            <div className={"flex items-center w-full h-16 " + (state.metamask ? "bg-emerald-100" : "bg-red-200")}>
+            <div className={"flex items-center w-full h-9 " + (state.metamask ? "bg-emerald-100" : "bg-red-200")}>
                 {
                     state.metamask ?
                         <div className="flex justify-center container">
@@ -137,7 +149,8 @@ function MyApp({Component, pageProps}) {
                         </div>
                         :
                         <div className="flex justify-center container">
-                            <button onClick={handleConnectMetamask} className="mb-3 bg-blue-400 text-white font-bold py-2 px-12 rounded">
+                            <button onClick={onClickConnectMetamask}
+                                    className=" bg-blue-400 text-white font-bold py-0.5 px-8 rounded">
                                 Connect with Metamask
                             </button>
                         </div>
@@ -160,7 +173,7 @@ function MyApp({Component, pageProps}) {
 
             <Component className="flex min-h-full"
                        {...pageProps}
-                       state={state} dispatch={dispatch}
+                       state={state} dispatch={dispatch} updateNFTs={updateNFTs}
             />
         </div>
     )

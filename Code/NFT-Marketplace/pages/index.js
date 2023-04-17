@@ -37,7 +37,7 @@ export default function Home(prop) {
         <div className="px-4" style={{maxWidth: '1600px'}}>
             <div className="grid grid-cols-1, sm:grid-cols-2, lg:grid-cols-4 gap-4 pt-4">
                 {
-                    state.nft.map((nft, i) => (
+                    state.nft.map((nft, i) => nft.sold ? <></> : (
                         <div key={i} className="flex flex-col justify-between border shadow rounded-xl overflow-hidden">
                             <CustomImage src={nft.thumbnail} />
                             <div className="p-4">

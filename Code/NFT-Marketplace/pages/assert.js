@@ -17,7 +17,8 @@ import changePriceNFT from "../utils/changePriceNFT";
  * @returns {JSX.Element}
  * @constructor
  */
-export default function Assert({state, dispatch}) {
+export default function Assert(prop) {
+    const {state, dispatch, updateNFTs} = prop;
     const router = useRouter();
     const editPriceBoxRef = useRef(null);
     const [currentNFT, setCurrentNFT] = useState(null)
@@ -43,22 +44,25 @@ export default function Assert({state, dispatch}) {
     },[router.query.tokenId, state.nft]);
 
 
-    const clickCopyLink = () => {
+    const onClickCopyLink = () => {
         navigator.clipboard.writeText(window.location.href).then(r => {
             toast("Link copied to clipboard", {type: toast.TYPE.INFO});
         })
     }
 
-    const clickBuy = async () => {
+    const _buyNFT = async () => {
         dispatch({
             type: SET_LOADING,
             data: true
         });
         try {
             await buyNft(currentNFT);
+            toast("NFT buy successfully", toast.TYPE.INFO);
+            updateNFTs();
         } catch (err) {
+            toast("Buying NFT failed", toast.TYPE.ERROR);
+            toast(err.message, toast.TYPE.ERROR);
             console.error(err);
-            alert(err.message);
         }
         dispatch({
             type: SET_LOADING,
@@ -66,14 +70,19 @@ export default function Assert({state, dispatch}) {
         });
     }
 
-
-
-    function handleChangePriceClick() {
+    async function handleChangePriceClick() {
         debugger;
         if (price === "") {
             toast("Invalid Price", {type: toast.TYPE.ERROR});
         } else {
-            changePriceNFT(currentNFT, price);
+            try {
+                await changePriceNFT(currentNFT, price);
+                toast("Price changed successfully", toast.TYPE.INFO);
+                updateNFTs();
+            } catch (err) {
+                toast("Price change failed", toast.TYPE.ERROR);
+                toast(err.message, toast.TYPE.ERROR);
+            }
         }
     }
 
@@ -85,7 +94,20 @@ export default function Assert({state, dispatch}) {
         if (state.loggedIn === false) {
             toast("Please login before buy...", {type: toast.TYPE.ERROR})
         }
-        setIsConfirmOpen(true);
+        confirmAlert({
+            title: 'Confirm Buy',
+            message: `Are you sure to buy this NFT for ${currentNFT.price} MATIC?`,
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => _buyNFT()
+                },
+                {
+                    label: 'No',
+                    onClick: () => {}
+                }
+            ]
+        });
     }
 
     const PriceComp = () => {
@@ -222,7 +244,7 @@ export default function Assert({state, dispatch}) {
                                             transition
                                             duration-150
                                             ease-in-out"
-                                            onClick={clickCopyLink}
+                                            onClick={onClickCopyLink}
                                         >
                                             Copy Link
                                         </button>
