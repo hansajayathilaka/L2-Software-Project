@@ -17,18 +17,20 @@
 </head>
     {% block navbar %}
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#036;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#036; border-bottom-width:2px;border-bottom-style:solid;border-bottom-color:#fcba19">
           <!-- Navbar content -->
           <div class="container">
             <a class="navbar-brand" href="/">
+                {% load static %}
               <img
                 class="img-fluid d-none d-md-block"
-                src="/assets/favicon.svg"
-                width="177"
-                height="44"
+                src="{% static 'favicon.svg' %}"
+                width="70"
+                height="35"
                 alt="VOMS logo"
               />
             </a>
+                
             <div class="navbar-brand">
               NFT Minting Service
             </div>
