@@ -22,7 +22,7 @@
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
                 <div class="row justify-content-center align-items-center h-100">
-                    <div class="col-12 col-lg-9 col-xl-7">
+                    <div class="col-12 col-lg-9 col-xl-10">
                         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                             <div class="card-body p-4 p-md-5">
                                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5" style="color: #036 ;">Vehicle Details</h3>
@@ -31,6 +31,11 @@
                                         <div class="col">
                                             <label for="Cowner">Owner Name</label>
                                             {{ form.owner_name }}
+                                        </div>
+                                        <div class="col">
+                                            <label for="body">Estimation Price (MATIC)</label>
+                                            <input type="number" class="form-control" name="price" min="0" value="{{form.price.value}}" required>
+{#                                            {{ form.price }}#}
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Manufacture Date</label>
@@ -43,6 +48,10 @@
                                         <div class="col">
                                             <label for="body">Owner Address</label>
                                             {{ form.owner_address }}
+                                        </div>
+                                        <div class="col">
+                                            <label for="Cowner">Wheel Base (cm)</label>
+                                            {{ form.wheel_base }}
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Registration Date</label>
@@ -58,6 +67,10 @@
                                             {{ form.owner_nic }}
                                         </div>
                                         <div class="col">
+                                            <label for="body">Engine Number</label>
+                                            {{ form.engine_no }}
+                                        </div>
+                                        <div class="col">
                                             <label for="Cowner">Body Type</label>
                                             {{ form.body_type }}
                                         </div>
@@ -65,29 +78,9 @@
 
                                     <div class="row mt-3">
                                         <div class="col">
-                                            <label for="body">Estimation Price (MATIC)</label>
-                                            <input type="number" class="form-control" name="price" min="0" value="{{form.price.value}}" required>
-{#                                            {{ form.price }}#}
-                                        </div>
-                                        <div class="col">
-                                            <label for="Cowner">Wheel Base (cm)</label>
-                                            {{ form.wheel_base }}
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row mt-3">
-                                        <div class="col">
-                                            <label for="body">Engine Number</label>
-                                            {{ form.engine_no }}
-                                        </div>
-                                        <div class="col">
                                             <label for="Cowner">Color</label>
                                             {{ form.color }}
                                         </div>
-                                    </div>
-
-                                    <div class="row mt-3">
                                         <div class="col">
                                             <label for="body">Chassis Number</label>
                                             {{ form.chassis_no }}
@@ -109,6 +102,10 @@
                                             <input type="number" class="form-control" name="internal_height" min="0" value="{{form.internal_height.value}}">
 {#                                            {{ form.internal_height }}#}
                                         </div>
+                                        <div class="col">
+                                            <label for="body">Fuel Type</label><br>
+                                            {{ form.fuel_type }}
+                                        </div>
                                     </div>
 
                                     <div class="row mt-3">
@@ -120,13 +117,6 @@
                                             <label for="body">Cylinder Capacity (cc)</label>
                                             <input type="number" class="form-control" name="cylinder_capacity" min="0" value="{{form.cylinder_capacity.value}}">
 {#                                            {{ form.cylinder_capacity }}#}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-3">
-                                        <div class="col">
-                                            <label for="body">Fuel Type</label><br>
-                                            {{ form.fuel_type }}
                                         </div>
                                         <div class="col">
                                             <label for="body">Vehicle Type</label><br>
