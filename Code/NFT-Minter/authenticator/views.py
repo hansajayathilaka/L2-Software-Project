@@ -25,3 +25,7 @@ class LoginView(View):
         else:
             messages.error(request, 'Invalid username or password')
         return render(request, 'login.html', {'form': form})
+
+class resetPasswordView(View):
+    def get(self, request):
+        return render(request, 'resetPassword.html')
