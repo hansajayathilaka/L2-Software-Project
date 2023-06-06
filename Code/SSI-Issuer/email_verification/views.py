@@ -24,6 +24,7 @@ from django.core.cache import cache
 from .forms import EmailForm, PersonForm
 from .models import Verification, SessionState
 
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -214,7 +215,7 @@ def webhooks(request, topic):
                         "name": "img",
                         "value": "test image url",
                         "mime-type": "text/plain",
-                    },
+                    },  
                     {
                         "name": "email",
                         "value": str(verification.email),

@@ -13,9 +13,12 @@ class Verification(models.Model):
     lname = models.CharField("Last Name", max_length=30)
     dob = models.DateField("Date of Birth", null=True, blank=True)
     address = models.TextField("Address", null=True, blank=True)
-    wallet_address = models.CharField("Wallet Address", max_length=1024, help_text="Address of Etherium wallet", null=True, blank=True)
-    img = models.ImageField("Image", help_text="Portrait Image of the user", null=True, blank=True)
+    wallet_address = models.CharField("Wallet Address", max_length=1024, null=True, blank=True)
+    img = models.ImageField("Image", null=True, blank=True)
     sex = models.CharField("Sex", choices=SEX_CHOICES, max_length=10, default="male", null=True, blank=True)
+    
+
+    
 
     connection_id = models.UUIDField()
     invite_url = models.URLField(max_length=2000)

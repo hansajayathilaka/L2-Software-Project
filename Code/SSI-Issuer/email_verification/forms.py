@@ -2,6 +2,9 @@ from django import forms
 
 from .models import Verification
 
+from django.contrib.auth.forms import AuthenticationForm
+
+
 
 class BaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -19,4 +22,5 @@ class EmailForm(BaseForm):
 class PersonForm(BaseForm):
     class Meta:
         model = Verification
-        fields = ["email", "nic", "fname", "lname", "dob", "address", "wallet_address", "sex", "img"]
+        fields = ["email", "nic", "fname", "lname", "dob", "address", "wallet_address", "sex", "img",]
+        
