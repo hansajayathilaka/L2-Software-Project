@@ -4,7 +4,7 @@ import { Button, TextInput, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = ({ theme, navigation }) => {
-  // const [userEnteredUserName, setUserEnteredName] = useState("");
+  const [userEnteredUserName, setUserEnteredName] = useState("");
   const [userEnteredPassword, setUserEnteredPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true);
 
