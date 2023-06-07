@@ -24,6 +24,7 @@ from django.core.cache import cache
 from .forms import EmailForm, PersonForm
 from .models import Verification, SessionState
 
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -60,7 +61,7 @@ def submit(request):
             email_html = template.render({"redirect_url": redirect_url}, request)
 
             send_mail(
-                "BC Email Verification Invite",
+                "VOMS Email Verification Invite",
                 (
                     "Follow this link to connect with our "
                     f"verification service: {redirect_url}"
@@ -214,7 +215,7 @@ def webhooks(request, topic):
                         "name": "img",
                         "value": "test image url",
                         "mime-type": "text/plain",
-                    },
+                    },  
                     {
                         "name": "email",
                         "value": str(verification.email),

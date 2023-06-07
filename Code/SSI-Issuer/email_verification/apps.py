@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db.utils import ProgrammingError
 
-
+#setting a logger
 logger = logging.getLogger(__name__)
 AGENT_URL = getattr(settings, "AGENT_URL", 'localhost')
 API_KEY = getattr(settings, "AGENT_ADMIN_API_KEY", '')
@@ -23,6 +23,9 @@ class EmailVerificationConfig(AppConfig):
             cache.get("")
         except ProgrammingError:
             return
+        
+        # implementing a check for the existence of a credential definition ID in a cache. If the ID is not found in the cache,
+        #  it proceeds to create a new schema and credential definition
 
         if cache.get("credential_definition_id") is None:
             schema_body = {
