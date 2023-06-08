@@ -88,4 +88,4 @@ services:
 
 volumes:
   verifier-aca-py:
-  verifier-db:
+#  verifier-db:

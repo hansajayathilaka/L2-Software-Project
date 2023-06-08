@@ -1,0 +1,49 @@
+version: "3"
+services:
+  holder-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    environment:
+      ADMIN_PORT: 6000
+      AGENT_PORT: 12000
+      ACAPY_LABEL: "VOMS Person SSI Holder"
+#      # URL on invitation; It should be a public URL that can be access from your mobile phone
+#      ACAPY_ENDPOINT: ${AGENT_EXTERNAL_URL}
+      ACAPY_ENDPOINT: "http://localhost:6000"
+      ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
+      ACAPY_GENESIS_URL: "http://test.bcovrin.vonx.io/genesis"
+      ACAPY_WALLET_TYPE: "indy"
+      ACAPY_WALLET_NAME: "voms"
+      ACAPY_WALLET_KEY: "walletkey"
+      ACAPY_AUTO_ACCEPT_INVITES: "true"
+      ACAPY_AUTO_ACCEPT_REQUESTS: "true"
+      ACAPY_ADMIN_INSECURE_MODE: "true"
+      ACAPY_AUTO_PROVISION: "true"
+      ACAPY_LOG_LEVEL: "info"
+    ports:
+      - "6000:6000"
+      - "12000:12000"
+    volumes:
+      - holder-aca-py:/home/indy/.indy_client/wallet
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"VOMS Person SSI Issuer (Docker)\"}' -X POST http://test.bcovrin.vonx.io/register; \
+        sleep 5; \
+        aca-py start --auto-ping-connection --auto-respond-messages --inbound-transport http 0.0.0.0 12000 --outbound-transport http --admin 0.0.0.0 6000 --admin-insecure-mode --wallet-type indy --preserve-exchange-records --trace-target log --trace-tag acapy.events --trace-label holder.Agent.trace --auto-accept-invites --auto-accept-requests --auto-store-credential --debug-credentials \
+#        -it http '0.0.0.0' 12000 \
+#        -ot http \
+#        --admin '0.0.0.0' 6000 \
+#        --auto-ping-connection \
+#        --auto-respond-messages \
+#        --preserve-exchange-records \
+#        --trace-target log \
+#        --trace-tag acapy.events \
+#        --trace-label holder.Agent.trace \
+#        --admin-api-key false \
+#        --auto-store-credential \
+#        --debug-credentials \
+        ",
+      ]
+
+volumes:
+  holder-aca-py:
