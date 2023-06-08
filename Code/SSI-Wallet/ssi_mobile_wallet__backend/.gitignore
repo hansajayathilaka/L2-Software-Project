@@ -1,27 +1,21 @@
-# Logs
-logs
-*.log
-
-# Compiled output
-dist
-build
-lib
-
-# Dependencies
+# Node.js
 node_modules
+bower_components
+jspm_packages
 
-# Environment variables
-.env
-.env.*
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# TypeScript
+*.tsbuildinfo
 
-# IDE files
-.vscode
+# Build output
+dist/
+
+# Editor files
 .idea
+*.iml
 
-# Miscellaneous
-*.DS_Store
+# OS metadata
+.DS_Store
 Thumbs.db
+
+# Ignore yarn.lock
+yarn.lock
