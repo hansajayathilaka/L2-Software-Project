@@ -1,7 +1,7 @@
 import Document, {Html, Head, Main, NextScript} from "next/document";
 import {ToastContainer} from "react-toastify";
 
-export default class MyDocument extends Document {
+export default class _Document extends Document {
     render() {
         return (
             <Html>

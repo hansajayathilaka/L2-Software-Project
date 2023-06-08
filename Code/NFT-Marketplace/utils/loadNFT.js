@@ -3,13 +3,12 @@ import {nftaddress, nftmarketaddress, rpc} from "../config";
 import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import axios from "axios";
+import secureLocalStorage from "react-secure-storage";
 
 export const URINFTDataMapper = async (i) => {
     const provider = new ethers.providers.JsonRpcProvider(rpc);
     const nftContract = new ethers.Contract(nftaddress, NFT.abi, provider);
     const ipfsUrlSuffix = process.env.NEXT_PUBLIC_IPFS_URL_PREFIX;
-
-    debugger
 
     let tokenUri;
     try {
@@ -26,12 +25,13 @@ export const URINFTDataMapper = async (i) => {
     }
     let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
 
+
     return {
         price,
         tokenId: i.tokenId.toNumber(),
         itemId: i.itemId,
         nftContract: i.nftContract,
-        owners: i.owners,
+        owners: i.owners.map(owner => Object.assign({}, owner)),
         sold: i.sold,
         thumbnail: meta.data.thumbnail,
         attachments: meta.data.attachments,
@@ -41,7 +41,18 @@ export const URINFTDataMapper = async (i) => {
     };
 }
 
-export default async function loadNFTs() {
+export default async function loadNFTs(forceReload=false) {
+    // forceReload = true;
+    // debugger;
+    if (!forceReload && process.env.NEXT_PUBLIC_CASH_LOAD_NFT) {
+        const nftData = JSON.parse(secureLocalStorage.getItem("nft"));
+        // debugger;
+        if (nftData) {
+            return new Promise((resolve, reject) => resolve(nftData));
+        }
+    }
+
+
     const provider = new ethers.providers.JsonRpcProvider(rpc);
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider);
 
@@ -54,6 +65,7 @@ export default async function loadNFTs() {
         console.error("Error getting items.");
         return []
     } else {
+        secureLocalStorage.setItem("nft", JSON.stringify(items));
         return items
     }
 }

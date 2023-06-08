@@ -2,57 +2,118 @@
 import '../styles/globals.css'
 import "../styles/custom.css";
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import Link from 'next/link'
-import React, {useEffect, useReducer} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import Image from "next/image";
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
+import secureLocalStorage from "react-secure-storage";
+import {useRouter} from "next/router";
 
-import { initialState, reducer } from "../reducer/ìndex";
+import {initialState, reducer} from "../reducer/ìndex";
 import {SET_LOADING, SET_LOGIN, SET_METAMASK, SET_NFT} from "../reducer/actions";
-import loadNFTs from "../utils/loadNFT";
 import logo from "../public/logo.svg";
+import {checkMetamaskAvailability, getMetamaskAccount} from "../utils/metamask";
+import loadNFTs from "../utils/loadNFT";
 
 
-function MyApp({Component, pageProps}) {
+function _App({Component, pageProps}) {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [accountPanel, setAccountPanel] = useState(true);
+    const [gearMenu, setGearMenu] = useState(false);
+    const router = useRouter();
 
-    // Login
+    // Handle login with session storage
     useEffect(() => {
-        if ('caches' in window){
-
+        secureLocalStorage.setItem("test", "test");
+        const loginData = JSON.parse(secureLocalStorage.getItem("login"));
+        if (loginData) {
+            dispatch({
+                type: SET_LOGIN,
+                data: loginData
+            });
         }
     }, []);
 
-    // Load initial data from Polygon blockchain
     useEffect(() => {
-        handleConnectMetamask();
+        const val = Math.random();
+        console.log("Start UseEffect on _app.js", val);
+
+        // Check availability of metamask in browser.
+        checkMetamaskAvailability();
+
+        if (window.ethereum.isConnected()) {
+            dispatch({
+                type: SET_METAMASK,
+                data: window.ethereum.selectedAddress,
+            });
+        }
+
+        window.ethereum.on('accountsChanged', handleMetamaskAccountChanged);
+
+        updateNFTs();
+        console.log("Finish UseEffect on _app.js", val);
+        return () => {
+            window.ethereum.removeListener('accountsChanged', handleMetamaskAccountChanged);
+            console.log("Remove UseEffect on _app.js", val);
+        }
     }, []);
 
-    // Configure with the metamask
-    const handleConnectMetamask =  () => {
-        if (typeof window.ethereum === 'undefined') {
-            toast("Metamask is not installed in this browser", toast.TYPE.ERROR);
-        } else {
-            if (!ethereum.isMetaMask) {
-                toast("You should install metamask for transactions", toast.TYPE.WARNING);
-            } else {
-                ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
-                    if (accounts.length > 0) {
-                        // TODO: Check the address with logged in address and verify it is same
-                        dispatch({
-                            type: SET_METAMASK,
-                            data: accounts[0],
-                        });
-                    } else {
-                        toast("No account selected", toast.TYPE.ERROR);
-                    }
-                }).catch(err => {
-                    toast(`Metamask: ${err.message}`, toast.TYPE.WARNING);
-                })
+    const updateNFTs = (forceReload=false) => {
+        dispatch({
+            type: SET_LOADING,
+            data: true,
+        });
+        loadNFTs(forceReload).then((items) => {
+            window.items = items;
+            console.log(items);
+            dispatch({
+                type: SET_NFT,
+                data: items
+            });
+            dispatch({
+                type: SET_LOADING,
+                data: false,
+            });
+        }).catch(err => {
+            toast("Loading NFT failed", toast.TYPE.ERROR);
+            console.log('Error while loading NFT.');
+            console.error(err);
+            dispatch({
+                type: SET_LOADING,
+                data: false,
+            });
+        });
+    }
 
-            }
+    const handleMetamaskAccountChanged = (accounts) => {
+        setAccountPanel(true);
+        if (accounts.length === 0) {
+            dispatch({
+                type: SET_METAMASK,
+                data: false,
+            });
+            return
         }
-    };
+        dispatch({
+            type: SET_METAMASK,
+            data: accounts[0],
+        });
+    }
+
+    const onClickConnectMetamask = () => {
+        getMetamaskAccount().then(account => {
+            // TODO: Check the address with logged in address and verify it is same
+            dispatch({
+                type: SET_METAMASK,
+                data: account,
+            });
+            setAccountPanel(true);
+        });
+    }
 
     const onLoginClick = () => {
         const windowFeatures = "left=100,top=100,width=500,height=700";
@@ -63,7 +124,7 @@ function MyApp({Component, pageProps}) {
     }
 
     const onLogoutClick = () => {
-        toast("Logged out successfully", {type: toast.TYPE.INFO})
+        toast("Logged out successfully", {type: toast.TYPE.INFO});
         dispatch({
             type: SET_LOGIN,
             data: false
@@ -72,7 +133,7 @@ function MyApp({Component, pageProps}) {
 
     return (
         <div>
-            <ToastContainer draggable={false} />
+            <ToastContainer draggable={false}/>
             <nav className="border-b p-2 flex" style={{
                 backgroundColor: "#036",
                 borderBottomWidth: 2,
@@ -88,61 +149,88 @@ function MyApp({Component, pageProps}) {
                     </Link>
                     <div className="flex flex-row items-center">
                         <Link href="/">
-                            <a className="mr-8 text-white">
+                            <p className={"mr-8 text-white " + (router.pathname === '/' ? "border-2 rounded px-3 py-1" : "")}>
                                 Home
-                            </a>
+                            </p>
                         </Link>
-                        {/*<Link href="/create-item">*/}
-                        {/*    <a className="mr-8 text-white">*/}
-                        {/*        Sell Digital Asset*/}
-                        {/*    </a>*/}
-                        {/*</Link>*/}
                         {
                             state.loggedIn ?
                                 <Link href="/my-assets">
-                                    <a className="mr-8 text-white">
+                                    <p className={"mr-8 text-white " + (router.pathname === '/my-assets' ? "border-2 rounded px-3 py-1" : "")}>
                                         My Digital Assets
-                                    </a>
+                                    </p>
                                 </Link>
                                 : <></>
                         }
-                        {/*<Link href="/creator-dashboard">*/}
-                        {/*  <a className="mr-6 text-blue-600">*/}
-                        {/*    Creator Dashboard*/}
-                        {/*  </a>*/}
-                        {/*</Link>*/}
-                        {state.loggedIn ?
-                            <>
-                                <button className="mr-8 text-white inset-y-0 right-0" onClick={onLogoutClick}>
-                                    Logout
+                        {
+                            state.loggedIn ?
+                                <>
+                                    <button className="mr-8 text-white inset-y-0 right-0" onClick={onLogoutClick}>
+                                        Logout
+                                    </button>
+                                    <strong className="mr-8 text-white">Hi, {state.loggedIn.fname}</strong>
+                                </>
+                                :
+                                <button className="mr-8 text-white inset-y-0 right-0 flex flex-row items-center"
+                                        onClick={onLoginClick}>
+                                    <Image className="" src={logo} alt="Logo" height={20} width={20}/>
+                                    <strong className="ml-1">Login with VOMS Verifier</strong>
                                 </button>
-                                <strong className="mr-8 text-white">Hi, {state.loggedIn.fname}</strong>
-                            </>
-                            :
-                            <button className="mr-8 text-white inset-y-0 right-0 flex flex-row items-center"
-                                    onClick={onLoginClick}>
-                                <Image className="" src={logo} alt="Logo" height={20} width={20}/>
-                                <strong className="ml-1">Login with VOMS Verifier</strong>
-                            </button>
                         }
 
                     </div>
                 </div>
             </nav>
-            <div className={"flex items-center w-full h-16 " + (state.metamask ? "bg-emerald-100" : "bg-red-200")}>
-                {
-                    state.metamask ?
-                        <div className="flex justify-center container">
-                            Account {state.metamask}
+
+            {/* Gear Menu */}
+            <button className="absolute" style={{top: 28, right: 28}} onClick={() => setGearMenu(!gearMenu)} onBlur={() => setGearMenu(false)}>
+                <FontAwesomeIcon icon={solid('gear')} size={"lg"} color={"white"}/>
+                <div className={`absolute right-0 w-40 py-2 mt-2 rounded-lg shadow-xl z-40 bg-gray-50 ${gearMenu ? "block" : "hidden"}`}>
+                    <ul>
+                        <li className="flex w-full items-center px-3 py-2 text-sm hover:bg-gray-300" onClick={() => updateNFTs(true)}>
+                            Force Reload
+                        </li>
+                        {
+                            !accountPanel ?
+                                <li className="flex w-full items-center px-3 py-2 text-sm hover:bg-gray-300" onClick={() => setAccountPanel(true)}>
+                                    Show Account Pannel
+                                </li>
+                                : <></>
+                        }
+                    </ul>
+                </div>
+
+            </button>
+
+            {
+                accountPanel ?
+                    <div
+                        className={"flex items-center w-full h-9 " + (state.metamask ? "bg-emerald-100" : "bg-red-200")}>
+                        <div className="container flex mx-auto justify-center items-center">
+                            {
+                                state.metamask ?
+                                    <>
+                                        <div className="flex items-center container">
+                                            Connected - Web3 <a href={"https://mumbai.polygonscan.com/address/" + state.metamask} target="_blank" rel="noreferrer">[ {state.metamask} ]</a>
+                                        </div>
+                                        <button className="mr-3" onClick={() => setAccountPanel(false)}
+                                                title="Disconnect from metamask">
+                                            <FontAwesomeIcon icon={solid('xmark')} size={"lg"} color={'red'}/>
+                                        </button>
+                                    </>
+                                    :
+                                    <div className="flex justify-left container">
+                                        <button onClick={onClickConnectMetamask} className="text-black font-bold">
+                                            Connect with Metamask
+                                        </button>
+                                    </div>
+                            }
                         </div>
-                        :
-                        <div className="flex justify-center container">
-                            <button onClick={handleConnectMetamask} className="mb-3 bg-blue-400 text-white font-bold py-2 px-12 rounded">
-                                Connect with Metamask
-                            </button>
-                        </div>
-                }
-            </div>
+                    </div>
+                    :
+                    <></>
+
+            }
 
             {
                 state.loading ?
@@ -160,11 +248,11 @@ function MyApp({Component, pageProps}) {
 
             <Component className="flex min-h-full"
                        {...pageProps}
-                       state={state} dispatch={dispatch}
+                       state={state} dispatch={dispatch} updateNFTs={updateNFTs}
             />
         </div>
     )
 
 }
 
-export default MyApp
+export default _App

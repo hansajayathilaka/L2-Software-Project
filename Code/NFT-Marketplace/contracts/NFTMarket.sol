@@ -18,6 +18,13 @@ contract NFTMarket is ReentrancyGuard {
         owner = payable(msg.sender);
     }
 
+    modifier onlyOwner()
+    {
+        require(msg.sender == owner,
+            "Function accessible only by the owner");
+        _;
+    }
+
     enum ListingStatus {
         Active,
         Sold
@@ -58,8 +65,15 @@ contract NFTMarket is ReentrancyGuard {
         bool sold
     );
 
+    // Get price for listing item
     function getListingPrice() public view returns(uint256) {
         return listingPrice;
+    }
+
+    // Change listing price
+    // Only accessible for owner
+    function updateListingPrice(uint256 _listingPrice) onlyOwner public {
+        listingPrice = _listingPrice;
     }
 
     // Mint NFT
@@ -184,6 +198,7 @@ contract NFTMarket is ReentrancyGuard {
         return items;
     }
 
+    // Update price of an item
     function changeMarketItemPrice(
         address nftContract,
         uint256 itemId,
@@ -193,6 +208,18 @@ contract NFTMarket is ReentrancyGuard {
         require(msg.sender == idToOwners[itemId][idToOwners[itemId].length - 1]._address, "You are not the owner of this NFT");
 
         idToMarketItem[itemId].price = new_price;
+    }
+
+    // Update sold status
+    function updateMarketItemSoldStatus(
+        address nftContract,
+        uint256 itemId,
+        bool soldStatus
+    ) public {
+        require(Address.isContract(nftContract), "Invalid NFT contract address");
+        require(msg.sender == idToOwners[itemId][idToOwners[itemId].length - 1]._address, "You are not the owner of this NFT");
+
+        idToMarketItem[itemId].sold = soldStatus;
     }
 
 }
