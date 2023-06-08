@@ -31,7 +31,7 @@ export default function Login({state, dispatch}) {
             debugger
             router.replace('/').then(r => console.log("No Logged in...")).catch(e => console.error("Error while routing..."));
         }
-    }, [])
+    }, [router])
 
 
     return (<>Login</>)

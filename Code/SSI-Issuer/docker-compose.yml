@@ -65,23 +65,23 @@ services:
 #    volumes:
 #      - .:/app
 
-  issuer-postgres:
-    restart: always
-    image: postgres:11
-    volumes:
-      - issuer-db:/var/lib/postgresql
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5430:5432"
+#  issuer-postgres:
+#    restart: always
+#    image: postgres:11
+#    volumes:
+#      - issuer-db:/var/lib/postgresql
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - "5430:5432"
 
-  maildev:
-    image: djfarrelly/maildev
-    ports:
-      - "26:25"
-      - "8050:80"
+#  maildev:
+#    image: djfarrelly/maildev
+#    ports:
+#      - "26:25"
+#      - "8050:80"
 
 volumes:
   issuer-aca-py:

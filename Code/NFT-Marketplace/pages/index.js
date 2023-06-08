@@ -4,6 +4,7 @@ import Link from "next/link";
 import {CustomImage} from "../components/Image";
 import {SET_LOADING} from "../reducer/actions";
 import buyNft from "../utils/buyNFT";
+import secureLocalStorage from "react-secure-storage";
 
 
 export default function Home(prop) {

@@ -1,4 +1,6 @@
 import {SET_LOADING, SET_LOGIN, SET_METAMASK, SET_NFT} from "./actions";
+import secureLocalStorage from "react-secure-storage";
+import {data} from "autoprefixer";
 
 
 export const initialState = {
@@ -17,9 +19,9 @@ export const reducer = (state, action) => {
     switch (action.type) {
         case SET_LOGIN:
             if (action.data === false) {
-                // Logout: Remove cookies
+                secureLocalStorage.clear();
             } else {
-                // Login: Add cookies
+                secureLocalStorage.setItem("login", JSON.stringify(action.data));
             }
             return { ...state, loggedIn: action.data };
         case SET_NFT:

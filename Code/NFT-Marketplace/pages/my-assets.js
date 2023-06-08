@@ -13,19 +13,25 @@ export default function MyAssets({state, dispatch, updateNFTs}) {
     useEffect(() => {
         const _nft = [];
         for(const nft of state.nft) {
+            if (typeof nft.owners[nft.owners.length - 1]._address === "undefined")
+                debugger;
             if (
                 (
                     state.loggedIn &&
                     state.loggedIn.wallet_address &&
                     nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()
                 ) || (
-                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.metamask.toLowerCase())
+                    state.metamask &&
+                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.metamask.toLowerCase()
+                )
             ) {
                 _nft.push(nft);
+            } else {
+                debugger;
             }
         }
         setMyNFTs(_nft);
-    }, []);
+    }, [state.loggedIn, state.metamask, state.nft]);
 
     if (!state.metamask || !state.loggedIn) return (
         <h1 className="py-10 px-20 text-3xl">Please connect to metamask and login using your SSI</h1>

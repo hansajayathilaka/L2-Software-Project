@@ -19,6 +19,7 @@ class NFTCreateView(View):
             attachments = form.files.getlist('attachments')
             try:
                 hash_list = upload_files_to_ipfs([thumbnail, *attachments])
+                print("Images uploaded successfully")
             except Exception as e:
                 form.add_error(None, str(e))
                 hash_list = []
@@ -57,7 +58,7 @@ class NFTCreateView(View):
                         ]
                     ]
                 }
-
+                print(nft_data)
                 # Mint NFT
                 try:
                     mint_nft(
