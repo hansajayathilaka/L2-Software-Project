@@ -1,0 +1,21 @@
+# Node.js
+node_modules
+bower_components
+jspm_packages
+
+# TypeScript
+*.tsbuildinfo
+
+# Build output
+dist/
+
+# Editor files
+.idea
+*.iml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Ignore yarn.lock
+yarn.lock
