@@ -3,7 +3,7 @@ services:
   holder-agent:
     image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
     environment:
-      ADMIN_PORT: 6000
+      ADMIN_PORT: 3000
       AGENT_PORT: 12000
       ACAPY_LABEL: "VOMS Person SSI Holder"
 #      # URL on invitation; It should be a public URL that can be access from your mobile phone
@@ -19,7 +19,7 @@ services:
       ACAPY_AUTO_PROVISION: "true"
       ACAPY_LOG_LEVEL: "info"
     ports:
-      - "6000:6000"
+      - "3000:3000"
       - "12000:12000"
     volumes:
       - holder-aca-py:/home/indy/.indy_client/wallet
@@ -28,7 +28,7 @@ services:
         "-c",
         "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"VOMS Person SSI Issuer (Docker)\"}' -X POST http://test.bcovrin.vonx.io/register; \
         sleep 5; \
-        aca-py start --auto-ping-connection --auto-respond-messages --inbound-transport http 0.0.0.0 12000 --outbound-transport http --admin 0.0.0.0 6000 --admin-insecure-mode --preserve-exchange-records --trace-target log --trace-tag acapy.events --trace-label holder.Agent.trace --auto-accept-invites --auto-accept-requests --auto-store-credential --debug-credentials \
+        aca-py start --auto-ping-connection --auto-respond-messages --inbound-transport http 0.0.0.0 12000 --outbound-transport http --admin 0.0.0.0 3000 --admin-insecure-mode --preserve-exchange-records --trace-target log --trace-tag acapy.events --trace-label holder.Agent.trace --auto-accept-invites --auto-accept-requests --auto-store-credential --debug-credentials \
         ",
       ]
 
