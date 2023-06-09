@@ -2,6 +2,7 @@ import { View, Alert, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 const SignUp = ({ navigation }) => {
   const [userName, setUserName] = useState("");
@@ -9,6 +10,7 @@ const SignUp = ({ navigation }) => {
   const [confPassword, setConfPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [confPasswordVisibility, setconfPasswordVisibility] = useState(true);
+  const [did, setPrivateDid] = useState({});
 
   // style colour
   const outlineColor = "rgb(37, 139, 214)";
@@ -68,6 +70,16 @@ const SignUp = ({ navigation }) => {
   const signUp = () => {
     isBothPasswordsEqual();
     console.log(`${userName} ${password} ${confPassword}`);
+    axios.post('http://172.104.61.240:3000/wallet/did/create')
+      .then(response => {
+        // Handle the successful response
+        setPrivateDid(response.date);
+        console.log(response.data);
+      })
+      .catch(error => {
+        // Handle the error
+        console.log(error);
+      });
   };
 
   return (

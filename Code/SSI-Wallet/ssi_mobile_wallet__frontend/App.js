@@ -13,7 +13,6 @@ import Settings from "./src/pages/Settings";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { DrawerContent } from "@react-navigation/drawer";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -45,11 +44,11 @@ function Root() {
           },
         }}
       />
-      {/* <Drawer.Screen
-        name="Connections"
+      <Drawer.Screen
+        name="Connectiones"
         component={Connections}
         options={{
-          title: "My home",
+          title: "Connectiones",
           headerStyle: {
             backgroundColor: "rgb(37, 139, 214)",
           },
@@ -58,7 +57,7 @@ function Root() {
             fontWeight: "bold",
           },
         }}
-      /> */}
+      />
       <Drawer.Screen
         name="Credentials"
         component={Credentials}
