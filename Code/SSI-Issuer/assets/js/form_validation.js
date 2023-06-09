@@ -1,5 +1,5 @@
 // Get the input field element
-const nameInput = document.querySelector('fname');
+const nameInput = document.querySelector('#fname');
 
 // Define a regular expression pattern for a valid name
 const namePattern = /^[A-Za-z]{2,}$/;
