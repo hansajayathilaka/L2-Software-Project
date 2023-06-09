@@ -18,8 +18,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from authenticator.views import LoginView
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authenticator.urls')),
-    path('nft/', include('nft_minter.urls')),
+    path('nft/', include('nft_minter.urls')), 
+    path('', LoginView.as_view(), name='login')  
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
