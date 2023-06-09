@@ -25,7 +25,7 @@ export default function Login({state, dispatch}) {
                 type: SET_LOGIN,
                 data: _data
             });
-            toast("Logged in successfully", {type: toast.TYPE.INFO})
+            toast.info("Logged in successfully")
             router.push('/').then(r => console.log("Logged in...")).catch(e => console.error("Error while routing..."));
         } catch (e) {
             debugger

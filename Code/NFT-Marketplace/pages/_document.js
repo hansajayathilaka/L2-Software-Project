@@ -1,5 +1,4 @@
 import Document, {Html, Head, Main, NextScript} from "next/document";
-import {ToastContainer} from "react-toastify";
 
 export default class _Document extends Document {
     render() {
@@ -10,7 +9,6 @@ export default class _Document extends Document {
                     <link rel="icon" href="/favicon.svg" />
                 </Head>
                 <body>
-                    <ToastContainer draggable={false} />
                     <Main />
                     <NextScript />
                 </body>
