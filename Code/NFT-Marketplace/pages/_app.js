@@ -43,26 +43,26 @@ function _App({Component, pageProps}) {
         console.log("Start UseEffect on _app.js", val);
 
         // Check availability of metamask in browser.
-        checkMetamaskAvailability();
+        if (checkMetamaskAvailability()) {
+            if (window.ethereum.isConnected()) {
+                dispatch({
+                    type: SET_METAMASK,
+                    data: window.ethereum.selectedAddress,
+                });
+            }
 
-        if (window.ethereum.isConnected()) {
-            dispatch({
-                type: SET_METAMASK,
-                data: window.ethereum.selectedAddress,
-            });
-        }
+            window.ethereum.on('accountsChanged', handleMetamaskAccountChanged);
 
-        window.ethereum.on('accountsChanged', handleMetamaskAccountChanged);
-
-        updateNFTs();
-        console.log("Finish UseEffect on _app.js", val);
-        return () => {
-            window.ethereum.removeListener('accountsChanged', handleMetamaskAccountChanged);
-            console.log("Remove UseEffect on _app.js", val);
+            updateNFTs();
+            console.log("Finish UseEffect on _app.js", val);
+            return () => {
+                window.ethereum.removeListener('accountsChanged', handleMetamaskAccountChanged);
+                console.log("Remove UseEffect on _app.js", val);
+            }
         }
     }, []);
 
-    const updateNFTs = (forceReload=false) => {
+    const updateNFTs = (forceReload = false) => {
         dispatch({
             type: SET_LOADING,
             data: true,
@@ -79,7 +79,7 @@ function _App({Component, pageProps}) {
                 data: false,
             });
         }).catch(err => {
-            toast("Loading NFT failed", toast.TYPE.ERROR);
+            toast.error("Loading NFT failed");
             console.log('Error while loading NFT.');
             console.error(err);
             dispatch({
@@ -105,14 +105,16 @@ function _App({Component, pageProps}) {
     }
 
     const onClickConnectMetamask = () => {
-        getMetamaskAccount().then(account => {
-            // TODO: Check the address with logged in address and verify it is same
-            dispatch({
-                type: SET_METAMASK,
-                data: account,
+        if (checkMetamaskAvailability()) {
+            getMetamaskAccount().then(account => {
+                // TODO: Check the address with logged in address and verify it is same
+                dispatch({
+                    type: SET_METAMASK,
+                    data: account,
+                });
+                setAccountPanel(true);
             });
-            setAccountPanel(true);
-        });
+        }
     }
 
     const onLoginClick = () => {
@@ -124,11 +126,68 @@ function _App({Component, pageProps}) {
     }
 
     const onLogoutClick = () => {
-        toast("Logged out successfully", {type: toast.TYPE.INFO});
+        toast.info("Logged out successfully");
         dispatch({
             type: SET_LOGIN,
             data: false
         });
+    }
+
+    const walletAddressBar = () => {
+        if (state.metamask) {
+            if (state.loggedIn) {
+                debugger;
+                console.log(state.metamask.toLowerCase(), state.loggedIn.wallet_address.toLowerCase())
+                if (state.metamask.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()) {
+                    return (
+                        <>
+                            <div className="flex items-center container">
+                                Conneced Web3: <a href={"https://mumbai.polygonscan.com/address/" + state.metamask}
+                                                  target="_blank" rel="noreferrer">[ {state.metamask} ]</a>
+                            </div>
+                            <button className="mr-3" onClick={() => setAccountPanel(false)}
+                                    title="Disconnect from metamask">
+                                <FontAwesomeIcon icon={solid('xmark')} size={"lg"} color={'red'}/>
+                            </button>
+                        </>
+                    );
+                }
+                return (
+                    <>
+                        <div className="flex items-center container">
+                            <label className="font-bold text-red-700">Accounts do not match</label> &emsp;
+                            Metamask: <a href={"https://mumbai.polygonscan.com/address/" + state.metamask} target="_blank"
+                                         rel="noreferrer">[ {state.metamask} ]</a> &emsp;
+                            SSI Wallet: <a href={"https://mumbai.polygonscan.com/address/" + state.loggedIn.wallet_address}
+                                           target="_blank" rel="noreferrer">[ {state.loggedIn.wallet_address} ]</a>
+                        </div>
+                        <button className="mr-3" onClick={() => setAccountPanel(false)}
+                                title="Disconnect from metamask">
+                            <FontAwesomeIcon icon={solid('xmark')} size={"lg"} color={'red'}/>
+                        </button>
+                    </>
+                );
+            }
+            return (
+                <>
+                    <div className="flex items-center container">
+                        Metamask: <a href={"https://mumbai.polygonscan.com/address/" + state.metamask} target="_blank"
+                                     rel="noreferrer">[ {state.metamask} ]</a>
+                    </div>
+                    <button className="mr-3" onClick={() => setAccountPanel(false)}
+                            title="Disconnect from metamask">
+                        <FontAwesomeIcon icon={solid('xmark')} size={"lg"} color={'red'}/>
+                    </button>
+                </>
+            );
+        }
+        return (
+            <div className="flex justify-left container">
+                <button onClick={onClickConnectMetamask} className="text-black font-bold">
+                    Connect with Metamask
+                </button>
+            </div>
+        );
     }
 
     return (
@@ -183,16 +242,20 @@ function _App({Component, pageProps}) {
             </nav>
 
             {/* Gear Menu */}
-            <button className="absolute" style={{top: 28, right: 28}} onClick={() => setGearMenu(!gearMenu)} onBlur={() => setGearMenu(false)}>
+            <button className="absolute" style={{top: 28, right: 28}} onClick={() => setGearMenu(!gearMenu)}
+                    onBlur={() => setGearMenu(false)}>
                 <FontAwesomeIcon icon={solid('gear')} size={"lg"} color={"white"}/>
-                <div className={`absolute right-0 w-40 py-2 mt-2 rounded-lg shadow-xl z-40 bg-gray-50 ${gearMenu ? "block" : "hidden"}`}>
+                <div
+                    className={`absolute right-0 w-40 py-2 mt-2 rounded-lg shadow-xl z-40 bg-gray-50 ${gearMenu ? "block" : "hidden"}`}>
                     <ul>
-                        <li className="flex w-full items-center px-3 py-2 text-sm hover:bg-gray-300" onClick={() => updateNFTs(true)}>
+                        <li className="flex w-full items-center px-3 py-2 text-sm hover:bg-gray-300"
+                            onClick={() => updateNFTs(true)}>
                             Force Reload
                         </li>
                         {
                             !accountPanel ?
-                                <li className="flex w-full items-center px-3 py-2 text-sm hover:bg-gray-300" onClick={() => setAccountPanel(true)}>
+                                <li className="flex w-full items-center px-3 py-2 text-sm hover:bg-gray-300"
+                                    onClick={() => setAccountPanel(true)}>
                                     Show Account Pannel
                                 </li>
                                 : <></>
@@ -207,24 +270,7 @@ function _App({Component, pageProps}) {
                     <div
                         className={"flex items-center w-full h-9 " + (state.metamask ? "bg-emerald-100" : "bg-red-200")}>
                         <div className="container flex mx-auto justify-center items-center">
-                            {
-                                state.metamask ?
-                                    <>
-                                        <div className="flex items-center container">
-                                            Connected - Web3 <a href={"https://mumbai.polygonscan.com/address/" + state.metamask} target="_blank" rel="noreferrer">[ {state.metamask} ]</a>
-                                        </div>
-                                        <button className="mr-3" onClick={() => setAccountPanel(false)}
-                                                title="Disconnect from metamask">
-                                            <FontAwesomeIcon icon={solid('xmark')} size={"lg"} color={'red'}/>
-                                        </button>
-                                    </>
-                                    :
-                                    <div className="flex justify-left container">
-                                        <button onClick={onClickConnectMetamask} className="text-black font-bold">
-                                            Connect with Metamask
-                                        </button>
-                                    </div>
-                            }
+                            {walletAddressBar()}
                         </div>
                     </div>
                     :
@@ -239,7 +285,8 @@ function _App({Component, pageProps}) {
                         <div
                             className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
                         <h2 className="text-center text-white text-xl font-semibold">Loading...</h2>
-                        <p className="w-1/3 text-center text-white">This may take a few seconds, please don't close this
+                        <p className="w-1/3 text-center text-white">This may take a few seconds, please don&apos;t close
+                            this
                             page.</p>
                     </div>
                     :

@@ -46,7 +46,7 @@ export default function Assert(prop) {
 
     const onClickCopyLink = () => {
         navigator.clipboard.writeText(window.location.href).then(r => {
-            toast("Link copied to clipboard", {type: toast.TYPE.INFO});
+            toast.info("Link copied to clipboard");
         })
     }
 
@@ -57,11 +57,11 @@ export default function Assert(prop) {
         });
         try {
             await buyNft(currentNFT);
-            toast("NFT buy successfully", toast.TYPE.INFO);
+            toast.success("NFT buy successfully");
             updateNFTs();
         } catch (err) {
-            toast("Buying NFT failed", toast.TYPE.ERROR);
-            toast(err.message, toast.TYPE.ERROR);
+            toast.error("Buying NFT failed");
+            toast.error(err.message);
             console.error(err);
         }
         dispatch({
@@ -73,7 +73,7 @@ export default function Assert(prop) {
     async function handleChangePriceClick() {
         debugger;
         if (price === "") {
-            toast("Invalid Price", {type: toast.TYPE.ERROR});
+            toast.error("Invalid Price");
         } else {
             dispatch({
                 type: SET_LOADING,
@@ -81,12 +81,12 @@ export default function Assert(prop) {
             });
             try {
                 await changePriceNFT(currentNFT, price);
-                toast("Price changed successfully", toast.TYPE.INFO);
+                toast.success("Price changed successfully");
                 setEdit(false);
                 updateNFTs(true);
             } catch (err) {
-                toast("Price change failed", toast.TYPE.ERROR);
-                toast(err.message, toast.TYPE.ERROR);
+                toast.error("Price change failed");
+                toast.error(err.message);
             }
         }
     }
@@ -97,7 +97,7 @@ export default function Assert(prop) {
 
     function handleBuyClick() {
         if (state.loggedIn === false) {
-            toast("Please login before buy...", {type: toast.TYPE.ERROR})
+            toast.error("Please login before purchase")
             return;
         }
         confirmAlert({

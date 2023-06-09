@@ -5,7 +5,7 @@ import {data} from "autoprefixer";
 
 export const initialState = {
     nft: [],
-    loggedIn: true,
+    loggedIn: false,
     loading: false,
     metamask: false,
 }

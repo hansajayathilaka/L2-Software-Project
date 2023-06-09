@@ -13,6 +13,15 @@ const nextConfig = {
     //
     //     return config;
     // },
+    exclude: [
+        'artifacts',
+        'contracts',
+        'node_modules',
+        '.next',
+        'scripts',
+        'test',
+        'cache',
+    ],
     images: {
         domains: ["https://ipfs.io/ipfs/"]
     }

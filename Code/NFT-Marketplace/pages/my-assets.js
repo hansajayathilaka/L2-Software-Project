@@ -47,11 +47,11 @@ export default function MyAssets({state, dispatch, updateNFTs}) {
             data: true,
         });
         updateSoldStatus(nft, status).then(doc => {
-            toast("Selling status updated successfully", toast.TYPE.INFO);
+            toast.success("Selling status updated successfully");
             updateNFTs();
         }).catch(err => {
-            toast("Selling status update failed", toast.TYPE.ERROR);
-            toast(err.message, toast.TYPE.ERROR);
+            toast.error("Selling status update failed");
+            toast.error(err.message);
 
             dispatch({
                 type: SET_LOADING,

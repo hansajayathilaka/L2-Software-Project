@@ -2,14 +2,16 @@ import {toast} from "react-toastify";
 
 export const checkMetamaskAvailability = () => {
     if (typeof window.ethereum === 'undefined') {
-        toast("Metamask is not installed in this browser", toast.TYPE.ERROR);
+        toast.error("Metamask is not installed in this browser");
     } else {
         if (!window.ethereum.isMetaMask) {
-            toast("You should install metamask for transactions", toast.TYPE.WARNING);
+            toast.warning("You should install metamask for transactions");
         } else {
             console.log("Metamask is ready to go");
+            return true;
         }
     }
+    return false;
 }
 
 export const getMetamaskAccount = async () => {
@@ -19,11 +21,11 @@ export const getMetamaskAccount = async () => {
         if (accounts.length > 0) {
             account = accounts[0];
         } else {
-            toast("No account selected", toast.TYPE.ERROR);
+            toast.error("No account selected");
         }
     } catch (err) {
         debugger;
-        toast(`Metamask: ${err.message}`, toast.TYPE.WARNING);
+        toast.warning(`Metamask: ${err.message}`);
     }
     return account;
 };
