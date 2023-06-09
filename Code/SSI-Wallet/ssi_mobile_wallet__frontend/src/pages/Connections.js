@@ -1,15 +1,19 @@
-import { View, Text } from "react-native";
-import { React } from "react";
+import { View, FlatList, Text } from "react-native";
+import { React, useState } from "react";
 import axios from "axios";
 import { Button } from "react-native-paper";
+import { Avatar, Card, IconButton } from 'react-native-paper';
 
 export default function Connections() {
+  const [connections, setConnections] = useState([]);
 
   const loadConnectiones = () => {
     axios.get('http://172.104.61.240:3000/connections')
     .then(response => {
       // Handle the successful response
-      console.log(response.data);
+      const results = response.data.results;
+      setConnections(results);
+      console.log(results);
     })
     .catch(error => {
       // Handle the error
@@ -17,6 +21,19 @@ export default function Connections() {
     });
 
   }
+
+  const renderItem = ({ item }) => (
+    <Card style={{ margin: 10, fontWeight: "bold" }}>
+          <Card.Content>
+          <Card.Title
+              title={item.their_label }
+              subtitle={item.created_at}
+              left={(props) => <Avatar.Icon {...props} icon="card" />}
+              right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
+            />
+            </Card.Content>
+          </Card>
+  );
 
   return (
     <View>
@@ -29,7 +46,11 @@ export default function Connections() {
         >
           Refresh
         </Button>
-      <Text>Connections</Text>
+      <FlatList
+      data={connections}
+      keyExtractor={(item) => item.connection_id}
+      renderItem={renderItem}
+    />
     </View>
   )
 }

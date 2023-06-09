@@ -16,12 +16,12 @@ const SignUp = ({ navigation }) => {
   const outlineColor = "rgb(37, 139, 214)";
 
   // store the password in the asynch storage
-  const storeData = async (value) => {
+  const storeData = async (key, value) => {
     try {
-      AsyncStorage.setItem("@password", value);
+      AsyncStorage.setItem(key , value);
       console.log("saved the data");
-      resetForm();
-      navigation.navigate("SignIn", { name: "Upeksha" });
+      // resetForm();
+      // navigation.navigate("SignIn", { name: "Upeksha" });
     } catch (e) {
       alert("Error occured while signup");
     }
@@ -32,8 +32,8 @@ const SignUp = ({ navigation }) => {
     if (userName != "") {
       if (password != "") {
         if (password === confPassword) {
-          storeData(userName);
-          storeData(password);
+          storeData("@userName", userName);
+          storeData("@password", password);
           resetForm();
           navigation.navigate("SignIn", { name: "upeksha" });
         } else {

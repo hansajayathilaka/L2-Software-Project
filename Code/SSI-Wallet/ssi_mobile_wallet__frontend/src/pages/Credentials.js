@@ -6,16 +6,20 @@ import { Button } from "react-native-paper";
 
 
 export default function Credentials() {
+  const [credentials, setCredentials] = useState([]);
 
   const loadCredentials = () => {
     axios.get('http://172.104.61.240:3000/credentials')
     .then(response => {
       // Handle the successful response
-      console.log(response.data);
+      const results = response.data.results;
+      const connectionIds = results.map((result) => result.connection_id);
+      setCredentials(connectionIds);
+      console.log("results");
     })
     .catch(error => {
       // Handle the error
-      console.log(error);
+      console.error(error);
     });
   }
   

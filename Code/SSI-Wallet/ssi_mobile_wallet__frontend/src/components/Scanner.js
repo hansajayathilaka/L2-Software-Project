@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import base64 from 'react-native-base64';
 import axios from "axios";
@@ -35,25 +35,20 @@ const Scanner = () => {
       const match = regex.exec(data);
       const encodedValue = match ? match[1] : null;
       console.log(decodeBase64(encodedValue));
-      alert(`${decodeBase64(encodedValue)}`);
+      Alert.alert(`${decodeBase64(encodedValue)}`);
       const base64_encodedValue = decodeBase64(encodedValue);
 
       axios.post('http://172.104.61.240:3000/connections/receive-invitation?alias=alias&accept=accept', base64_encodedValue)
         .then(response => {
           // Handle the successful response
           console.log(response.data);
-          console.log("request is ok");
         })
         .catch(error => {
           // Handle the error
           console.error(error);
       });
-
-      
-
-
     } catch (error) {
-      alert('Invalid QR code');
+      Alert.alert('Invalid QR code');
     }
   };
 
