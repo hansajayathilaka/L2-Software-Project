@@ -30,22 +30,6 @@ const SignIn = ({ theme, navigation }) => {
       }
   };
 
-  const signIn = () => {
-    // check the user name and password
-    AsyncStorage.getItem("@password").then((value) => {
-      if (value === userEnteredPassword) {
-        console.log(value);
-        setUserEnteredPassword("");
-        console.log(value);
-        navigation.navigate("Root");
-        // navigation.push('Home', {name: 'Upeksha'});
-      } else {
-        console.log(value);
-        Alert.alert("password is incorrect. Check the password correctly!");
-      }
-    });
-  };
-
   return (
     <View
       style={{

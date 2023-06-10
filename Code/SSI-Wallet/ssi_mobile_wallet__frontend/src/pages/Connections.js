@@ -2,13 +2,25 @@ import { View, FlatList, Text } from "react-native";
 import { React, useState } from "react";
 import axios from "axios";
 import { Button } from "react-native-paper";
-import { Avatar, Card, IconButton } from 'react-native-paper';
+import { Avatar, Card } from 'react-native-paper';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Connections() {
   const [connections, setConnections] = useState([]);
+  const [connectionID, setConnectionID] = useState("");
+  
+  // to store the connection IDs in the async storage
+  const storeData = async (key, value) => {
+    try {
+      AsyncStorage.setItem(key , value);
+      console.log("saved the data");
+    } catch (e) {
+      alert("Error occured while storing data");
+    }
+  };
 
   const loadConnectiones = () => {
-    axios.get('http://172.104.61.240:3000/connections')
+    axios.get('https://holder-admin-agent.hansajayathilaka.com/connections')
     .then(response => {
       // Handle the successful response
       const results = response.data.results;
@@ -29,10 +41,9 @@ export default function Connections() {
               title={item.their_label }
               subtitle={item.created_at}
               left={(props) => <Avatar.Icon {...props} icon="card" />}
-              right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
-            />
-            </Card.Content>
-          </Card>
+          />
+          </Card.Content>
+    </Card>
   );
 
   return (
@@ -43,9 +54,9 @@ export default function Connections() {
           style={{ margin: 10, fontWeight: "bold" }}
           buttonColor="rgb(37, 139, 214)"
           textColor="white"
-        >
-          Refresh
-        </Button>
+      >
+        Refresh
+      </Button>
       <FlatList
       data={connections}
       keyExtractor={(item) => item.connection_id}

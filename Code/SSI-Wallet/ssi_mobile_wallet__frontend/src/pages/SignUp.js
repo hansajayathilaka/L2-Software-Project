@@ -12,6 +12,7 @@ const SignUp = ({ navigation }) => {
   const [confPasswordVisibility, setconfPasswordVisibility] = useState(true);
   const [did, setPrivateDid] = useState({});
 
+  
   // style colour
   const outlineColor = "rgb(37, 139, 214)";
 
@@ -70,7 +71,7 @@ const SignUp = ({ navigation }) => {
   const signUp = () => {
     isBothPasswordsEqual();
     console.log(`${userName} ${password} ${confPassword}`);
-    axios.post('http://172.104.61.240:3000/wallet/did/create')
+    axios.post('https://holder-admin-agent.hansajayathilaka.com/wallet/did/create')
       .then(response => {
         // Handle the successful response
         setPrivateDid(response.date);
