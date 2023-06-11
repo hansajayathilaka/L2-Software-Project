@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import React, { useState } from "react";
 import { Button, TextInput, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -11,19 +11,23 @@ const SignIn = ({ theme, navigation }) => {
   // style colour
   const outlineColor = "rgb(37, 139, 214)";
 
-  const signIn = () => {
-    AsyncStorage.getItem("@password").then((value) => {
-      if (value === userEnteredPassword) {
-        console.log(value);
-        setUserEnteredPassword("");
-        console.log(value);
-        navigation.navigate("Root");
-        // navigation.push('Home', {name: 'Upeksha'});
+  // get values from the async storage
+  const getValue = async () => {
+      const userName = await AsyncStorage.getItem('@userName');
+      const password = await AsyncStorage.getItem('@password');
+
+      if (password === userEnteredPassword) {
+        if (userName === userEnteredUserName) {
+          setUserEnteredPassword("");
+          setUserEnteredName("");
+          navigation.navigate("Root");
+          // navigation.push('Home', {name: 'Upeksha'});
+        } else {
+          Alert.alert("User name is incorrect. Check the user name correctly!");
+        }
       } else {
-        console.log(value);
-        alert("password is incorrect. Check the password correctly!");
+        Alert.alert("password is incorrect. Check the password correctly!");
       }
-    });
   };
 
   return (
@@ -84,7 +88,7 @@ const SignIn = ({ theme, navigation }) => {
         />
         <Button
           icon="login"
-          onPress={signIn}
+          onPress={getValue}
           style={{ marginTop: 10, fontWeight: "bold" }}
           buttonColor="rgb(37, 139, 214)"
           textColor="white"

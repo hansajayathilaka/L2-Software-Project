@@ -2,6 +2,7 @@ import { View, Alert, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { withTheme, Button, TextInput, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 const SignUp = ({ navigation }) => {
   const [userName, setUserName] = useState("");
@@ -9,17 +10,19 @@ const SignUp = ({ navigation }) => {
   const [confPassword, setConfPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [confPasswordVisibility, setconfPasswordVisibility] = useState(true);
+  const [did, setPrivateDid] = useState({});
 
+  
   // style colour
   const outlineColor = "rgb(37, 139, 214)";
 
   // store the password in the asynch storage
-  const storeData = async (value) => {
+  const storeData = async (key, value) => {
     try {
-      AsyncStorage.setItem("@password", value);
+      AsyncStorage.setItem(key , value);
       console.log("saved the data");
-      resetForm();
-      navigation.navigate("SignIn", { name: "Upeksha" });
+      // resetForm();
+      // navigation.navigate("SignIn", { name: "Upeksha" });
     } catch (e) {
       alert("Error occured while signup");
     }
@@ -30,8 +33,8 @@ const SignUp = ({ navigation }) => {
     if (userName != "") {
       if (password != "") {
         if (password === confPassword) {
-          storeData(userName);
-          storeData(password);
+          storeData("@userName", userName);
+          storeData("@password", password);
           resetForm();
           navigation.navigate("SignIn", { name: "upeksha" });
         } else {
@@ -68,6 +71,16 @@ const SignUp = ({ navigation }) => {
   const signUp = () => {
     isBothPasswordsEqual();
     console.log(`${userName} ${password} ${confPassword}`);
+    axios.post('https://holder-admin-agent.hansajayathilaka.com/wallet/did/create')
+      .then(response => {
+        // Handle the successful response
+        setPrivateDid(response.date);
+        console.log(response.data);
+      })
+      .catch(error => {
+        // Handle the error
+        console.log(error);
+      });
   };
 
   return (
