@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ey2cj)@kg2uke7!gmgcr%-m1#9l_w2tcjn5*zed99cb2!kj=9j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 LOGIN_REDIRECT_URL = '/nft/'
 LOGOUT_REDIRECT_URL = '/nft/'

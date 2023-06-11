@@ -1,5 +1,4 @@
 function validateAll(){
-
     var username = document.getElementById("id_username").value;
     var password = document.getElementById("id_password").value;
 

@@ -1,10 +1,8 @@
-
-
-
 $("#nft_minting_form").validate({
     rules: {
         owner_name: {
             required: true,
+            pattern: /^[A-Za-z]+$/,
         },
         owner_address: {
             required: true,
@@ -31,11 +29,9 @@ $("#nft_minting_form").validate({
         },
         engine_no: {
             required: true,
-            pattern: /^[0-9]{6,10}$/,
         },
         chassis_no: {
             required: true,
-            pattern: /^[0-9]{6,10}$/,
         },
         internal_height: {
             required: true,
@@ -103,11 +99,9 @@ $("#nft_minting_form").validate({
         },
         engine_no: {
             required: "Please enter engine number",
-            pattern: "Please enter a valid engine number",
         },
         chassis_no: {
             required: "Please enter chassis number",
-            pattern: "Please enter a valid chassis number",
         },
         internal_height: {
             required: "Please enter internal height",
@@ -150,3 +144,14 @@ $("#nft_minting_form").validate({
     
         
 });
+
+$.validator.addMethod("pattern", function( value, element, param ) {
+    debugger;
+	if ( this.optional( element ) ) {
+		return true;
+	}
+	if ( typeof param === "string" ) {
+		param = new RegExp( "^(?:" + param + ")$" );
+	}
+	return param.test( value );
+}, "Invalid format." );
