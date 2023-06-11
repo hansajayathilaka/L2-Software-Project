@@ -29,7 +29,7 @@ header nav {
 }
 
 .btn-primary {
-  background-color: rgb(49, 40, 131) !important;
+  background-color: #036 !important;
   border: none !important;
   color: white !important;
 }
@@ -37,3 +37,4 @@ header nav {
 form {
   margin: 0;
 }
+

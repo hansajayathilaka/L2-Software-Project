@@ -26,13 +26,14 @@
       (async () => {
         var interval = setInterval(async function(){
           try {
-            console.log("getting state...")
+            // console.log("getting state...")
             const response = await fetch('/state/' + '{{connection_id}}');
             const state = await response.json();
             console.log(state)
-            if (state["state"] === 'presentation-verified') {
-              clearInterval(interval)
-              location.href = '/verify/' + '{{connection_id}}' + window.location.search;
+            if (state["state"] === 'connection-formed') {
+              debugger;
+              clearInterval(interval);
+              location.href = '/in-progress/' + '{{connection_id}}' + window.location.search;
             }
           } catch (e) {
             console.error(e)
@@ -74,7 +75,7 @@
             <h1>Get Verified</h1>
             <p>
              Scan the QR code with your Mobile Wallet or click connect from your phone to form a connection with this verification service.Once the connection is established,the service will offer you a verifiable
-             credential.If you does not have cedential.please go back and do sign up process.
+             credential.If you does not have a cedential,please go back and do sign up process.
             </p>
 
             <div class="row">
