@@ -4,7 +4,7 @@ import {nftaddress, nftmarketaddress} from "../config";
 import Market from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 
 
-export default async function buyNft(nft) {
+export default async function buyNft(nft, owner_name, owner_nic) {
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection)
@@ -14,7 +14,7 @@ export default async function buyNft(nft) {
 
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
 
-    const tx = await contract.createMarketSale(nftaddress, nft.tokenId, {
+    const tx = await contract.createMarketSale(nftaddress, nft.tokenId, owner_name, owner_nic,  {
         value: price,
     });
 

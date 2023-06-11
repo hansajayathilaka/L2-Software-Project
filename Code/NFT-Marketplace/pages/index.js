@@ -4,30 +4,10 @@ import Link from "next/link";
 import {CustomImage} from "../components/Image";
 import {SET_LOADING} from "../reducer/actions";
 import buyNft from "../utils/buyNFT";
-import secureLocalStorage from "react-secure-storage";
 
 
 export default function Home(prop) {
     const {state, dispatch} = prop;
-
-    const clickBuyNFT = async (nft) => {
-        dispatch({
-            type: SET_LOADING,
-            data: true
-        });
-
-        try {
-            await buyNft(nft);
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
-
-        dispatch({
-            type: SET_LOADING,
-            data: false
-        });
-    }
 
     if (!state.loading && !state.nft.length) return (
         <h1 className='px-20 py-10 text-3xl'>No items in marketplace</h1>
@@ -49,12 +29,13 @@ export default function Home(prop) {
                             </div>
                             <div className="p-4 bg-gray-100">
                                 <p className="text-2xl mb-4 font-bold text-gray-800">{nft.price} Matic</p>
-                                {
-                                    state.loggedIn ?
-                                        <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded"
-                                                onClick={() => clickBuyNFT(nft)}>Buy</button>
-                                    : <></>
-                                }
+                                {/*{*/}
+                                {/*    state.loggedIn ?*/}
+                                {/*        <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded"*/}
+                                {/*                onClick={() => clickBuyNFT(nft)}>Buy</button>*/}
+                                {/*    : <></>*/}
+                                {/*}*/}
+                                <Link href={`${process.env.NEXT_PUBLIC_BLOCKCHAIN_SCANNER_URL}/token/${process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS}?a=${nft.tokenId}#inventory`} target="_blank"><button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded">See NFT History</button></Link>
                                 <Link href={{pathname: '/assert', query: {tokenId: nft.tokenId}}}><button className="w-full bg-blue-500 text-white font-bold py-2 px-12 rounded" title={`Token Id ${nft.tokenId}`}>More details</button></Link>
                             </div>
                         </div>
