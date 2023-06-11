@@ -20,8 +20,6 @@ Initialize hardhat
 npx hardhat
 ```
 
-Add account to `.secret` file in the project root.
-
 Run test
 ```shell
 npx hardhat test
@@ -43,7 +41,7 @@ npx hardhat run scripts/deploy.js --network localhost
 ```
 
 ### Setup secret keys
-- Copy your private key to `.secret` file at the root of the project.
+- Rename `.env.example` as `.env` and change the variables as your system.
 - Create an Infura project for `Polygon` network.
 - Create an Infura project for `IPFS`.
 - Place project ID and secrets in the environment file at the root of the project.

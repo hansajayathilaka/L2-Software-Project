@@ -163,7 +163,9 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# This commented because of the fallowing error
+# AssertionError: database connection isn't set to UTC
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -182,3 +184,8 @@ LOGOUT_REDIRECT_URL = 'index'
 
 # Gunicorn options
 timeout = 300
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
