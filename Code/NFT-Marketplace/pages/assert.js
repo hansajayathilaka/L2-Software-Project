@@ -10,6 +10,7 @@ import {CustomImage} from "../components/Image";
 import buyNft from "../utils/buyNFT";
 import {SET_LOADING} from "../reducer/actions";
 import changePriceNFT from "../utils/changePriceNFT";
+import {checkMetamaskAvailability} from "../utils/metamask";
 
 /**
  * This is for view vehicle assert
@@ -102,7 +103,7 @@ export default function Assert(prop) {
         }
         confirmAlert({
             title: 'Confirm Buy',
-            message: 'Are you sure that you want to buy this?',
+            message: `Are you sure that you want to buy this for ${price} Matic?`,
             buttons: [
                 {
                     label: 'Yes',
@@ -111,8 +112,27 @@ export default function Assert(prop) {
                         backgroundColor: "rgb(59 130 246)",
                         float: "right",
                     },
-                    onClick: () => {
-                        buyNft(currentNFT);
+                    onClick: async () => {
+                        try {
+                            if (checkMetamaskAvailability()) {
+                                if (state.metamask.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()) {
+                                    try {
+                                        await buyNft(currentNFT);
+                                        toast.success("NFT buy successfully");
+                                    } catch (err) {
+                                        toast.error("Buying NFT failed");
+                                        toast.error(err.message);
+                                        console.error(err);
+                                    }
+                                } else {
+                                    toast.error("Please connect the same metamask wallet address that you used to login");
+                                }
+                            }
+                        } catch (err) {
+                            toast.error("Buying NFT failed");
+                            toast.error(err.message);
+                            console.error(err);
+                        }
                     }
                 },
                 {
