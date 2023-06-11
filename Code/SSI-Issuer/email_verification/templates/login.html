@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 Login Form | SSI Issuer
@@ -11,7 +12,7 @@ Login Form | SSI Issuer
             <div class="card-title text-center mt-3">
                 <h2 style="color:  #036;">SSI Issuing Officer Login</h2>
             </div>
-            <form method="post" action="/login">
+            <form method="post" action="/login" class="was-validated">
                 {% csrf_token %}
                
                 <div class="card-body mt-3">
@@ -34,13 +35,10 @@ Login Form | SSI Issuer
                                 <label class="form-check-label"> Remember me </label>
                             </div>
                         </div>
-                        <div class="col d-flex justify-content-end mt-3 mx-3">
-                            <a href="/forgot_password" style="color: #036;">Forgot password?</a>
-                            
-                        </div>
+                        
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto mt-3">
-                        <button type="submit" class="btn btn-primary btn-block"  style="background-color: #036;">
+                        <button type="submit" class="btn btn-primary btn-block"  style="background-color: #036;" onclick="validateAll()">
                             Login
                         </button>
                     </div>
@@ -48,6 +46,11 @@ Login Form | SSI Issuer
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'login_validation.js' %}"></script>
 
 
 {% endblock %}
