@@ -27,8 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+LOGIN_REDIRECT_URL = '/nft/'
+LOGOUT_REDIRECT_URL = '/nft/'
 
-# Application definition
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR / 'emails'
+# Application definition6
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -147,13 +151,13 @@ API_PATH = Path(__file__).resolve().parents[2]\
 
 #SMTP Configuration
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS =  True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS =  True
+# EMAIL_USE_SSL = False
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
 
 try:
     from .local_settings import *
