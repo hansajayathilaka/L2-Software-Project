@@ -54,24 +54,29 @@ class PersonForm(BaseForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         # Add custom validation logic for email field
-        # Example: Check if email is unique or matches a specific pattern
+    
         if not re.match("^[\w\.-]+@[\w\.-]+\.\w+$",email):
             raise forms.ValidationError('Invalid email')
         return email
 
     
-    #def clean_wallet_address(self):
-        wallet_address = self.cleaned_data.get('wallet_address')
-        # Add custom validation logic for wallet_address field
-        # Example: Check if wallet address is valid according to a specific format or pattern
-        if not wallet_address_is_valid(wallet_address):
-            raise forms.ValidationError('Invalid wallet address')
-        return wallet_address
-
    
+ 
+    def clean_wallet_address(self):
+        wallet_address = self.cleaned_data.get('wallet_address')
+
+        regex = r"^0x[a-fA-F0-9]{40}$"
+        test_str = "0x9917EB0be0d1Ea4aF401BB8fc6627ad19F99c14f"
+        matches = re.finditer(regex, test_str.strip())
+
+        found = False
+        for matchNum, match in enumerate(matches, start=1):
+            print ("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum = matchNum, start = match.start(), end = match.end(), match = match.group()))
+            return wallet_address
+        return forms.ValidationError('Invalid wallet address')
+
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
-class ForgotPasswordForm(forms.Form):
-    email = forms.EmailField(label='Email')
