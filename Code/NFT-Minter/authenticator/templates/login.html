@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 Login Form | NFT Minter
@@ -11,21 +12,23 @@ Login Form | NFT Minter
             <div class="card-title text-center mt-3">
                 <h2 style="color: #036;">Minting Officer Login</h2>
             </div>
-            <form method="post">
+            <form method="post" class="was-validated">
                 {% csrf_token %}
                
                 <div class="card-body mt-3">
                     <div class="input-group">
-                        <div class="input-group-text"><i class="bi bi-person fa-1x"></i></div>
+                        <div class="input-group-text" class="form-control"><i class="bi bi-person fa-1x"></i></div>
                         {{ form.username.errors }}
                         {{ form.username }}
+                        <div class="invalid-feedback">Please fill out this field.</div>
                       </div>
                         <div class="input-group mt-3">
-                            <div class="input-group-text">
+                            <div class="input-group-text" class="form-control">
                                 <i class="bi bi-lock fa-1x"></i>
                             </div>
                             {{ form.password.errors }}
                             {{ form.password }}
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div> 
                     <div class="row">
                         <div class="col d-flex justify-content-start mt-3 mx-3">
@@ -35,11 +38,11 @@ Login Form | NFT Minter
                             </div>
                         </div>
                         <div class="col d-flex justify-content-end mt-3 mx-3">
-                            <a href="/auth/resetPassword" style="color: #036;">Forgot password?</a>
+                            <a href="/auth/password_reset_form" style="color: #036;">Forgot password?</a>
                         </div>
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto mt-3">
-                        <button type="submit" class="btn btn-primary btn-block" style="background-color: #036;">
+                        <button type="submit" class="btn btn-primary btn-block" style="background-color: #036;" onclick="validateAll()">
                             Login
                         </button>
                     </div>
@@ -51,3 +54,7 @@ Login Form | NFT Minter
 
 {% endblock %}
 
+{% block script %}
+<script src="{% static 'validation.js' %}"></script>
+
+{% endblock %}
