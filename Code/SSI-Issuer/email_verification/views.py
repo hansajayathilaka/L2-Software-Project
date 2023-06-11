@@ -29,11 +29,6 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 from django.views import View
 
-from .forms import ForgotPasswordForm
-from django.contrib.auth.models import User
-from django.urls import reverse
-from django.contrib.auth.tokens import default_token_generator
-
 
 
 import logging
@@ -61,32 +56,6 @@ def login_view(request):
     
     return render(request, 'login.html', {'form': form})
 
-class ForgotPasswordView(View):
-    def get(self, request):
-        form = ForgotPasswordForm()
-        return render(request, 'forgot_password.html', {'form': form})
-
-    def post(self, request):
-        form = ForgotPasswordForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            try:
-                user = User.objects.get(email=email)
-                token = default_token_generator.make_token(user)
-                reset_url = request.build_absolute_uri(reverse('password_reset', kwargs={'uidb64': user.pk, 'token': token}))
-                # Send email to the user with the password reset link
-                send_mail(
-                    'Password Reset',
-                    f'Please click the following link to reset your password: {reset_url}',
-                    'from@example.com',
-                    [email],
-                    fail_silently=False,
-                )
-                return render(request, 'password_reset_email_sent.html')
-            except User.DoesNotExist:
-                # Handle case where the user does not exist for the provided email
-                pass
-        return render(request, 'forgot_password.html', {'form': form})
 
 def index(request):
     template = loader.get_template("index.html")

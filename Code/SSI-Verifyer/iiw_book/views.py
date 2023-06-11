@@ -136,14 +136,6 @@ def verify(request, connection_id):
 def verified(request):
     return HttpResponse()
 
-
-@login_required
-def backend(request):
-    template = loader.get_template("backend.html")
-    attendees = Attendee.objects.order_by("-updated_at")
-    return HttpResponse(template.render({"attendees": attendees}, request))
-
-
 # @login_required
 # def backend_denied(request):
 #     template = loader.get_template("backend_denied.html")
