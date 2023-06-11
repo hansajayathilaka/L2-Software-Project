@@ -19,7 +19,7 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'You are now logged in as {username}')
-                return redirect('home')
+                return redirect('index')
             else:
                 messages.error(request, 'Invalid username or password')
         else:

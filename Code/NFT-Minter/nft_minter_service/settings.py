@@ -145,7 +145,20 @@ PRIVATE_KEY = ''
 API_PATH = Path(__file__).resolve().parents[2]\
     .joinpath('NFT-Marketplace/artifacts/contracts/NFTMarket.sol/NFTMarket.json')
 
+#SMTP Configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS =  True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
 try:
     from .local_settings import *
 except ImportError:
     pass
+
+
+
