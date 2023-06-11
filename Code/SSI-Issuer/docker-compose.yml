@@ -7,8 +7,9 @@ services:
       AGENT_PORT: 10000
       INDY_SEED: ${AGENT_WALLET_SEED}
       SITE_URL: ${AGENT_EXTERNAL_URL}
-      WEBHOOK_URL: "http://issuer-service:8080/webhooks"
+      WEBHOOK_URL: ${WEBHOOK_URL}
       ACAPY_LABEL: "VOMS Person SSI Issuer"
+      # URL on invitation; It should be a public URL that can be access from your mobile phone
       ACAPY_ENDPOINT: ${AGENT_EXTERNAL_URL}
       ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
       ACAPY_GENESIS_URL: "http://test.bcovrin.vonx.io/genesis"
@@ -36,51 +37,52 @@ services:
         --admin '0.0.0.0' 5000",
       ]
 
-  issuer-service:
-    restart: always
-    build:
-      context: .
-      target: ${TARGET}
-    depends_on:
-      - issuer-postgres
-      - issuer-agent
-    environment:
-      PORT: 8080
-      SITE_URL: ${SERVICE_EXTERNAL_URL}
-      AGENT_URL: "http://issuer-agent:5000"
-      DEBUG: "true"
-      DB_NAME: postgres
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_PORT: 5432
-      DB_HOST: issuer-postgres
-      EMAIL_HOST: maildev
-      EMAIL_PORT: 25
-      EMAIL_USE_SSL: "false"
-      # APP_HOME: "email_verification_service"
-      WEB_CONCURRENCY: 1
-    ports:
-      - "8080:8080"
-    volumes:
-      - .:/app
+#  issuer-service:
+#    restart: always
+#    build:
+#      context: .
+#      target: ${TARGET}
+#    depends_on:
+#      - issuer-postgres
+#      - issuer-agent
+#    environment:
+#      PORT: 8080
+#      SITE_URL: ${SERVICE_EXTERNAL_URL}
+#      AGENT_URL: "http://issuer-agent:5000"
+#      DEBUG: "true"
+#      DB_NAME: postgres
+#      DB_USER: postgres
+#      DB_PASSWORD: password
+#      DB_PORT: 5432
+#      DB_HOST: issuer-postgres
+#      EMAIL_HOST: maildev
+#      EMAIL_PORT: 25
+#      EMAIL_USE_SSL: "false"
+#      # APP_HOME: "email_verification_service"
+#      WEB_CONCURRENCY: 1
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - .:/app
 
-  issuer-postgres:
-    restart: always
-    image: postgres:10
-    volumes:
-      - issuer-db:/var/lib/postgresql
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5430:5432"
+#  issuer-postgres:
+#    restart: always
+#    image: postgres:11
+#    volumes:
+#      - issuer-db:/var/lib/postgresql
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - "5430:5432"
 
-  maildev:
-    image: djfarrelly/maildev
-    ports:
-      - "8050:80"
+#  maildev:
+#    image: djfarrelly/maildev
+#    ports:
+#      - "26:25"
+#      - "8050:80"
 
 volumes:
   issuer-aca-py:
-  issuer-db:
+#  issuer-db:

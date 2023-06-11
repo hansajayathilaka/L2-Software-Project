@@ -1,73 +1,105 @@
 import React, {useState, useEffect} from "react";
-import {ethers} from "ethers";
-import {create as ipfsHttpClient} from "ipfs-http-client";
-import Web3Modal from "web3modal";
+import Link from "next/link";
 
-import {
-    nftaddress, nftmarketaddress
-} from "../config";
+import {CustomImage} from "../components/Image";
+import {updateSoldStatus} from "../utils/nftSoldStatus";
+import {SET_LOADING, SET_NFT} from "../reducer/actions";
+import {toast} from "react-toastify";
 
-import NFT from '../artifacts/contracts/NFT.sol/NFT.json';
-import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json';
-import axios from "axios";
 
-export default function MyAssets() {
-    const [nfts, setNfts] = useState([]);
-    const [loadingState, setLoadingState] = useState('not-loaded')
+export default function MyAssets({state, dispatch, updateNFTs}) {
+    const [myNFTs, setMyNFTs] = useState([]);
 
     useEffect(() => {
-        loadNFTs();
-    }, [])
-
-    async function loadNFTs() {
-        const web3Modal = new Web3Modal();
-        const connection = await web3Modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer = provider.getSigner();
-
-        const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-        const tokenContract = new ethers.Contract(nftaddress, NFT.abi, signer)
-
-        const data = await marketContract.fetchMyNFTs();
-        const items = await Promise.all(data.map(async i => {
-            const tokenUri = await tokenContract.tokenURI(i.tokenId);
-            const meta = await axios.get(tokenUri);
-            let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
-            let item = {
-                price,
-                tokenId: i.tokenId.toNumber().tokenId,
-                seller: i.seller,
-                owner: i.owner,
-                image: meta.data.image,
-                name: meta.data.name,
-                description: meta.data.description,
+        const _nft = [];
+        for(const nft of state.nft) {
+            if (typeof nft.owners[nft.owners.length - 1]._address === "undefined")
+                debugger;
+            if (
+                (
+                    state.loggedIn &&
+                    state.loggedIn.wallet_address &&
+                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()
+                ) || (
+                    state.metamask &&
+                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.metamask.toLowerCase()
+                )
+            ) {
+                _nft.push(nft);
+            } else {
+                debugger;
             }
-            return item;
-        }));
-        setNfts(items);
-        setLoadingState('loaded');
-    }
+        }
+        setMyNFTs(_nft);
+    }, [state.loggedIn, state.metamask, state.nft]);
 
-    if (loadingState === 'loaded' && !nfts.length) return (
+    if (!state.metamask || !state.loggedIn) return (
+        <h1 className="py-10 px-20 text-3xl">Please connect to metamask and login using your SSI</h1>
+    );
+
+    if (state.loading === false && (myNFTs && !myNFTs.length)) return (
         <h1 className="py-10 px-20 text-3xl">No assets owned</h1>
     );
+
+    const _updateSoldStatus = (nft, status) => {
+        dispatch({
+            type: SET_LOADING,
+            data: true,
+        });
+        updateSoldStatus(nft, status).then(doc => {
+            toast.success("Selling status updated successfully");
+            updateNFTs();
+        }).catch(err => {
+            toast.error("Selling status update failed");
+            toast.error(err.message);
+
+            dispatch({
+                type: SET_LOADING,
+                data: false,
+            });
+        });
+    }
+
+    const onClickToBeSale = (nft) => {
+        _updateSoldStatus(nft, false);
+    }
+
+    const onClickToSold = (nft) => {
+        _updateSoldStatus(nft, true);
+    }
 
     return (
         <div className="flex justify-center">
             <div className="px-4" style={{maxWidth: '1600px'}}>
                 <div className="grid grid-cols-1, sm:grid-cols-2, lg:grid-cols-4 gap-4 pt-4">
                     {
-                        nfts.map((nft, i) => (
-                            <div key={i} className="border shadow rounded-xl overflow-hidden">
-                                <img src={nft.image} alt="NFT token image"/>
+                        myNFTs.map((nft, i) => (
+                            <div key={i} className="flex flex-col justify-between border shadow rounded-xl overflow-hidden">
+                                <CustomImage src={nft.thumbnail} />
                                 <div className="p-4">
-                                    <p style={{height: "64px"}} className="text-2xl font-semibold">{nft.name}</p>
-                                    <div style={{height:'70px', overflow: 'hidden'}}>
+                                    <p className="text-2xl font-semibold">{nft.name}</p>
+                                    <div className=" overflow-hidden" title={nft.description}>
                                         <p className="text-gray-400">{nft.description}</p>
                                     </div>
                                 </div>
-                                <div className="p-4 bg-black">
-                                    <p className="text-2xl mb-4 font-bold text-white">{nft.price} ETH</p>
+                                <div className="p-4 bg-gray-100">
+                                    <p className="text-2xl mb-4 font-bold text-gray-800">{nft.price} Matic</p>
+                                    {
+                                        nft.sold ?
+                                            <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" onClick={() => onClickToBeSale(nft)}>
+                                                Mark to be Sale
+                                            </button>
+                                            :
+                                            <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" onClick={() => onClickToSold(nft)}>
+                                                Mark as Sold
+                                            </button>
+                                    }
+
+                                    <Link href={{pathname: '/assert', query: {tokenId: nft.tokenId, edit: true}}}>
+                                        <button className="mb-3 w-full bg-blue-500 text-white font-bold py-2 px-12 rounded" title={`Token Id ${nft.tokenId}`}>
+                                            More details
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))

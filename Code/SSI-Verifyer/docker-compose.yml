@@ -7,11 +7,11 @@ services:
       AGENT_PORT: 11000
       INDY_SEED: ${AGENT_WALLET_SEED}
       SITE_URL: ${AGENT_EXTERNAL_URL}
-      WEBHOOK_URL: "http://verifier-service:7070/webhooks"
+      WEBHOOK_URL: ${WEBHOOK_URL}
       ACAPY_LABEL: "VOMS Person SSI Verifier"
       ACAPY_ENDPOINT: ${AGENT_EXTERNAL_URL}
       ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
-      ACAPY_GENESIS_URL: "http://test.bcovrin.vonx.io/genesis"
+      ACAPY_GENESIS_URL: ${GENESIS_URL}
       ACAPY_WALLET_TYPE: "indy"
       ACAPY_WALLET_NAME: "voms"
       ACAPY_WALLET_KEY: "walletkey"
@@ -36,55 +36,56 @@ services:
         --admin '0.0.0.0' 4000",
       ]
 
-  verifier-service:
-    restart: always
-    build:
-      context: .
-      target: ${TARGET}
-    depends_on:
-      - verifier-postgres
-      - verifier-agent
-    environment:
-      PORT: 7070
-      SITE_URL: ${SERVICE_EXTERNAL_URL}
-      INDY_SSI_ISSUER_DID: ${INDY_SSI_ISSUER_DID}
-      AGENT_URL: "http://verifier-agent:4000"
-      DEBUG: "true"
-      DB_NAME: postgres
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_PORT: 5432
-      DB_HOST: verifier-postgres
-      EMAIL_HOST: maildev
-      EMAIL_PORT: 25
-      EMAIL_USE_SSL: "false"
-      APP_MODULE: "iiw_book_service.wsgi"
-      STAFF_EMAILS: "test@example.com"
-      CONFERENCE_OPTIONS: "VOMS,NFT Marketplace"
-      INDY_DID_REGISTER_URL: ${INDY_DID_REGISTER_URL}
-      WEB_CONCURRENCY: 1
-    ports:
-      - "7070:7070"
-    volumes:
-      - .:/app
+#  verifier-service:
+#    restart: always
+#    build:
+#      context: .
+#      target: ${TARGET}
+#    depends_on:
+#      - verifier-postgres
+#      - verifier-agent
+#    environment:
+#      PORT: 7070
+#      SITE_URL: ${SERVICE_EXTERNAL_URL}
+#      INDY_SSI_ISSUER_DID: ${INDY_SSI_ISSUER_DID}
+#      AGENT_URL: "http://verifier-agent:4000"
+#      DEBUG: "true"
+#      DB_NAME: postgres
+#      DB_USER: postgres
+#      DB_PASSWORD: password
+#      DB_PORT: 5432
+#      DB_HOST: verifier-postgres
+#      EMAIL_HOST: maildev
+#      EMAIL_PORT: 25
+#      EMAIL_USE_SSL: "false"
+#      APP_MODULE: "iiw_book_service.wsgi"
+#      STAFF_EMAILS: "test@example.com"
+#      CONFERENCE_OPTIONS: "VOMS,NFT Marketplace"
+#      INDY_DID_REGISTER_URL: ${INDY_DID_REGISTER_URL}
+#      WEB_CONCURRENCY: 1
+#    ports:
+#      - "7070:7070"
+#    volumes:
+#      - .:/app
 
-  verifier-postgres:
-    restart: always
-    image: postgres:10
-    volumes:
-      - verifier-db:/var/lib/postgresql
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5431:5432"
+#  verifier-postgres:
+#    restart: always
+#    image: postgres:10
+#    volumes:
+#      - verifier-db:/var/lib/postgresql
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - "5431:5432"
 
-  maildev:
-    image: djfarrelly/maildev
-    ports:
-      - "7050:80"
+#  maildev:
+#    image: djfarrelly/maildev
+#    ports:
+#      - "27:25"
+#      - "7050:80"
 
 volumes:
   verifier-aca-py:
-  verifier-db:
+#  verifier-db:
