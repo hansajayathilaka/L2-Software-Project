@@ -136,7 +136,6 @@ function _App({Component, pageProps}) {
     const walletAddressBar = () => {
         if (state.metamask) {
             if (state.loggedIn) {
-                debugger;
                 console.log(state.metamask.toLowerCase(), state.loggedIn.wallet_address.toLowerCase())
                 if (state.metamask.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()) {
                     return (

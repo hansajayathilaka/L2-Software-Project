@@ -1,14 +1,12 @@
 from django.urls import path
 
 from . import views
-from .views import ForgotPasswordView
+
 
 
 urlpatterns = [
     path("login/", views.login_view, name='login'),
-    path('forgot_password/', ForgotPasswordView.as_view(), name='forgot_password'),
     
-
     path("index/", views.index, name="index"), 
     path("submit/", views.submit, name="submit"),
     path("thanks/", views.thanks, name="thanks"),

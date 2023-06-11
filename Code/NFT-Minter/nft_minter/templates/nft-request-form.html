@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     NFT Requesting Form | NFT Minter
@@ -17,7 +18,7 @@
         </div>
     {% endif %}
 
-    <form action="/nft/" method="POST" enctype="multipart/form-data">
+    <form action="/nft/" method="POST" enctype="multipart/form-data" class="" id="nft_minting_form">
         {% csrf_token %}
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
@@ -31,32 +32,39 @@
                                         <div class="col">
                                             <label for="Cowner">Owner Name</label>
                                             {{ form.owner_name }}
+                                           
                                         </div>
                                         <div class="col">
                                             <label for="body">Estimation Price (MATIC)</label>
                                             <input type="number" class="form-control" name="price" min="0" value="{{form.price.value}}" required>
 {#                                            {{ form.price }}#}
+                          
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Manufacture Date</label>
                                             <input type="date" class="form-control" name="manufactured_date" value="{{form.manufactured_date.value}}">
 {#                                            {{ form.manufactured_date }}#}
+                                           
                                         </div>
                                     </div>
 
                                     <div class="row mt-3">
                                         <div class="col">
-                                            <label for="body">Owner Address</label>
+                                            <label for="body">Owner's Wallet Address</label>
                                             {{ form.owner_address }}
+                                            
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Wheel Base (cm)</label>
                                             {{ form.wheel_base }}
+                                            
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Registration Date</label>
                                             <input type="date" class="form-control" name="registered_date" value="{{form.registered_date.value}}">
-{#                                            {{ form.registered_date }}#}
+
+                                            {#{{ form.registered_date }}#}
+
                                         </div>
                                     </div>
 
@@ -65,14 +73,17 @@
                                         <div class="col">
                                             <label for="body">Owner NIC Number</label>
                                             {{ form.owner_nic }}
+                                            
                                         </div>
                                         <div class="col">
                                             <label for="body">Engine Number</label>
                                             {{ form.engine_no }}
+                                           
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Body Type</label>
                                             {{ form.body_type }}
+                                            
                                         </div>
                                     </div>
 
@@ -80,15 +91,18 @@
                                         <div class="col">
                                             <label for="Cowner">Color</label>
                                             {{ form.color }}
+                                            
                                         </div>
                                         <div class="col">
                                             <label for="body">Chassis Number</label>
                                             {{ form.chassis_no }}
+                                      
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Seating Capacity</label>
                                             <input type="number" class="form-control" name="seating_capacity" min="1" value="{{form.seating_capacity.value}}">
 {#                                            {{ form.seating_capacity }}#}
+                                           
                                         </div>
                                     </div>
 
@@ -96,15 +110,18 @@
                                         <div class="col">
                                             <label for="body">Company</label>
                                             {{ form.company }}
+                                            
                                         </div>
                                         <div class="col">
                                             <label for="Cowner">Internal Height (cm)</label>
                                             <input type="number" class="form-control" name="internal_height" min="0" value="{{form.internal_height.value}}">
 {#                                            {{ form.internal_height }}#}
+                                          
                                         </div>
                                         <div class="col">
                                             <label for="body">Fuel Type</label><br>
                                             {{ form.fuel_type }}
+                                           
                                         </div>
                                     </div>
 
@@ -112,15 +129,18 @@
                                         <div class="col">
                                             <label for="body">Model Number</label>
                                             {{ form.vehicle_model }}
+                                           
                                         </div>
                                         <div class="col">
                                             <label for="body">Cylinder Capacity (cc)</label>
                                             <input type="number" class="form-control" name="cylinder_capacity" min="0" value="{{form.cylinder_capacity.value}}">
 {#                                            {{ form.cylinder_capacity }}#}
+                                           
                                         </div>
                                         <div class="col">
                                             <label for="body">Vehicle Type</label><br>
                                             {{ form.vehicle_type }}
+                                           
                                         </div>
                                     </div>
 
@@ -128,6 +148,7 @@
                                         <div class="col">
                                             <label for="body">Description</label>
                                             {{ form.description }}
+                                            
                                         </div>
                                     </div>
 
@@ -136,11 +157,13 @@
                                             <label for="thumbnail" class="col-md-3">Thumbnail</label>
                                             <input type="file" id="thumbnail" name="thumbnail" class="col-md-9" required>
 {#                                            {{ form.thumbnail }}#}
+                                           
                                         </div>
                                         <div class="mt-lg-2 row">
                                             <label for="attachments" class="col-md-3">Attachments</label>
                                             <input type="file" id="attachments" multiple name="attachments" class="col-md-9" required>
 {#                                            {{ form.attachments }}#}
+                                            
                                         </div>
                                     </div>
 
@@ -161,3 +184,7 @@
     </form>
 {% endblock %}
 
+{% block script %}
+<script src="{% static 'nft_validations.js' %}"></script>
+
+{% endblock %}

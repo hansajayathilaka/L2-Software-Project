@@ -1,13 +1,16 @@
 version: "3"
 services:
   holder-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    image: bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
     environment:
       ADMIN_PORT: 3000
       AGENT_PORT: 12000
-      # URL on invitation; It should be a public URL that can be access from your mobile phone
+      INDY_SEED: ${AGENT_WALLET_SEED}
+      SITE_URL: ${AGENT_EXTERNAL_URL}
+      ACAPY_LABEL: "VOMS Person SSI Holder"
+      ACAPY_ENDPOINT: ${AGENT_EXTERNAL_URL}
       ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
-      ACAPY_GENESIS_URL: "http://test.bcovrin.vonx.io/genesis"
+      ACAPY_GENESIS_URL: ${GENESIS_URL}
       ACAPY_WALLET_TYPE: "indy"
       ACAPY_WALLET_NAME: "voms"
       ACAPY_WALLET_KEY: "walletkey"
@@ -23,12 +26,14 @@ services:
       - holder-aca-py:/home/indy/.indy_client/wallet
     entrypoint: /bin/bash
     command: [
-        "-c",
-        "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"VOMS Person SSI Issuer (Docker)\"}' -X POST http://test.bcovrin.vonx.io/register; \
+      "-c",
+      "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"VOMS Person SSI Holder (Docker)\"}' -X POST ${INDY_DID_REGISTER_URL}; \
         sleep 5; \
-        aca-py start --endpoint ${AGENT_EXTERNAL_URL} --label \"VOMS Person SSI Holder\" --auto-ping-connection --auto-respond-messages --inbound-transport http 0.0.0.0 12000 --outbound-transport http --admin 0.0.0.0 3000 --admin-insecure-mode --preserve-exchange-records --trace-target log --trace-tag acapy.events --trace-label holder.Agent.trace --auto-accept-invites --auto-accept-requests --auto-store-credential --debug-credentials \
-        ",
-      ]
+        aca-py start \
+        -it http '0.0.0.0' 12000 \
+        -ot http \
+        --admin '0.0.0.0' 3000",
+    ]
 
 volumes:
   holder-aca-py:

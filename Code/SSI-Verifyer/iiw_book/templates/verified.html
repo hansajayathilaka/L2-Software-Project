@@ -14,7 +14,6 @@
     <title>SSI Verifier | Verified</title>
     <meta
       name="description"
-      content="A verification service used to issue a verifiable credential asserting a requester is an IIW 28 Attendee based on their verified email address."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -34,9 +33,18 @@
       <nav class="navbar navbar-expand-lg navbar-dark">
         <!-- Navbar content -->
         <div class="container">
-          <a class="navbar-brand" href="/" style="font-size:2em">
-            SSI Verifier
-          </a>
+          <a class="navbar-brand" href="/" style="font-size:2em" >
+            <img
+            class="img-fluid d-none d-md-block"
+            src="/assets/images/bcid-logo-rev-en.svg"
+            width="177"
+            height="44"
+            alt="VOMS Logo"
+          />
+        </a>
+        <div class="navbar-brand">
+          SSI Verifying Service
+        </div>
         </div>
       </nav>
     </header>
@@ -46,7 +54,7 @@
           <div class="col-lg-9 col-md-12">
             <h1>Verified Person</h1>
               <h4>{{ name }}</h4>
-              <button onclick="on_click_continue(event, '{{ data }}')">Continue</button>
+              <button type="button" class="btn btn-primary btn-lg mt-2" id="continueBtn" onclick="on_click_continue(event, '{{ data }}')">Continue</button>
           </div>
         </div>
       </div>
@@ -64,8 +72,21 @@
             debugger;
             window.close();
         }
-    </script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+          const urlParams = Object.fromEntries(new URLSearchParams(location.search));
+            var oauthVal = urlParams['oauth'];
+            var contBtn = document.getElementById("continueBtn");
+            if(oauthVal === "1") {
+              contBtn.style.display = "block";
+            } else {
+              contBtn.style.display = "none";
+            }
+        });
+            
+          </script>
 
     <script src="{% static 'js/voms.min.js' %}" async defer></script>
   </body>
 </html>
+

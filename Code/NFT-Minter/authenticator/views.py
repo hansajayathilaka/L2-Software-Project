@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
 from authenticator.forms import LoginForm
+from django.shortcuts import render, redirect
+
 
 class LoginView(View):
     def get(self, request):
@@ -26,6 +28,3 @@ class LoginView(View):
             messages.error(request, 'Invalid username or password')
         return render(request, 'login.html', {'form': form})
 
-class resetPasswordView(View):
-    def get(self, request):
-        return render(request, 'resetPassword.html')

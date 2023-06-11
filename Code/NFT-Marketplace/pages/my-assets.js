@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import {CustomImage} from "../components/Image";
 import {updateSoldStatus} from "../utils/nftSoldStatus";
-import {SET_LOADING, SET_NFT} from "../reducer/actions";
+import {SET_LOADING} from "../reducer/actions";
 import {toast} from "react-toastify";
 
 
@@ -13,8 +13,6 @@ export default function MyAssets({state, dispatch, updateNFTs}) {
     useEffect(() => {
         const _nft = [];
         for(const nft of state.nft) {
-            if (typeof nft.owners[nft.owners.length - 1]._address === "undefined")
-                debugger;
             if (
                 (
                     state.loggedIn &&
