@@ -68,18 +68,7 @@ class PersonForm(BaseForm):
             raise forms.ValidationError('Invalid wallet address')
         return wallet_address
 
-    # Add clean methods for other fields if needed
-
-    #def clean(self):
-        cleaned_data = super().clean()
-        # Add custom validation logic that involves multiple fields
-        # Example: Check if the combination of fname and lname is unique
-        fname = cleaned_data.get('fname')
-        lname = cleaned_data.get('lname')
-        if fname and lname and not is_unique_combination(fname, lname):
-            raise forms.ValidationError('Combination of first name and last name already exists')
-        return cleaned_data
-        
+   
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
