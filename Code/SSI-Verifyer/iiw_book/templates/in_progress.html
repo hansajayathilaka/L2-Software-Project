@@ -11,10 +11,10 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
-    <title>ConfBook Attendance Issuer</title>
+    <title>VOMS Verifier</title>
     <meta
       name="description"
-      content="A verification service used to issue a verifiable credential asserting a requester is an IIW 28 Attendee based on their verified email address."
+      content="A verification service used to issue a verifiable credential based on their verified email address."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -80,16 +80,25 @@
         <a href="#">upgrade your browser</a> to improve your experience.
       </p>
     <![endif]-->
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-dark">
-        <!-- Navbar content -->
-        <div class="container">
-          <a class="navbar-brand" href="/" style="font-size:2em">
-            SSI Verifier
-          </a>
-        </div>
-      </nav>
-    </header>
+      <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+          <!-- Navbar content -->
+          <div class="container">
+            <a class="navbar-brand" href="/" style="font-size:2em" >
+              <img
+              class="img-fluid d-none d-md-block"
+              src="/assets/images/bcid-logo-rev-en.svg"
+              width="177"
+              height="44"
+              alt="VOMS Logo"
+            />
+            </a>
+            <div class="navbar-brand">
+            SSI Verifying Service
+            </div>
+          </div>
+        </nav>
+      </header>
     <main role="main">
       <div class="container">
         <div class="row">
