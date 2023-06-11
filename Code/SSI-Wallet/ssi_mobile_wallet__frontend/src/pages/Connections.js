@@ -31,7 +31,6 @@ export default function Connections() {
       // Handle the error
       console.error(error);
     });
-
   }
 
   const renderItem = ({ item }) => (

@@ -112,6 +112,7 @@ function Root() {
 
 export default function App() {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator theme={styles.container}>
         <Stack.Screen
@@ -132,6 +133,7 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 

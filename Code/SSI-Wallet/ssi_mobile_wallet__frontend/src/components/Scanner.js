@@ -4,6 +4,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import base64 from 'react-native-base64';
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Scanner = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -12,9 +13,6 @@ const Scanner = () => {
   const [connectionID, setConnectionID] = useState(''); // connection ID
 
   const dispatch = useDispatch()
-  const { SearchRes, SearchVal } = useSelector(state => {
-      return state
-  })
   
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -24,6 +22,8 @@ const Scanner = () => {
 
     getBarCodeScannerPermissions();
   }, []);
+
+  
 
   // to decode the base 64 string 
   const decodeBase64 = (encodedString) => {
@@ -40,15 +40,27 @@ const Scanner = () => {
       const regex = /c_i=([^&]+)/;
       const match = regex.exec(data);
       const encodedValue = match ? match[1] : null;
-      Alert.alert(`${decodeBase64(encodedValue)}`);
+      
       const base64_encodedValue = decodeBase64(encodedValue);
       console.log(base64_encodedValue);
 
       axios.post('https://holder-admin-agent.hansajayathilaka.com/connections/receive-invitation', base64_encodedValue)
         .then(response => {
           // Handle the successful response
-          console.warn(response.data);
+          console.log(response.data);
           console.log(response.data.connection_id); // react store ekata daaganna
+          dispatch({ type: 'CONNECTION_ID', payload: response.data.connection_id });
+          // Alert.alert("Connection Established successfully between wallet and Issuer...");
+          Alert.alert(
+            'Connection Established',
+            'Between wallet and Issuer. Go to Connections and Check...',
+            [
+              {
+                text: 'Ok',
+                style: 'cancel',
+              },
+            ]
+          );
         })
         .catch(error => {
           // Handle the error
