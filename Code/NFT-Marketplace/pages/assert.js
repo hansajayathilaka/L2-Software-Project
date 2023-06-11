@@ -1,10 +1,10 @@
 import {useRouter} from "next/router";
 import Link from "next/link";
 import {useEffect, useRef, useState} from "react";
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
-import { confirmAlert } from 'react-confirm-alert';
+import {confirmAlert} from 'react-confirm-alert';
 
 import {CustomImage} from "../components/Image";
 import buyNft from "../utils/buyNFT";
@@ -31,7 +31,7 @@ export default function Assert(prop) {
         const tokenId = Number(router.query.tokenId);
         let _currentNFT = []
 
-        for(const nft of state.nft) {
+        for (const nft of state.nft) {
             if (tokenId === nft.tokenId) {
                 _currentNFT.push(nft);
             }
@@ -42,7 +42,7 @@ export default function Assert(prop) {
             setPrice(_currentNFT[0].price);
             console.log(currentNFT);
         }
-    },[currentNFT, router.query.tokenId, state.nft]);
+    }, [currentNFT, router.query.tokenId, state.nft]);
 
 
     const onClickCopyLink = () => {
@@ -51,28 +51,8 @@ export default function Assert(prop) {
         })
     }
 
-    const _buyNFT = async () => {
-        dispatch({
-            type: SET_LOADING,
-            data: true
-        });
-        try {
-            await buyNft(currentNFT);
-            toast.success("NFT buy successfully");
-            updateNFTs();
-        } catch (err) {
-            toast.error("Buying NFT failed");
-            toast.error(err.message);
-            console.error(err);
-        }
-        dispatch({
-            type: SET_LOADING,
-            data: false
-        });
-    }
 
     async function handleChangePriceClick() {
-        debugger;
         if (price === "") {
             toast.error("Invalid Price");
         } else {
@@ -113,11 +93,16 @@ export default function Assert(prop) {
                         float: "right",
                     },
                     onClick: async () => {
+                        dispatch({
+                            type: SET_LOADING,
+                            data: true
+                        });
                         try {
                             if (checkMetamaskAvailability()) {
                                 if (state.metamask.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()) {
                                     try {
-                                        await buyNft(currentNFT);
+                                        await buyNft(currentNFT, `${state.loggedIn.fname} ${state.loggedIn.lname}`, state.loggedIn.nic);
+                                        updateNFTs(true);
                                         toast.success("NFT buy successfully");
                                     } catch (err) {
                                         toast.error("Buying NFT failed");
@@ -133,6 +118,10 @@ export default function Assert(prop) {
                             toast.error(err.message);
                             console.error(err);
                         }
+                        dispatch({
+                            type: SET_LOADING,
+                            data: false
+                        });
                     }
                 },
                 {
@@ -142,7 +131,8 @@ export default function Assert(prop) {
                         backgroundColor: "rgb(245 158 11)",
                         float: "right"
                     },
-                    onClick: () => {}
+                    onClick: () => {
+                    }
                 }
             ]
         });
@@ -164,11 +154,14 @@ export default function Assert(prop) {
                                 autoFocus
                             />
                             <div className="flex mx-6 items-center">
-                                <div className="flex items-center mr-2 px-2 border-2 rounded-lg h-full hover:bg-gray-200" onClick={handleChangePriceClick}>
-                                    <FontAwesomeIcon icon={solid("check")} size={"3x"} color={'green'} />
+                                <div
+                                    className="flex items-center mr-2 px-2 border-2 rounded-lg h-full hover:bg-gray-200"
+                                    onClick={handleChangePriceClick}>
+                                    <FontAwesomeIcon icon={solid("check")} size={"3x"} color={'green'}/>
                                 </div>
-                                <div className="flex items-center px-4 border-2 rounded-lg h-full hover:bg-gray-200" onClick={handlePriceChangeCancelClick}>
-                                    <FontAwesomeIcon icon={solid('xmark')} size={"3x"} color={'red'} />
+                                <div className="flex items-center px-4 border-2 rounded-lg h-full hover:bg-gray-200"
+                                     onClick={handlePriceChangeCancelClick}>
+                                    <FontAwesomeIcon icon={solid('xmark')} size={"3x"} color={'red'}/>
                                 </div>
                             </div>
                         </div>
@@ -205,8 +198,7 @@ export default function Assert(prop) {
         return (
             <></>
         )
-    }
-    else if (!currentNFT) {
+    } else if (!currentNFT) {
         return (
             <div className="flex flex-col items-center justify-center mt-10">
                 <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
@@ -218,20 +210,20 @@ export default function Assert(prop) {
             </div>
         );
     } else {
-        return(
-                <>
-                    <div className="container my-5 px-6 mx-auto">
-                        <div className="flex flex-wrap">
-                            <div className="grow-0 shrink-0 basis-auto mb-12 lg:mb-0 w-full lg:w-5/12 px-3 lg:px-6 pt-4">
-                                <CustomImage src={currentNFT.thumbnail} size="large" />
-                                <div className="flex flex-col grow py-5">
-                                    <PriceComp />
-                                </div>
-                                <div className="grow">
-                                    <button
-                                        type="submit"
-                                        className="
-                                            mt-8
+        return (
+            <>
+                <div className="container my-5 px-6 mx-auto">
+                    <div className="flex flex-wrap">
+                        <div className="grow-0 shrink-0 basis-auto mb-12 lg:mb-0 w-full lg:w-5/12 px-3 lg:px-6 pt-4">
+                            <CustomImage src={currentNFT.thumbnail} size="large"/>
+                            <div className="flex flex-col grow pt-5 pb-3">
+                                <PriceComp/>
+                            </div>
+                            <div className="grow">
+                                <button
+                                    type="submit"
+                                    className="
+                                            mt-5
                                             mr-4
                                             px-6
                                             py-2.5
@@ -244,14 +236,14 @@ export default function Assert(prop) {
                                             transition
                                             duration-150
                                             ease-in-out"
-                                        onClick={onClickCopyLink}
-                                    >
-                                        Copy Link
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="
-                                            mt-8
+                                    onClick={onClickCopyLink}
+                                >
+                                    Copy Link
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="
+                                            mt-5
                                             px-6
                                             py-2.5
                                             bg-blue-500
@@ -263,55 +255,83 @@ export default function Assert(prop) {
                                             transition
                                             duration-150
                                             ease-in-out"
-                                        onClick={handleBuyClick}
-                                        title={!state.loggedIn ? "Please login before buy" : ""}
-                                    >
-                                        Buy for {currentNFT.price} MATIC
-                                    </button>
-                                </div>
+                                    onClick={handleBuyClick}
+                                    title={!state.loggedIn ? "Please login before buy" : ""}
+                                >
+                                    Buy for {currentNFT.price} MATIC
+                                </button>
                             </div>
-                            <div className="grow-0 shrink-0 basis-auto w-full lg:w-7/12">
-                                <div className="flex-col flex-wrap">
-                                    <div className="text-center lg:max-w-3xl md:max-w-xl">
-                                        <h2 className="text-4xl font-bold mb-12 px-6">{currentNFT.name}</h2>
-                                    </div>
-                                    <div className="grow ml-6 flex justify-between pb-2">
-                                        <p className="text-gray-500 mb-1">Description</p>
-                                        <p className="font-bold ml-6">{currentNFT.description}</p>
-                                    </div>
-                                    {
-                                        Object.entries(currentNFT.more_data).map(([key,value],i) => {
-                                            const split_key = key.split("_");
-                                            const formatted_key = split_key.map(val => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase());
-                                            const formatted_string = formatted_key.join(" ")
-                                            return (
-                                                <div className="grow ml-6 pt-3 pb-2 flex justify-between items-center border-t-2" key={i}>
-                                                    <p className="text-gray-500 mb-1">{formatted_string}</p>
-                                                    <p className="font-bold ml-6">{value}</p>
-                                                </div>
-                                            );
-                                        })
-                                    }
-                                    <div className="grow ml-6 flex justify-between pt-3 border-t-2">
-                                        <p className="text-gray-500 mb-1">Attachments</p>
-                                        <p>
-                                            {
-                                                currentNFT.attachments.map((item, index) => {
-                                                    return <p className="font-bold ml-6" key={index}>
-                                                        <a href={"image/" + item.fileUrl} target="_blank" rel="noreferrer">{item.description}</a>
-                                                    </p>
-                                                })
-                                            }
-                                        </p>
-
-                                    </div>
-
+                            <div>
+                                <h3 className="text-2xl font-bold mb-2 mt-9">Previous Owners</h3>
+                                <table className="table-auto">
+                                    <thead>
+                                    <tr>
+                                        <th className="px-4 py-2">Name</th>
+                                        <th className="px-4 py-2">NIC</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {currentNFT.owners.map((owner, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td className="border px-4 py-2">
+                                                    <Link href={`${process.env.NEXT_PUBLIC_BLOCKCHAIN_SCANNER_URL}/address/${owner._address}`} target="_blank">
+                                                        {owner.name}
+                                                    </Link>
+                                                </td>
+                                                <td className="border px-4 py-2">{owner.nic}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="grow-0 shrink-0 basis-auto w-full lg:w-7/12">
+                            <div className="flex-col flex-wrap">
+                                <div className="text-center lg:max-w-3xl md:max-w-xl">
+                                    <h2 className="text-4xl font-bold mb-12 px-6">{currentNFT.name}</h2>
+                                </div>
+                                <div className="grow ml-6 flex justify-between pb-2">
+                                    <p className="text-gray-500 mb-1">Description</p>
+                                    <p className="font-bold ml-6">{currentNFT.description}</p>
+                                </div>
+                                {
+                                    Object.entries(currentNFT.more_data).map(([key, value], i) => {
+                                        const split_key = key.split("_");
+                                        const formatted_key = split_key.map(val => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase());
+                                        const formatted_string = formatted_key.join(" ")
+                                        return (
+                                            <div
+                                                className="grow ml-6 pt-3 pb-2 flex justify-between items-center border-t-2"
+                                                key={i}>
+                                                <p className="text-gray-500 mb-1">{formatted_string}</p>
+                                                <p className="font-bold ml-6">{value}</p>
+                                            </div>
+                                        );
+                                    })
+                                }
+                                <div className="grow ml-6 flex justify-between pt-3 border-t-2">
+                                    <p className="text-gray-500 mb-1">Attachments</p>
+                                    <p>
+                                        {
+                                            currentNFT.attachments.map((item, index) => {
+                                                return <p className="font-bold ml-6" key={index}>
+                                                    <a href={"image/" + item.fileUrl} target="_blank"
+                                                       rel="noreferrer">{item.description}</a>
+                                                </p>
+                                            })
+                                        }
+                                    </p>
 
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
+            </>
 
         );
     }

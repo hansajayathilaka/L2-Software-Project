@@ -4,30 +4,10 @@ import Link from "next/link";
 import {CustomImage} from "../components/Image";
 import {SET_LOADING} from "../reducer/actions";
 import buyNft from "../utils/buyNFT";
-import secureLocalStorage from "react-secure-storage";
 
 
 export default function Home(prop) {
     const {state, dispatch} = prop;
-
-    const clickBuyNFT = async (nft) => {
-        dispatch({
-            type: SET_LOADING,
-            data: true
-        });
-
-        try {
-            await buyNft(nft);
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
-        }
-
-        dispatch({
-            type: SET_LOADING,
-            data: false
-        });
-    }
 
     if (!state.loading && !state.nft.length) return (
         <h1 className='px-20 py-10 text-3xl'>No items in marketplace</h1>
