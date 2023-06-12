@@ -2,7 +2,7 @@ $("#nft_minting_form").validate({
     rules: {
         owner_name: {
             required: true,
-            pattern: /^[A-Za-z]+$/,
+            pattern: /^[a-zA-Z]+ [a-zA-Z]+$/,
         },
         owner_address: {
             required: true,
@@ -10,7 +10,7 @@ $("#nft_minting_form").validate({
         },
         owner_nic: {
             required: true,
-            pattern: /^[0-9]{9}[vVxX]$/,
+            pattern: /(^\d{9}V$|^\d{12}$)/i,
         },
         color: {
             required: true,
