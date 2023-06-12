@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {View, FlatList, Alert} from "react-native";
-import {Button, Card, Avatar} from "react-native-paper";
+import {Button, Card, Avatar, DefaultTheme, Provider as PaperProvider} from "react-native-paper";
 import {useSelector} from 'react-redux';
 import getCredentials from "../service/get-credentials";
 
@@ -12,28 +12,37 @@ export default function Credentials() {
         return state
     });
 
+    const theme = {
+      ...DefaultTheme,
+      colors: {
+        ...DefaultTheme.colors,
+        primary: 'rgb(37, 139, 214)', // Set the primary color to blue
+      },
+    };
+
     useEffect(() => {
         getCredentials().then((response) => {
-            for(let i = 0; i < response.results.length; i++) {
-                debugger
-            }
             setCredentials(response.results);
             setLast_credential_ex_id(response.results[0].credential_exchange_id);
         });
     }, [ConnectionID]);
 
     const renderItem = ({item}) => (
+      <PaperProvider theme={theme}>
         <Card style={{margin: 10, fontWeight: "bold"}}>
             <Card.Content>
                 <Card.Title
-                    title={item.their_label}
-                    subtitle={item.created_at}
-                    left={(props) => <Avatar.Icon {...props} icon="card"/>}
+                    title={item.attrs.time}
+                    subtitle={item.attrs.fname}
+                    left={(props) => (
+                      <Avatar.Icon {...props} icon="star" color={theme.colors.primary} />
+                    )}
                 />
             </Card.Content>
         </Card>
+      </PaperProvider>
     );
-
+// issue date
     return (
         <View>
             {/*<Button*/}

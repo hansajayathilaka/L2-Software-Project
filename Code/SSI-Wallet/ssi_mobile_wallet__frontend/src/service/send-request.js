@@ -9,5 +9,4 @@ const acceptCredentialOffer = async (credentialExchangeId) => {
     }
 }
 
-
 export default acceptCredentialOffer;

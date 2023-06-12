@@ -2,10 +2,10 @@ import express from "express";
 import { Express, Request, Response } from "express";
 import "dotenv/config";
 import {
-  TrinsicService,
-  LoginRequest,
-  LoginResponse,
-  AccountService,
+    TrinsicService,
+    LoginRequest,
+    LoginResponse,
+    AccountService, InsertItemRequest,
 } from "@trinsic/trinsic";
 const bodyParser = require("body-parser");
 
@@ -39,12 +39,15 @@ app.post("/insertACredential", async (req: Request, res: Response) => {
     try {
         // create a Trinsic service
         const trinsic = new TrinsicService();
+        const issueResponse = req.body;
+        console.log(issueResponse);
+
         // inserting a credential to wallet
-        // let insertItemResponse = await trinsic.wallet().insertItem(
-        //     InsertItemRequest.fromPartial({
-        //         itemJson: issueResponse.documentJson,
-        //     })
-        // );
+        let insertItemResponse = await trinsic.wallet().insertItem(
+            InsertItemRequest.fromPartial({
+                itemJson: issueResponse.documentJson,
+            })
+        );
         } catch (e) {
         console.error(e);
         return "ERROR" + e;
