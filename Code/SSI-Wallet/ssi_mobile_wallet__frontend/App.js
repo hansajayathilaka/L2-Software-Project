@@ -4,7 +4,7 @@ import {AppRegistry} from "react-native";
 import {MD3LightTheme as DefaultTheme} from "react-native-paper";
 import {name as appName} from "./app.json";
 import {createStore} from 'redux';
-import {Provider, useDispatch} from 'react-redux';
+import {Provider} from 'react-redux';
 
 import SignUp from "./src/pages/SignUp";
 import SignIn from "./src/pages/SignIn";
@@ -18,9 +18,6 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import {reducer} from './src/reducers/reducers';
-import {useEffect} from "react";
-import {UPDATE_CONNECTION_ID} from "./src/reducers/actions";
-import {getConnectionID} from "./src/utils/connectionIdManage";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
