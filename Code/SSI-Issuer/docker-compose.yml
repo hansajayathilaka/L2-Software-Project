@@ -6,11 +6,11 @@ services:
       ADMIN_PORT: 5000
       AGENT_PORT: 10000
       INDY_SEED: ${AGENT_WALLET_SEED}
-      SITE_URL: http://${SERVER_DOMAIN}:10000
+      SITE_URL: ${AGENT_EXTERNAL_URL}
       WEBHOOK_URL: ${WEBHOOK_URL}
       ACAPY_LABEL: "VOMS Person SSI Issuer"
       # URL on invitation; It should be a public URL that can be access from your mobile phone
-      ACAPY_ENDPOINT: http://${SERVER_DOMAIN}:10000
+      ACAPY_ENDPOINT: ${AGENT_EXTERNAL_URL}
       ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
       ACAPY_GENESIS_URL: "http://test.bcovrin.vonx.io/genesis"
       ACAPY_WALLET_TYPE: "indy"
@@ -65,24 +65,24 @@ services:
 #    volumes:
 #      - .:/app
 
-  issuer-postgres:
-    restart: always
-    image: postgres:11
-    volumes:
-      - issuer-db:/var/lib/postgresql
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5430:5432"
+#  issuer-postgres:
+#    restart: always
+#    image: postgres:11
+#    volumes:
+#      - issuer-db:/var/lib/postgresql
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - "5430:5432"
 
-  maildev:
-    image: djfarrelly/maildev
-    ports:
-      - "26:25"
-      - "8050:80"
+#  maildev:
+#    image: djfarrelly/maildev
+#    ports:
+#      - "26:25"
+#      - "8050:80"
 
 volumes:
   issuer-aca-py:
-  issuer-db:
+#  issuer-db:

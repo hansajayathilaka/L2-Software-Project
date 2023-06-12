@@ -1,5 +1,5 @@
 const nextConfig = {
-    reactStrictMode: true,
+    reactStrictMode: false,
     // future: {
     //     webpack5: true, // by default, if you customize webpack config, they switch back to version 4.
     //     // Looks like backward compatibility approach.
@@ -13,6 +13,15 @@ const nextConfig = {
     //
     //     return config;
     // },
+    exclude: [
+        'artifacts',
+        'contracts',
+        'node_modules',
+        '.next',
+        'scripts',
+        'test',
+        'cache',
+    ],
     images: {
         domains: ["https://ipfs.io/ipfs/"]
     }

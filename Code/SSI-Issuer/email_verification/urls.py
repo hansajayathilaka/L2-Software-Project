@@ -2,8 +2,12 @@ from django.urls import path
 
 from . import views
 
+
+
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.login_view, name='login'),
+    
+    path("index/", views.index, name="index"), 
     path("submit/", views.submit, name="submit"),
     path("thanks/", views.thanks, name="thanks"),
     path("state/<str:connection_id>", views.state, name="state"),
@@ -14,4 +18,5 @@ urlpatterns = [
     ),
     path("verify/<str:connection_id>/", views.verify_redirect, name="verify_redirect"),
     path("webhooks/topic/<str:topic>/", views.webhooks, name="webhooks"),
+   
 ]

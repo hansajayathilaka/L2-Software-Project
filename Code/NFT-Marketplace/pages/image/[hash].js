@@ -1,5 +1,5 @@
 import {useRouter} from "next/router";
-import {useHeight, useWidth} from "./hooks";
+import {useHeight, useWidth} from "../../components/hooks";
 
 export default function ImageFromHash() {
     const router = useRouter()

@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-
 from nft_minter.forms import NFTRequestForm
 from nft_minter.utils import upload_files_to_ipfs, mint_nft
 
@@ -19,6 +18,7 @@ class NFTCreateView(View):
             attachments = form.files.getlist('attachments')
             try:
                 hash_list = upload_files_to_ipfs([thumbnail, *attachments])
+                print("Images uploaded successfully")
             except Exception as e:
                 form.add_error(None, str(e))
                 hash_list = []
@@ -28,20 +28,20 @@ class NFTCreateView(View):
                     'name': f"{form.cleaned_data['company']} - {form.cleaned_data['vehicle_model']}",
                     'description': form.cleaned_data['description'],
                     'more_data': {
-                        'engine_no': form.cleaned_data['engine_no'],
-                        'chassis_no': form.cleaned_data['chassis_no'],
-                        'vehicle_type': form.cleaned_data['vehicle_type'],
-                        'company': form.cleaned_data['company'],
-                        'fuel_type': form.cleaned_data['fuel_type'],
-                        'vehicle_model': form.cleaned_data['vehicle_model'],
+                        'engine_no': str(form.cleaned_data['engine_no']),
+                        'chassis_no': str(form.cleaned_data['chassis_no']),
+                        'vehicle_type': str(form.cleaned_data['vehicle_type']),
+                        'company': str(form.cleaned_data['company']),
+                        'fuel_type': str(form.cleaned_data['fuel_type']),
+                        'vehicle_model': str(form.cleaned_data['vehicle_model']),
                         'manufactured_date': str(form.cleaned_data['manufactured_date']),
                         'registered_data': str(form.cleaned_data['registered_date']),
-                        'body_type': form.cleaned_data['body_type'],
-                        'wheel_base': form.cleaned_data['wheel_base'],
-                        'color': form.cleaned_data['color'],
-                        'seating_capacity': form.cleaned_data['seating_capacity'],
-                        'internal_height': form.cleaned_data['internal_height'],
-                        'cylinder_capacity': form.cleaned_data['cylinder_capacity'],
+                        'body_type': str(form.cleaned_data['body_type']),
+                        'wheel_base': str(form.cleaned_data['wheel_base']),
+                        'color': str(form.cleaned_data['color']),
+                        'seating_capacity': str(form.cleaned_data['seating_capacity']),
+                        'internal_height': str(form.cleaned_data['internal_height']),
+                        'cylinder_capacity': str(form.cleaned_data['cylinder_capacity']),
                     },
                     'thumbnail': hash_list[0],
                     'attachments': [
@@ -57,14 +57,15 @@ class NFTCreateView(View):
                         ]
                     ]
                 }
-
+                print(nft_data)
                 # Mint NFT
                 try:
                     mint_nft(
                         nft_data,
                         form.cleaned_data['price'],
                         form.cleaned_data['owner_name'],
-                        form.cleaned_data['owner_nic']
+                        form.cleaned_data['owner_nic'],
+                        form.cleaned_data['owner_address'],
                     )
                 except Exception as e:
                     print(e)

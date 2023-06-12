@@ -1,19 +1,29 @@
 import {useRouter} from "next/router";
 import Link from "next/link";
-import {useEffect, useState} from "react";
-import { toast } from 'react-toastify';
+import {useEffect, useRef, useState} from "react";
+import {toast} from 'react-toastify';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
+import {confirmAlert} from 'react-confirm-alert';
 
 import {CustomImage} from "../components/Image";
 import buyNft from "../utils/buyNFT";
 import {SET_LOADING} from "../reducer/actions";
+import changePriceNFT from "../utils/changePriceNFT";
+import {checkMetamaskAvailability} from "../utils/metamask";
 
-
-export default function Assert({state, dispatch}) {
+/**
+ * This is for view vehicle assert
+ * @param state
+ * @param dispatch
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export default function Assert(prop) {
+    const {state, dispatch, updateNFTs} = prop;
     const router = useRouter();
+    const editPriceBoxRef = useRef(null);
     const [currentNFT, setCurrentNFT] = useState(null)
-    const [isConfirmOpen, setIsConfirmOpen] = useState(true);
     const [edit, setEdit] = useState(false);
     const [price, setPrice] = useState(0);
 
@@ -21,7 +31,7 @@ export default function Assert({state, dispatch}) {
         const tokenId = Number(router.query.tokenId);
         let _currentNFT = []
 
-        for(const nft of state.nft) {
+        for (const nft of state.nft) {
             if (tokenId === nft.tokenId) {
                 _currentNFT.push(nft);
             }
@@ -32,170 +42,189 @@ export default function Assert({state, dispatch}) {
             setPrice(_currentNFT[0].price);
             console.log(currentNFT);
         }
-    },[router.query.tokenId, state.nft]);
+    }, [currentNFT, router.query.tokenId, state.nft]);
 
 
-    const clickCopyLink = () => {
+    const onClickCopyLink = () => {
         navigator.clipboard.writeText(window.location.href).then(r => {
-            toast("Link copied to clipboard", {type: toast.TYPE.INFO});
+            toast.info("Link copied to clipboard");
         })
     }
 
-    const clickBuy = async () => {
-        dispatch({
-            type: SET_LOADING,
-            data: true
-        });
-        try {
-            await buyNft(currentNFT);
-        } catch (err) {
-            console.error(err);
-            alert(err.message);
+
+    async function handleChangePriceClick() {
+        if (price === "") {
+            toast.error("Invalid Price");
+        } else {
+            dispatch({
+                type: SET_LOADING,
+                data: true
+            });
+            try {
+                await changePriceNFT(currentNFT, price);
+                toast.success("Price changed successfully");
+                setEdit(false);
+                updateNFTs(true);
+            } catch (err) {
+                toast.error("Price change failed");
+                toast.error(err.message);
+            }
         }
-        dispatch({
-            type: SET_LOADING,
-            data: false
-        });
     }
 
+    function handlePriceChangeCancelClick() {
+        setEdit(false);
+    }
 
-    function handleDeleteClick() {
+    function handleBuyClick() {
         if (state.loggedIn === false) {
-            toast("Please login before buy...", {type: toast.TYPE.ERROR})
+            toast.error("Please login before purchase")
+            return;
         }
-        setIsConfirmOpen(true);
+        confirmAlert({
+            title: 'Confirm Buy',
+            message: `Are you sure that you want to buy this for ${price} Matic?`,
+            buttons: [
+                {
+                    label: 'Yes',
+                    className: 'bg-blue-500 text-white hover:bg-blue-700 hover:shadow-lg transition duration-150 ease-in-out',
+                    style: {
+                        backgroundColor: "rgb(59 130 246)",
+                        float: "right",
+                    },
+                    onClick: async () => {
+                        dispatch({
+                            type: SET_LOADING,
+                            data: true
+                        });
+                        try {
+                            if (checkMetamaskAvailability()) {
+                                if (state.metamask.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()) {
+                                    try {
+                                        await buyNft(currentNFT, `${state.loggedIn.fname} ${state.loggedIn.lname}`, state.loggedIn.nic);
+                                        updateNFTs(true);
+                                        toast.success("NFT buy successfully");
+                                    } catch (err) {
+                                        toast.error("Buying NFT failed");
+                                        toast.error(err.message);
+                                        console.error(err);
+                                    }
+                                } else {
+                                    toast.error("Please connect the same metamask wallet address that you used to login");
+                                }
+                            }
+                        } catch (err) {
+                            toast.error("Buying NFT failed");
+                            toast.error(err.message);
+                            console.error(err);
+                        }
+                        dispatch({
+                            type: SET_LOADING,
+                            data: false
+                        });
+                    }
+                },
+                {
+                    label: 'No',
+                    className: 'bg-yellow-500 text-white hover:bg-yellow-700 hover:shadow-lg transition duration-150 ease-in-out',
+                    style: {
+                        backgroundColor: "rgb(245 158 11)",
+                        float: "right"
+                    },
+                    onClick: () => {
+                    }
+                }
+            ]
+        });
     }
 
-    function handleConfirmClick() {
-        // do something
-        setIsConfirmOpen(false);
-    }
+    const PriceComp = () => {
+        if (router.query.edit) {
+            if (edit === true) {
+                return (
+                    <div className="flex items-center">
+                        <p className="font-bold text-2xl">Price</p>
+                        <div className="flex m-2">
+                            <input
+                                className="appearance-none block p-2 px-4 text-3xl w-3/4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                id="grid-last-name" type="text" placeholder={currentNFT.price}
+                                ref={editPriceBoxRef}
+                                value={price}
+                                onChange={val => setPrice(val.target.value)}
+                                autoFocus
+                            />
+                            <div className="flex mx-6 items-center">
+                                <div
+                                    className="flex items-center mr-2 px-2 border-2 rounded-lg h-full hover:bg-gray-200"
+                                    onClick={handleChangePriceClick}>
+                                    <FontAwesomeIcon icon={solid("check")} size={"3x"} color={'green'}/>
+                                </div>
+                                <div className="flex items-center px-4 border-2 rounded-lg h-full hover:bg-gray-200"
+                                     onClick={handlePriceChangeCancelClick}>
+                                    <FontAwesomeIcon icon={solid('xmark')} size={"3x"} color={'red'}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className="flex items-center">
+                        <p className="font-bold text-2xl">Price</p>
+                        <div className="flex">
+                            <p className="text-3xl text-gray-500 p-2 px-4 rounded-lg bg-gray-50 hover:bg-gray-200 hover:text-gray-800"
+                               onClick={() => setEdit(true)}
+                            >
+                                {currentNFT.price} MATIC
+                            </p>
+                        </div>
+                    </div>
+                )
+            }
+        } else {
+            return (
+                <div className="flex items-center">
+                    <p className="font-bold text-2xl">Price</p>
+                    <div className="flex">
+                        <p className="px-4 text-3xl text-gray-500">{currentNFT.price} MATIC</p>
+                    </div>
+                </div>
+            )
+        }
+    };
 
-    function handleCancelClick() {
-        setIsConfirmOpen(false);
-    }
 
     if (state.loading) {
         return (
             <></>
         )
-    }
-    else if (!currentNFT) {
+    } else if (!currentNFT) {
         return (
             <div className="flex flex-col items-center justify-center mt-10">
                 <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
                     Invalid token ID
                 </h1>
                 <Link href="/">
-                    <a>Goto home page</a>
+                    <p>Goto home page</p>
                 </Link>
             </div>
         );
     } else {
-        return(
-                <>
-                    {/*<ConfirmPopup*/}
-                    {/*    isOpen={isConfirmOpen}*/}
-                    {/*    onConfirm={handleConfirmClick}*/}
-                    {/*    onCancel={handleCancelClick}*/}
-                    {/*    message="Are you sure you want to delete this item?"*/}
-                    {/*/>*/}
-
-                    <div className="container my-24 px-6 mx-auto">
-                        <div className="flex flex-wrap">
-                            <div className="grow-0 shrink-0 basis-auto mb-12 lg:mb-0 w-full lg:w-5/12 px-3 lg:px-6">
-                                <CustomImage src={currentNFT.thumbnail} size="large" />
+        return (
+            <>
+                <div className="container my-5 px-6 mx-auto">
+                    <div className="flex flex-wrap">
+                        <div className="grow-0 shrink-0 basis-auto mb-12 lg:mb-0 w-full lg:w-5/12 px-3 lg:px-6 pt-4">
+                            <CustomImage src={currentNFT.thumbnail} size="large"/>
+                            <div className="flex flex-col grow pt-5 pb-3">
+                                <PriceComp/>
                             </div>
-                            <div className="grow-0 shrink-0 basis-auto w-full lg:w-7/12">
-                                <div className="flex-col flex-wrap">
-                                    <div className="text-center lg:max-w-3xl md:max-w-xl">
-                                        <h2 className="text-3xl font-bold mb-12 px-6">{currentNFT.name}</h2>
-                                    </div>
-                                    {
-                                        edit ?
-                                            <>
-                                                <div className="flex flex-col grow ml-6 mb-5">
-                                                    <p className="font-bold mb-1">Price</p>
-                                                    <div className="flex px-4">
-                                                        <div className="relative mb-3 xl:w-96">
-                                                            <input
-                                                                type="text"
-                                                                className="min-h-full min-w- shadow-sm border-gray-300 rounded-lg m-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
-                                                                id="priceInput"
-                                                                placeholder={`Price ${currentNFT.price}`}/>
-                                                        </div>
-                                                        <div>
-                                                            <button
-                                                                className="mx-2 inline-block min-h-fit rounded bg-blue-500 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                                                                onClick=""
-                                                            >
-                                                                <FontAwesomeIcon icon={solid('user-secret')} />
-                                                            </button>
-                                                            <button
-                                                                className="mx-2 inline-block rounded bg-red-500 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                                                                onClick={() => setEdit(false)}
-                                                            >
-                                                                <FontAwesomeIcon icon={solid('user-secret')} />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </>
-                                            :
-                                            <>
-                                                <div className="flex flex-col grow ml-6 mb-5">
-                                                    <p className="font-bold mb-1">Price</p>
-                                                    <div className="flex">
-                                                        <p className="px-4 text-3xl text-gray-500">{currentNFT.price} MATIC</p>
-                                                        {
-                                                            router.query.edit && !edit ?
-                                                                <button
-                                                                    onClick={() => setEdit(true)}
-                                                                    className="inline-block rounded border-2 border-primary px-6 pt-2 pb-[6px] text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-primary-700 active:text-primary-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
-                                                                >
-                                                                    Edit
-                                                                </button>
-                                                                :
-                                                                <></>
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                            </>
-                                    }
-
-                                    <div className="grow ml-6">
-                                        <p className="font-bold mb-1">Description</p>
-                                        <p className="text-gray-500 ml-6">{currentNFT.description}</p>
-                                    </div>
-                                    {
-                                        Object.entries(currentNFT.more_data).map(([key,value],i) => {
-                                            const split_key = key.split("_");
-                                            const formatted_key = split_key.map(val => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase());
-                                            const formatted_string = formatted_key.join(" ")
-                                            return (
-                                                <div className="grow ml-6" key={i}>
-                                                    <p className="font-bold mb-1">{formatted_string}</p>
-                                                    <p className="text-gray-500 ml-6">{value}</p>
-                                                </div>
-                                            );
-                                        })
-                                    }
-                                    <div className="grow ml-6">
-                                        <p className="font-bold mb-1">Attachments</p>
-                                        {
-                                            currentNFT.attachments.map((item, index) => {
-                                                return <p className="text-gray-500 ml-6" key={index}><a href={"image/" + item.fileUrl} target="_blank" rel="noreferrer">{item.description}</a></p>
-                                            })
-                                        }
-                                    </div>
-                                    <div className="grow ml-6">
-                                        <button
-                                            type="submit"
-                                            className="
-                                            mt-8
-                                            mx-2
+                            <div className="grow">
+                                <button
+                                    type="submit"
+                                    className="
+                                            mt-5
+                                            mr-4
                                             px-6
                                             py-2.5
                                             bg-amber-500
@@ -207,15 +236,14 @@ export default function Assert({state, dispatch}) {
                                             transition
                                             duration-150
                                             ease-in-out"
-                                            onClick={clickCopyLink}
-                                        >
-                                            Copy Link
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="
-                                            mt-8
-                                            mx-2
+                                    onClick={onClickCopyLink}
+                                >
+                                    Copy Link
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="
+                                            mt-5
                                             px-6
                                             py-2.5
                                             bg-blue-500
@@ -227,18 +255,83 @@ export default function Assert({state, dispatch}) {
                                             transition
                                             duration-150
                                             ease-in-out"
-                                            onClick={handleDeleteClick}
-                                            title={!state.loggedIn ? "Please login before buy" : ""}
-                                        >
-                                            Buy for {currentNFT.price} MATIC
-                                        </button>
-                                    </div>
+                                    onClick={handleBuyClick}
+                                    title={!state.loggedIn ? "Please login before buy" : ""}
+                                >
+                                    Buy for {currentNFT.price} MATIC
+                                </button>
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-bold mb-2 mt-9">Previous Owners</h3>
+                                <table className="table-auto">
+                                    <thead>
+                                    <tr>
+                                        <th className="px-4 py-2">Name</th>
+                                        <th className="px-4 py-2">NIC</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {currentNFT.owners.map((owner, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td className="border px-4 py-2">
+                                                    <Link href={`${process.env.NEXT_PUBLIC_BLOCKCHAIN_SCANNER_URL}/address/${owner._address}`} target="_blank">
+                                                        {owner.name}
+                                                    </Link>
+                                                </td>
+                                                <td className="border px-4 py-2">{owner.nic}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="grow-0 shrink-0 basis-auto w-full lg:w-7/12">
+                            <div className="flex-col flex-wrap">
+                                <div className="text-center lg:max-w-3xl md:max-w-xl">
+                                    <h2 className="text-4xl font-bold mb-12 px-6">{currentNFT.name}</h2>
+                                </div>
+                                <div className="grow ml-6 flex justify-between pb-2">
+                                    <p className="text-gray-500 mb-1">Description</p>
+                                    <p className="font-bold ml-6">{currentNFT.description}</p>
+                                </div>
+                                {
+                                    Object.entries(currentNFT.more_data).map(([key, value], i) => {
+                                        const split_key = key.split("_");
+                                        const formatted_key = split_key.map(val => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase());
+                                        const formatted_string = formatted_key.join(" ")
+                                        return (
+                                            <div
+                                                className="grow ml-6 pt-3 pb-2 flex justify-between items-center border-t-2"
+                                                key={i}>
+                                                <p className="text-gray-500 mb-1">{formatted_string}</p>
+                                                <p className="font-bold ml-6">{value}</p>
+                                            </div>
+                                        );
+                                    })
+                                }
+                                <div className="grow ml-6 flex justify-between pt-3 border-t-2">
+                                    <p className="text-gray-500 mb-1">Attachments</p>
+                                    <p>
+                                        {
+                                            currentNFT.attachments.map((item, index) => {
+                                                return <p className="font-bold ml-6" key={index}>
+                                                    <a href={"image/" + item.fileUrl} target="_blank"
+                                                       rel="noreferrer">{item.description}</a>
+                                                </p>
+                                            })
+                                        }
+                                    </p>
 
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
+            </>
 
         );
     }

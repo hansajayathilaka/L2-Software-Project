@@ -1,0 +1,39 @@
+version: "3"
+services:
+  holder-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
+    environment:
+      ADMIN_PORT: 3000
+      AGENT_PORT: 12000
+      INDY_SEED: ${AGENT_WALLET_SEED}
+      SITE_URL: ${AGENT_EXTERNAL_URL}
+      ACAPY_LABEL: "VOMS Person SSI Holder"
+      ACAPY_ENDPOINT: ${AGENT_EXTERNAL_URL}
+      ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
+      ACAPY_GENESIS_URL: ${GENESIS_URL}
+      ACAPY_WALLET_TYPE: "indy"
+      ACAPY_WALLET_NAME: "voms"
+      ACAPY_WALLET_KEY: "walletkey"
+      ACAPY_AUTO_ACCEPT_INVITES: "true"
+      ACAPY_AUTO_ACCEPT_REQUESTS: "true"
+      ACAPY_ADMIN_INSECURE_MODE: "true"
+      ACAPY_AUTO_PROVISION: "true"
+      ACAPY_LOG_LEVEL: "info"
+    ports:
+      - "3000:3000"
+      - "12000:12000"
+    volumes:
+      - holder-aca-py:/home/indy/.indy_client/wallet
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"VOMS Person SSI Holder (Docker)\"}' -X POST ${INDY_DID_REGISTER_URL}; \
+        sleep 5; \
+        aca-py start \
+        -it http '0.0.0.0' 12000 \
+        -ot http \
+        --admin '0.0.0.0' 3000",
+    ]
+
+volumes:
+  holder-aca-py:

@@ -17,9 +17,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.core.mail import send_mail
+from django.http import HttpResponse
+
+from authenticator.views import LoginView
+
 
 urlpatterns = [
+    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('auth/', include('authenticator.urls')),
-    path('nft/', include('nft_minter.urls')),
+    path('nft/', include('nft_minter.urls')), 
+    path('', LoginView.as_view(), name='login')  
+   
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

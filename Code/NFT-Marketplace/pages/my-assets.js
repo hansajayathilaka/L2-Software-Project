@@ -1,58 +1,70 @@
 import React, {useState, useEffect} from "react";
-import {ethers} from "ethers";
-import Web3Modal from "web3modal";
 import Link from "next/link";
 
-import {nftaddress, nftmarketaddress} from "../config";
-import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json';
 import {CustomImage} from "../components/Image";
-import {URINFTDataMapper} from "../utils/loadNFT";
+import {updateSoldStatus} from "../utils/nftSoldStatus";
 import {SET_LOADING} from "../reducer/actions";
+import {toast} from "react-toastify";
 
 
-export default function MyAssets(props) {
-    const {state, dispatch} = props;
+export default function MyAssets({state, dispatch, updateNFTs}) {
     const [myNFTs, setMyNFTs] = useState([]);
 
     useEffect(() => {
-        dispatch({
-            type: SET_LOADING,
-            data: true
-        });
-        loadNFTs().then(() => {
-            dispatch({
-                type: SET_LOADING,
-                data: false
-            });
-        }).catch(err => {
-            console.error(err);
-            alert(err.message);
-            dispatch({
-                type: SET_LOADING,
-                data: false
-            });
-        })
-    }, [])
+        const _nft = [];
+        for(const nft of state.nft) {
+            if (
+                (
+                    state.loggedIn &&
+                    state.loggedIn.wallet_address &&
+                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.loggedIn.wallet_address.toLowerCase()
+                ) || (
+                    state.metamask &&
+                    nft.owners[nft.owners.length - 1]._address.toLowerCase() === state.metamask.toLowerCase()
+                )
+            ) {
+                _nft.push(nft);
+            } else {
+                debugger;
+            }
+        }
+        setMyNFTs(_nft);
+    }, [state.loggedIn, state.metamask, state.nft]);
 
-    async function loadNFTs() {
-        const web3Modal = new Web3Modal();
-        const connection = await web3Modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer = provider.getSigner();
+    if (!state.metamask || !state.loggedIn) return (
+        <h1 className="py-10 px-20 text-3xl">Please connect to metamask and login using your SSI</h1>
+    );
 
-        const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-
-        const data = await marketContract.fetchMyNFTs();
-        const items = await Promise.all(data.map(URINFTDataMapper)).catch(err => {
-            console.error(err)
-        });
-        setMyNFTs(items);
-    }
-
-    if (state.loading === false && !myNFTs.length) return (
+    if (state.loading === false && (myNFTs && !myNFTs.length)) return (
         <h1 className="py-10 px-20 text-3xl">No assets owned</h1>
     );
 
+    const _updateSoldStatus = (nft, status) => {
+        dispatch({
+            type: SET_LOADING,
+            data: true,
+        });
+        updateSoldStatus(nft, status).then(doc => {
+            toast.success("Selling status updated successfully");
+            updateNFTs();
+        }).catch(err => {
+            toast.error("Selling status update failed");
+            toast.error(err.message);
+
+            dispatch({
+                type: SET_LOADING,
+                data: false,
+            });
+        });
+    }
+
+    const onClickToBeSale = (nft) => {
+        _updateSoldStatus(nft, false);
+    }
+
+    const onClickToSold = (nft) => {
+        _updateSoldStatus(nft, true);
+    }
 
     return (
         <div className="flex justify-center">
@@ -70,7 +82,22 @@ export default function MyAssets(props) {
                                 </div>
                                 <div className="p-4 bg-gray-100">
                                     <p className="text-2xl mb-4 font-bold text-gray-800">{nft.price} Matic</p>
-                                    <Link href={{pathname: '/assert', query: {tokenId: nft.tokenId, edit: true}}}><button className="w-full bg-blue-500 text-white font-bold py-2 px-12 rounded" title={`Token Id ${nft.tokenId}`}>More details</button></Link>
+                                    {
+                                        nft.sold ?
+                                            <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" onClick={() => onClickToBeSale(nft)}>
+                                                Mark to be Sale
+                                            </button>
+                                            :
+                                            <button className="mb-3 w-full bg-blue-400 text-white font-bold py-2 px-12 rounded" onClick={() => onClickToSold(nft)}>
+                                                Mark as Sold
+                                            </button>
+                                    }
+
+                                    <Link href={{pathname: '/assert', query: {tokenId: nft.tokenId, edit: true}}}>
+                                        <button className="mb-3 w-full bg-blue-500 text-white font-bold py-2 px-12 rounded" title={`Token Id ${nft.tokenId}`}>
+                                            More details
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))

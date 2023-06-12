@@ -68,24 +68,24 @@ services:
 #    volumes:
 #      - .:/app
 
-  verifier-postgres:
-    restart: always
-    image: postgres:10
-    volumes:
-      - verifier-db:/var/lib/postgresql
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5431:5432"
+#  verifier-postgres:
+#    restart: always
+#    image: postgres:10
+#    volumes:
+#      - verifier-db:/var/lib/postgresql
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - "5431:5432"
 
-  maildev:
-    image: djfarrelly/maildev
-    ports:
-      - "27:25"
-      - "7050:80"
+#  maildev:
+#    image: djfarrelly/maildev
+#    ports:
+#      - "27:25"
+#      - "7050:80"
 
 volumes:
   verifier-aca-py:
-  verifier-db:
+#  verifier-db:

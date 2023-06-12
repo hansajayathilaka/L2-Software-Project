@@ -66,9 +66,10 @@ def get_event(contract, tx_hash, event_name):
     return event_list
 
 
-def mint_nft(details, price, owner_name, owner_nic):
+def mint_nft(details, price, owner_name, owner_nic, owner_address):
     # Save primary details in IPFS
     _hash = upload_json_to_ipfs(details)
+    print("JSON saved in IPFS", _hash)
 
     if _hash:
 
@@ -78,6 +79,7 @@ def mint_nft(details, price, owner_name, owner_nic):
             tx_hash, receipt = create_transaction(w3, contract, 'createToken', params=[_hash])
             event_logs = contract.events.Transfer().process_receipt(receipt)
             item_id = event_logs[0]["args"]["tokenId"]
+            print("Updated in Polygon successfully")
             print(receipt.logs)
         except Exception as e:
             print(e)
@@ -91,7 +93,7 @@ def mint_nft(details, price, owner_name, owner_nic):
             tx_hash, receipt = create_transaction(
                 w3, contract,
                 'createMarketItem',
-                params=[settings.NFT_CONTRACT_ADDRESS, item_id, _price, owner_name, owner_nic],
+                params=[settings.NFT_CONTRACT_ADDRESS, item_id, _price, owner_name, owner_nic, owner_address],
                 value=listing_price
             )
             # events = get_event(contract, tx_hash, "MarketItemCreated")

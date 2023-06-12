@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
-
 from authenticator.forms import LoginForm
+from django.shortcuts import render, redirect
 
 
 class LoginView(View):
@@ -13,6 +13,7 @@ class LoginView(View):
 
     def post(self, request):
         form = LoginForm(data=request.POST)
+    
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -26,3 +27,4 @@ class LoginView(View):
         else:
             messages.error(request, 'Invalid username or password')
         return render(request, 'login.html', {'form': form})
+

@@ -1,6 +1,6 @@
 import Document, {Html, Head, Main, NextScript} from "next/document";
 
-export default class MyDocument extends Document {
+export default class _Document extends Document {
     render() {
         return (
             <Html>
@@ -9,8 +9,8 @@ export default class MyDocument extends Document {
                     <link rel="icon" href="/favicon.svg" />
                 </Head>
                 <body>
-                <Main />
-                <NextScript />
+                    <Main />
+                    <NextScript />
                 </body>
             </Html>
         );
