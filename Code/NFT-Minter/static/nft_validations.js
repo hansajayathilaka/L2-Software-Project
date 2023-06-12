@@ -10,7 +10,7 @@ $("#nft_minting_form").validate({
         },
         owner_nic: {
             required: true,
-            pattern: /^[0-9]{9}[vVxX]$/,
+            pattern: /(^\d{9}V$|^\d{12}$)/i,
         },
         color: {
             required: true,
