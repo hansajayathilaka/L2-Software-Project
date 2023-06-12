@@ -11,7 +11,6 @@ const SignUp = ({ navigation }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [confPasswordVisibility, setconfPasswordVisibility] = useState(true);
   const [did, setPrivateDid] = useState({});
-
   
   // style colour
   const outlineColor = "rgb(37, 139, 214)";

@@ -10,11 +10,11 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
-    <title>ConfBook Attendance Issuer</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.svg' %}" />
+    <title>VOMS Verifier</title>
     <meta
       name="description"
-      content="A verification service used to issue a verifiable credential asserting a requester is an IIW 28 Attendee based on their verified email address."
+      content="A verification service used to issue a verifiable credential based on their verified email address."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -48,11 +48,15 @@
               el = document.querySelector('#presentation-verified');
               el.style.display = 'block';
 
-              el = document.querySelector('#awaiting-approval');
-              el.style.display = 'block';
+              // el = document.querySelector('#awaiting-approval');
+              // el.style.display = 'block';
               
               el = document.querySelector('#email-placeholder');
               el.textContent = state["email"]
+              debugger;
+              setInterval(() => {
+                location.href = '/verify/' + '{{connection_id}}' + window.location.search;
+              }, 500);
             } else if (state["state"] == 'credential-issued') {
               el = document.querySelector('#awaiting-credential-request');
               el.style.display = 'none';
@@ -76,16 +80,25 @@
         <a href="#">upgrade your browser</a> to improve your experience.
       </p>
     <![endif]-->
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-dark">
-        <!-- Navbar content -->
-        <div class="container">
-          <a class="navbar-brand" href="/" style="font-size:2em">
-            ConfBook
-          </a>
-        </div>
-      </nav>
-    </header>
+      <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+          <!-- Navbar content -->
+          <div class="container">
+            <a class="navbar-brand" href="/" style="font-size:2em" >
+              <img
+              class="img-fluid d-none d-md-block"
+              src="/assets/images/bcid-logo-rev-en.svg"
+              width="177"
+              height="44"
+              alt="VOMS Logo"
+            />
+            </a>
+            <div class="navbar-brand">
+            SSI Verifying Service
+            </div>
+          </div>
+        </nav>
+      </header>
     <main role="main">
       <div class="container">
         <div class="row">
@@ -96,7 +109,7 @@
               <li id="connection-formed">
                 <h2>Connection Formed <span class="fa fa-check"></span></h2>
                 <p>
-                You now have a connection with ConfBook.
+                You now have a connection with SSI Verifier.
                 </p>
               </li>
               
@@ -143,9 +156,7 @@
               <li id="awaiting-approval" style="display: none">
                 <h2>Awaiting IIW Approval <span class="fa fa-spinner fa-spin"></span></h2>
                 <p>
-                We have your email address and we are manually verifying that your verified email
-                address is on the attendee list. Once this is verified, you will receive an IIW
-                attendance credential.
+               
                 </p>
               </li> {% endcomment %}
 

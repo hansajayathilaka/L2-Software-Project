@@ -14,7 +14,7 @@ class Verification(models.Model):
     dob = models.DateField("Date of Birth", null=True, blank=True)
     address = models.TextField("Address", null=True, blank=True)
     sex = models.CharField("Sex", choices=SEX_CHOICES, max_length=10, default="male", null=True, blank=True)
-    wallet_address = models.CharField("Wallet Address", max_length=1024, null=True, blank=True)
+    wallet_address = models.CharField("Wallet Address", max_length=1024, null=True)
     img = models.ImageField("Image", null=True, blank=True)
     
     
