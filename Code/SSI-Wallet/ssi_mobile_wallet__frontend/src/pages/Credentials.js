@@ -7,7 +7,6 @@ import getCredentials from "../service/get-credentials";
 export default function Credentials() {
     const [credentials, setCredentials] = useState([]);
     const [responseCheck, setResponseCheck] = useState({});
-    const [last_credential_ex_id, setLast_credential_ex_id] = useState("");
     const {ConnectionID} = useSelector(state => {
         return state
     });
@@ -21,9 +20,8 @@ export default function Credentials() {
     };
 
     useEffect(() => {
-        getCredentials().then((response) => {
-            setCredentials(response.results);
-            setLast_credential_ex_id(response.results[0].credential_exchange_id);
+        getCredentials().then((credentials) => {
+            setCredentials(credentials);
         });
     }, [ConnectionID]);
 

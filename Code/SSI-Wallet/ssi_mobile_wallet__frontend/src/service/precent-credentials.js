@@ -1,37 +1,41 @@
-const prescentCredentials = async (presentation_exchange_id) => {
+import {Alert} from "react-native";
+import axios from "axios";
+
+const prescentCredentials = async (presentation_exchange_id, cred_id) => {
+    debugger
     try {
         const data = {
             "requested_attributes": {
                 "email": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
                 "fname": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
                 "lname": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
                 "nic": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
                 "sex": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
                 "img": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
                 "wallet_address": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
                 "time": {
-                  "cred_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "cred_id": cred_id,
                   "revealed": true
                 },
             },
@@ -40,9 +44,13 @@ const prescentCredentials = async (presentation_exchange_id) => {
             "trace": false
           }
         const response = await axios.post(`https://holder-admin-agent.hansajayathilaka.com/present-proof/records/${presentation_exchange_id}/send-presentation`, data);
+        debugger;
         console.log(response.data);
     } catch (error) {
+        debugger
         console.error(error);
-        alert(error);
+        Alert.alert("Error", JSON.stringify(error));
     }
 }
+
+export default prescentCredentials;
