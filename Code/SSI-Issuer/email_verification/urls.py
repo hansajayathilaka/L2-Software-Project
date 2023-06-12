@@ -5,7 +5,7 @@ from . import views
 
 
 urlpatterns = [
-    path("login/", views.login_view, name='login'),
+    path("", views.login_view, name='login'),
     
     path("index/", views.index, name="index"), 
     path("submit/", views.submit, name="submit"),
@@ -18,4 +18,5 @@ urlpatterns = [
     ),
     path("verify/<str:connection_id>/", views.verify_redirect, name="verify_redirect"),
     path("webhooks/topic/<str:topic>/", views.webhooks, name="webhooks"),
+   
 ]
